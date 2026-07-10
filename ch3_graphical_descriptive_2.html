@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 3　圖表敘述法（二）</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false }
+                ],
+                throwOnError: false,
+                strict: "ignore"
+            });
+        });
+    </script>
+    <style>
+        :root {
+            --navy: #1a3a6b;
+            --blue: #2e6cb8;
+            --blue-light: #4a90d9;
+            --accent: #c0392b;
+            --gold: #d4a017;
+            --green: #27ae60;
+            --bg: #f7f9fc;
+            --card: #ffffff;
+            --border: #d0dcea;
+            --text: #2c3e50;
+            --muted: #5a6a7a;
+            --math-bg: #eaf3ff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Noto Sans TC', 'Source Serif 4', Georgia, serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 36px 24px 80px;
+        }
+        h1 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 2rem; font-weight: 700;
+            color: var(--navy);
+            border-bottom: 4px solid var(--blue-light);
+            padding-bottom: 12px; margin-bottom: 20px;
+        }
+        h2 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 1.45rem; font-weight: 600;
+            color: var(--navy);
+            margin-top: 48px; margin-bottom: 14px;
+            border-left: 5px solid var(--blue-light);
+            padding-left: 12px;
+        }
+        h3 { font-size: 1.1rem; font-weight: 700; color: var(--blue); margin-top: 28px; margin-bottom: 10px; }
+        p { margin-bottom: 12px; }
+        ul, ol { margin-left: 24px; margin-bottom: 12px; }
+        li { margin-bottom: 6px; }
+        hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+        .chapter-intro {
+            font-size: 1.05rem; color: var(--muted);
+            border-left: 3px solid var(--blue-light);
+            padding: 10px 16px; background: #eef4fb;
+            border-radius: 0 6px 6px 0; margin-bottom: 24px;
+        }
+        .learning-goals {
+            background: #fffbea; border: 1.5px solid var(--gold);
+            border-radius: 8px; padding: 18px 22px; margin: 24px 0;
+        }
+        .learning-goals h3 { color: #8a6000; margin-top: 0; }
+        .toc {
+            background: var(--card); border: 1.5px solid var(--border);
+            border-radius: 8px; padding: 18px 24px; margin: 24px 0;
+            box-shadow: 0 2px 8px rgba(30,60,110,0.06);
+        }
+        .toc h3 { color: var(--navy); margin-top: 0; }
+        .toc a { color: var(--blue); text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+        .highlight {
+            background: #fffbe6; border-left: 4px solid var(--gold);
+            padding: 12px 16px; margin: 16px 0; border-radius: 0 6px 6px 0;
+        }
+        .math-block {
+            background: var(--math-bg); border-radius: 6px;
+            padding: 14px 18px; margin: 14px 0;
+            overflow-x: auto; font-size: 1.05em; text-align: center;
+        }
+        .formula-card {
+            background: var(--card); border: 2px solid var(--blue-light);
+            border-radius: 10px; padding: 18px 22px; margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(74,144,217,0.1);
+        }
+        .formula-card h3 { margin-top: 0; color: var(--navy); }
+        .formula-card .note {
+            font-size: 0.9em; color: var(--muted);
+            background: #f0f6ff; border-left: 3px solid #aac4ee;
+            padding: 8px 12px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .example-block {
+            background: #f0faff; border-left: 5px solid var(--blue-light);
+            border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 20px 0;
+        }
+        .example-block h3 { color: var(--navy); margin-top: 0; }
+        .example-block .note {
+            font-size: 0.92em; color: #333;
+            background: #e6f7e6; border-left: 3px solid var(--green);
+            padding: 10px 14px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .example-block .warn {
+            font-size: 0.92em; background: #fff3cd;
+            border-left: 3px solid var(--gold);
+            padding: 10px 14px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .scenario {
+            background: #f8f4ff; border: 1.5px dashed #9b7fd4;
+            border-radius: 8px; padding: 12px 18px; margin-bottom: 14px;
+            font-size: 0.97em; color: #3d2070;
+        }
+        .scenario strong { color: #6a3fbf; }
+        table {
+            width: 100%; border-collapse: collapse;
+            margin: 14px 0; font-size: 0.95em;
+        }
+        th, td { border: 1px solid #c8d8ec; padding: 8px 12px; text-align: center; }
+        th { background: #ddeeff; color: var(--navy); font-weight: 600; }
+        tr:nth-child(even) { background: #f5f8ff; }
+        .type-table th { background: var(--navy); color: white; }
+
+        canvas.chart {
+            display: block; margin: 14px auto;
+            border: 1px solid #ddd; border-radius: 6px; background: #fff;
+            max-width: 100%;
+        }
+        .shape-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+        .shape-grid figure { margin: 0; text-align: center; }
+        .shape-grid figcaption { font-size: 0.85em; color: var(--muted); margin-top: 4px; }
+        .shape-grid canvas { width: 100%; border: 1px solid #e5eaf2; border-radius: 6px; background: #fff; }
+
+        /* ── Quiz ── */
+        .quiz-box {
+            background: #f0f6ff; border: 1.5px solid var(--blue-light);
+            border-radius: 10px; padding: 22px 26px; margin: 28px 0;
+        }
+        .quiz-box h3 { color: var(--navy); margin-top: 0; }
+        .quiz-q { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin-bottom: 16px; }
+        .quiz-q p { font-weight: 600; margin-bottom: 10px; }
+        .quiz-q label { display: block; margin: 6px 0; cursor: pointer; font-size: 0.97em; font-weight: 400; }
+        .quiz-q button { margin-top: 10px; padding: 7px 18px; background: var(--blue); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9em; }
+        .quiz-q button:hover { background: var(--navy); }
+        .quiz-feedback { display: none; margin-top: 10px; padding: 10px 14px; border-radius: 6px; font-size: 0.95em; }
+        .quiz-feedback.correct { background: #d4edda; border-left: 4px solid var(--green); color: #155724; }
+        .quiz-feedback.wrong { background: #f8d7da; border-left: 4px solid var(--accent); color: #721c24; }
+
+        /* ── Exercises ── */
+        .exercises-list { counter-reset: ex-counter; list-style: none; padding: 0; margin-left: 0; }
+        .exercises-list > li {
+            counter-increment: ex-counter;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 8px; padding: 16px 20px; margin-bottom: 16px;
+        }
+        .exercises-list > li strong { color: var(--navy); }
+        details summary { cursor: pointer; color: var(--blue); font-weight: 700; margin-top: 12px; user-select: none; }
+        details summary:hover { color: var(--navy); }
+        details > div { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+
+        /* ── Summary ── */
+        .summary {
+            background: var(--navy); color: #e8f0fc;
+            border-radius: 10px; padding: 22px 26px; margin-top: 40px;
+        }
+        .summary h2 { color: #c8dcf8; border-left-color: #6aaae8; }
+        .summary ul { margin-bottom: 0; }
+        .summary li { margin-bottom: 10px; color: #d8e8f8; }
+        .summary strong { color: #a8d0f8; }
+
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+        .col-box { border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; background: #fafbff; }
+        .col-box h3 { font-size: 0.98em; margin-top: 0; text-align: center; }
+
+        /* ── 互動工具 ── */
+        .calc-box {
+            background: var(--card); border: 1.5px solid var(--border);
+            border-radius: 10px; padding: 22px 26px; margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(30,60,110,0.06);
+        }
+        .calc-box h3 { margin-top: 0; color: var(--navy); }
+        .slider-row { display: flex; align-items: center; gap: 14px; margin: 10px 0; }
+        .slider-row input[type="range"] { flex: 1; }
+        .slider-row .val { font-family: monospace; font-weight: 700; color: var(--navy); min-width: 70px; }
+
+        @media (max-width: 640px) {
+            .two-col { grid-template-columns: 1fr; }
+            .shape-grid { grid-template-columns: 1fr 1fr; }
+            body { padding: 20px 14px 60px; }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Chapter 3　圖表敘述法（二） (Graphical Descriptive Techniques II)</h1>
+
+<p class="chapter-intro">
+上一章處理的是類別型資料；本章面對的是<strong>區間資料</strong>——真實的數字。我們將學習三種最重要的圖形：描述一組數值分布的<strong>直方圖</strong>、描述資料隨時間變化的<strong>線圖</strong>，以及描述兩個數值變數關係的<strong>散佈圖</strong>；最後探討「圖表呈現的藝術」——如何辨識（以及避免製作）誤導讀者的圖形。
+</p>
+
+<div class="learning-goals">
+<h3>🎯 Learning Objectives</h3>
+<ul>
+    <li>能為一組區間資料決定適當的<strong>類組數與類組寬度</strong>，編製次數分配表並繪製<strong>直方圖</strong>。</li>
+    <li>能判讀直方圖的<strong>形狀</strong>：對稱、右偏、左偏、單峰、雙峰、鐘形。</li>
+    <li>能區分<strong>橫斷面資料</strong>與<strong>時間序列資料</strong>，並用線圖呈現時間序列。</li>
+    <li>能繪製並判讀<strong>散佈圖</strong>：線性程度、方向與強弱。</li>
+    <li>能辨識常見的<strong>誤導性圖形手法</strong>，建立圖表判讀的批判性思維。</li>
+</ul>
+</div>
+
+<div class="toc">
+<h3>📋 本章內容</h3>
+<ol>
+    <li><a href="#s31">§3.1　直方圖：描述一組區間資料</a>
+        <ol style="margin-top:4px;">
+            <li><a href="#s31-1">建立直方圖的步驟</a></li>
+            <li><a href="#s31-2">直方圖的形狀</a></li>
+        </ol>
+    </li>
+    <li><a href="#s32">§3.2　線圖：描述時間序列資料</a></li>
+    <li><a href="#s33">§3.3　散佈圖：描述兩個區間變數的關係</a></li>
+    <li><a href="#s34">§3.4　圖表呈現的藝術與科學</a></li>
+    <li><a href="#tool">🔢 互動工具：類組數實驗室</a></li>
+    <li><a href="#quiz">🧠 Quick Quiz</a></li>
+    <li><a href="#exercises">📚 綜合練習</a></li>
+    <li><a href="#summary">📌 Chapter Summary</a></li>
+</ol>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 3.1
+══════════════════════════════════════════ -->
+<h2 id="s31">§3.1　直方圖：描述一組區間資料 (Histograms)</h2>
+
+<p>區間資料的觀測值是連續的數字，通常「每個值都不太一樣」，直接計次沒有意義。解決辦法：先把數值範圍切成若干<strong>類組 (class)</strong>，數出落入每個類組的觀測值個數，再以相鄰的長方形呈現——這就是<strong>直方圖 (histogram)</strong>。</p>
+
+<h3 id="s31-1">一、建立直方圖的步驟</h3>
+
+<div class="formula-card">
+<h3>📐 三步驟</h3>
+<ol>
+    <li><strong>決定類組數</strong>：依觀測值個數 $n$ 參考下表，或使用 Sturges 公式：
+        <div class="math-block">$$\text{類組數} \approx 1 + 3.3\,\log_{10}(n)$$</div>
+        <table>
+            <thead><tr><th>觀測值個數 $n$</th><th>建議類組數</th></tr></thead>
+            <tbody>
+                <tr><td>50 以下</td><td>5 – 7</td></tr>
+                <tr><td>50 – 200</td><td>7 – 9</td></tr>
+                <tr><td>200 – 500</td><td>9 – 10</td></tr>
+                <tr><td>500 – 1,000</td><td>10 – 11</td></tr>
+                <tr><td>1,000 以上</td><td>11 – 14</td></tr>
+            </tbody>
+        </table>
+    </li>
+    <li><strong>決定類組寬度</strong>：
+        <div class="math-block">$$\text{類組寬度} \approx \frac{\text{最大值} - \text{最小值}}{\text{類組數}}$$</div>
+        通常向上取整成「好讀的數字」（如 500、1,000、2,500）。</li>
+    <li><strong>計次並繪圖</strong>：數出各類組的次數。慣例上「觀測值等於類組上限時歸入該組」（即類組為左開右閉區間），長方形之間<strong>不留空隙</strong>（表示數值連續）。</li>
+</ol>
+<p class="note">類組數沒有唯一正確答案——太少會把細節抹平，太多會讓圖形破碎。文末的「類組數實驗室」可以親手體驗這件事。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 3.1　學區套房租金的分布（延續第 1 章範例 1.1）</h3>
+<div class="scenario">
+<strong>情境：</strong>第 1 章範例 1.1 中，小葉整理了學區商圈近一年 <strong>180 筆</strong>套房成交租金，最低 $5,500、最高 $23,000。她想看清楚租金的整體分布。
+</div>
+<p><strong>Step 1　類組數</strong>：$n = 180$，查表建議 7–9 組；Sturges 公式 $1 + 3.3\log_{10}(180) \approx 8.4$，取 <strong>8 組</strong>。</p>
+<p><strong>Step 2　類組寬度</strong>：$(23{,}000 - 5{,}500)/8 = 2{,}187.5$，向上取整為 <strong>$2,500</strong>，並讓類組界限從好讀的 $5,000 開始。</p>
+<p><strong>Step 3　計次</strong>：</p>
+<table>
+    <thead><tr><th>租金類組（元）</th><th>次數</th><th>相對次數</th></tr></thead>
+    <tbody>
+        <tr><td>5,000 ～ 7,500</td><td>24</td><td>0.133</td></tr>
+        <tr><td>7,500 ～ 10,000</td><td>58</td><td>0.322</td></tr>
+        <tr><td>10,000 ～ 12,500</td><td>44</td><td>0.244</td></tr>
+        <tr><td>12,500 ～ 15,000</td><td>26</td><td>0.144</td></tr>
+        <tr><td>15,000 ～ 17,500</td><td>14</td><td>0.078</td></tr>
+        <tr><td>17,500 ～ 20,000</td><td>8</td><td>0.044</td></tr>
+        <tr><td>20,000 ～ 22,500</td><td>5</td><td>0.028</td></tr>
+        <tr><td>22,500 ～ 25,000</td><td>1</td><td>0.006</td></tr>
+        <tr style="font-weight:700;"><td>合計</td><td>180</td><td>1.000</td></tr>
+    </tbody>
+</table>
+<canvas id="rentHist" class="chart" width="620" height="300"></canvas>
+<div class="note">✅ 判讀：分布<strong>單峰、右偏</strong>——多數物件集中在 $7,500 ～ $12,500，右側拖著一條由少數高價物件形成的長尾。這正是第 1 章說「平均數 $9,400 被拉高、中位數 $8,300 較能代表行情」的視覺證據。</div>
+</div>
+
+<h3 id="s31-2">二、直方圖的形狀 (Shapes of Histograms)</h3>
+
+<p>看直方圖時，依序問三個問題：<strong>幾個峰？對稱嗎？往哪邊偏？</strong></p>
+
+<div class="shape-grid">
+    <figure><canvas id="shpSym" width="260" height="150"></canvas><figcaption><strong>對稱 (Symmetric)</strong>：左右兩半互為鏡像</figcaption></figure>
+    <figure><canvas id="shpRight" width="260" height="150"></canvas><figcaption><strong>右偏 (Positively Skewed)</strong>：長尾拖向右方</figcaption></figure>
+    <figure><canvas id="shpLeft" width="260" height="150"></canvas><figcaption><strong>左偏 (Negatively Skewed)</strong>：長尾拖向左方</figcaption></figure>
+    <figure><canvas id="shpUni" width="260" height="150"></canvas><figcaption><strong>單峰 (Unimodal)</strong>：只有一個高峰</figcaption></figure>
+    <figure><canvas id="shpBi" width="260" height="150"></canvas><figcaption><strong>雙峰 (Bimodal)</strong>：兩個高峰，常暗示資料混合了兩個群體</figcaption></figure>
+    <figure><canvas id="shpBell" width="260" height="150"></canvas><figcaption><strong>鐘形 (Bell-shaped)</strong>：對稱單峰，第 8 章常態分配的原型</figcaption></figure>
+</div>
+
+<div class="highlight">
+<strong>💡 常見的偏態方向：</strong>「有下限、無上限」的變數常呈<strong>右偏</strong>（租金、所得、理賠金額、等待時間——最小是 0，極大值沒有上限）；「有天花板」的變數常呈<strong>左偏</strong>（例如接近滿分的考試成績、使用壽命接近設計上限的零件）。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 3.2　雙峰直方圖：程式設計課的期末成績</h3>
+<div class="scenario">
+<strong>情境：</strong>某「程式設計入門」通識課有 100 位學生，期末成績的直方圖如下。授課教師發現圖形有兩個明顯的高峰，覺得不對勁。
+</div>
+<canvas id="gradeHist" class="chart" width="620" height="280"></canvas>
+<p><strong>判讀：</strong>雙峰分布通常代表資料其實<strong>混合了兩個不同的群體</strong>。教師調閱選課名單後發現：修課學生中約四成曾自學過程式（成績集中在 80–95 分），六成完全是新手（成績集中在 40–60 分）。</p>
+<div class="note">✅ 決策意涵：與其用「全班平均 63 分」描述這門課（這個數字落在兩峰之間的低谷，幾乎沒有任何一位學生「長這樣」），不如分成兩群分別描述，甚至下學期開設分級班。<strong>看到雙峰，先找隱藏的分群變數</strong>——這是直方圖最有價值的偵探功能之一。</div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 3.2
+══════════════════════════════════════════ -->
+<h2 id="s32">§3.2　線圖：描述時間序列資料 (Line Charts for Time Series)</h2>
+
+<div class="formula-card">
+<h3>📐 兩種資料結構</h3>
+<ul>
+    <li><strong>橫斷面資料 (Cross-sectional Data)</strong>：在<strong>同一個時間點</strong>（或期間）觀察許多不同對象。例：今年 3 月「各縣市」的失業率、本學期「每位學生」的統計學成績。</li>
+    <li><strong>時間序列資料 (Time-series Data)</strong>：對<strong>同一個對象</strong>，依時間順序記錄多期的觀測值。例：某縣市「近十年每月」的失業率、某公司「近 24 個月」的營收。</li>
+</ul>
+<p class="note">直方圖適合橫斷面資料；時間序列資料則用<strong>線圖 (line chart)</strong>——橫軸是時間、縱軸是變數值，依時間順序以線段連接。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 3.3　冰品店的兩年營業額</h3>
+<div class="scenario">
+<strong>情境：</strong>「北極熊冰舖」老闆整理了近 24 個月的每月營業額（單位：萬元），想評估店面的經營趨勢，決定是否續租店面。
+</div>
+<canvas id="tsChart" class="chart" width="640" height="300"></canvas>
+<p><strong>判讀：</strong>線圖透露兩個訊息：</p>
+<ul>
+    <li><strong>季節性 (Seasonality)</strong>：每年 6–9 月營業額明顯衝高（夏季吃冰旺季），12–2 月落入谷底——規律的年循環。</li>
+    <li><strong>趨勢 (Trend)</strong>：第二年每個月都比第一年同月略高，整體呈溫和成長。</li>
+</ul>
+<div class="note">✅ 決策意涵：比較營業額時應「與去年同月比」而非「與上個月比」——11 月比 8 月差，不代表生意變壞，只是季節循環。這家店年增率為正，續租有理。</div>
+<div class="warn">⚠️ 若把這 24 個數字畫成「直方圖」，時間順序的資訊會完全消失——你只會看到營業額的分布，看不到趨勢與季節性。<strong>資料結構決定圖形選擇。</strong></div>
+</div>
+
+<div class="highlight">
+<strong>💡 進階提醒——貨幣的時間序列要小心「物價」：</strong>比較不同年代的金額（薪資、營收、票房）時，名目金額會受物價上漲影響。例如某商品十年間從 $55 漲到 $75（+36%），若同期間物價指數上漲了 30%，其「實質漲幅」其實有限。嚴謹的做法是先以消費者物價指數（CPI）平減，換算成同一年的「實質金額」再比較。
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 3.3
+══════════════════════════════════════════ -->
+<h2 id="s33">§3.3　散佈圖：描述兩個區間變數的關係 (Scatter Diagrams)</h2>
+
+<p>第 2 章用交叉分類表看「兩個名目變數」的關係；當兩個變數都是<strong>區間資料</strong>時，工具換成<strong>散佈圖 (scatter diagram)</strong>：每一個觀測對象畫成一個點，橫軸放<strong>自變數 $X$</strong>（推測是「因」），縱軸放<strong>應變數 $Y$</strong>（推測是「果」）。</p>
+
+<div class="example-block">
+<h3>📝 範例 3.4　氣溫與熱飲銷量</h3>
+<div class="scenario">
+<strong>情境：</strong>某連鎖咖啡店店長想了解「當日最高氣溫」與「熱飲銷售杯數」的關係，以便依氣象預報調整備料。隨機抽出過去一年中的 14 天：
+</div>
+<table>
+    <thead><tr><th>氣溫 (°C)</th><td>13</td><td>15</td><td>17</td><td>19</td><td>21</td><td>23</td><td>25</td><td>26</td><td>28</td><td>30</td><td>31</td><td>33</td><td>34</td><td>35</td></tr></thead>
+    <tbody><tr><th>熱飲 (杯)</th><td>352</td><td>331</td><td>338</td><td>296</td><td>285</td><td>271</td><td>250</td><td>262</td><td>224</td><td>212</td><td>221</td><td>186</td><td>178</td><td>170</td></tr></tbody>
+</table>
+<canvas id="scatter1" class="chart" width="620" height="320"></canvas>
+<p><strong>判讀：</strong>點群明顯沿一條「左上到右下」的直線分布——氣溫與熱飲銷量呈<strong>強烈的負向線性關係</strong>：氣溫越高、熱飲賣得越少，且點緊貼直線、關係很強。</p>
+<div class="note">✅ 決策意涵：店長可依氣象預報粗估銷量（例如「明天 30°C，熱飲備料約 210 杯上下」）。第 16 章的迴歸分析將教我們把這條直線正式「配適」出來，並量化預測的誤差。</div>
+</div>
+
+<h3>散佈圖的三個判讀面向</h3>
+<div class="two-col">
+    <div class="col-box">
+        <h3>① 線性程度</h3>
+        <p style="font-size:0.92em;">點群是否大致沿一條<strong>直線</strong>分布？也可能是曲線關係（如先升後降），或完全無型態。</p>
+    </div>
+    <div class="col-box">
+        <h3>② 方向</h3>
+        <p style="font-size:0.92em;"><strong>正向</strong>：$X$ 越大 $Y$ 越大（左下→右上）。<strong>負向</strong>：$X$ 越大 $Y$ 越小（左上→右下）。</p>
+    </div>
+</div>
+<div class="col-box" style="margin-top:-6px;">
+    <h3>③ 強弱</h3>
+    <p style="font-size:0.92em; margin-bottom:0;">點越<strong>緊貼</strong>直線關係越強；越<strong>發散</strong>越弱；散成一團雲則表示兩變數<strong>沒有線性關係</strong>。第 4 章的相關係數會把「強弱」變成一個 −1 到 +1 之間的數字。</p>
+</div>
+
+<canvas id="scatterGallery" class="chart" width="820" height="200"></canvas>
+
+<div class="highlight">
+<strong>⚠️ 相關 ≠ 因果：</strong>散佈圖只能顯示兩變數「一起變動」，不能證明誰造成誰。冰品銷量與溺水人數呈正相關，不是因為吃冰導致溺水，而是兩者背後都有「夏天」這個共同因素（干擾變數）。看到相關時，永遠先想想有沒有第三個變數在背後操盤。
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 3.4
+══════════════════════════════════════════ -->
+<h2 id="s34">§3.4　圖表呈現的藝術與科學 (The Art and Science of Graphical Presentation)</h2>
+
+<p>圖形是說服力極強的工具——也因此是<strong>誤導</strong>讀者最常見的工具。以下是三種最經典的手法；學會辨識它們，你就同時學會了如何誠實地做圖。</p>
+
+<h3>手法一：截斷縱軸，放大微小差異</h3>
+
+<div class="example-block">
+<h3>📝 範例 3.5　同一份資料的兩張圖</h3>
+<div class="scenario">
+<strong>情境：</strong>某市場調查中，甲、乙兩款瀏覽器的使用率分別為 42.1% 與 43.7%（相差 1.6 個百分點）。乙公司的行銷部門畫了左圖，新聞稿標題寫著「乙瀏覽器輾壓對手」。
+</div>
+<canvas id="misleadPair" class="chart" width="820" height="300"></canvas>
+<p><strong>判讀：</strong>左圖的縱軸從 41% 開始，把 1.6 個百分點的差距在視覺上放大成「兩倍高」；右圖從 0 開始，誠實呈現兩者其實相差無幾。</p>
+<div class="note">✅ 原則：長條圖的縱軸<strong>原則上應從 0 開始</strong>，因為長條的「高度比例」就是讀者對數量比例的直覺。若確有必要截斷（例如呈現微小但重要的變化），必須清楚標示斷軸記號，並在文字中說明實際差距。</div>
+</div>
+
+<h3>手法二：拉伸或壓縮橫軸，改變趨勢的「陡峭度」</h3>
+<p>同一條時間序列，把橫軸壓得越窄、縱軸拉得越高，成長看起來就越「暴衝」；反過來就顯得「平穩」。判讀線圖時，先看兩軸的刻度與範圍，再看線的形狀。</p>
+
+<h3>手法三：用面積或立體圖誇大倍數</h3>
+<p>當 A 是 B 的 2 倍時，若把圖示的「邊長」畫成 2 倍，面積就變成 4 倍、立體體積更達 8 倍——讀者的視覺印象會遠超過實際倍數。用圖示大小呈現數量時，應讓<strong>面積</strong>（而非邊長）與數量成正比，或乾脆改用長條圖。</p>
+
+<div class="highlight">
+<strong>💡 誠實製圖檢查清單：</strong>① 長條圖縱軸從 0 開始（或明確標示斷軸）；② 時間軸刻度等距；③ 圖示大小與數量成正比；④ 標題與標籤完整（單位、期間、資料來源）；⑤ 不挑選對自己有利的起訖時間點。
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     互動工具
+══════════════════════════════════════════ -->
+<h2 id="tool">🔢 互動工具：類組數實驗室</h2>
+
+<div class="calc-box">
+<h3>🔬 拖動滑桿，觀察類組數如何改變直方圖的樣貌</h3>
+<p style="font-size:0.93em; color:var(--muted);">資料為範例 3.1 的 180 筆套房租金。試試看：類組太少時右偏的細節被抹平；太多時圖形破碎、雜訊淹沒型態。你覺得幾組最能忠實呈現這份資料？</p>
+<div class="slider-row">
+    <span>類組數</span>
+    <input type="range" id="binSlider" min="3" max="24" value="8" oninput="updateBins()">
+    <span class="val" id="binVal">8 組</span>
+</div>
+<canvas id="labHist" class="chart" width="640" height="300"></canvas>
+</div>
+
+<hr>
+
+<!-- ══ Quiz ══ -->
+<div class="quiz-box" id="quiz">
+<h3>🧠 Quick Quiz</h3>
+
+<div class="quiz-q">
+    <p>Q1. 一組 300 筆的「客服等待時間」資料（最短 0 分鐘，少數個案長達 90 分鐘），其直方圖最可能呈現？</p>
+    <label><input type="radio" name="q1" value="a"> A. 左偏</label>
+    <label><input type="radio" name="q1" value="b"> B. 右偏</label>
+    <label><input type="radio" name="q1" value="c"> C. 完全對稱</label>
+    <label><input type="radio" name="q1" value="d"> D. 均勻分布</label>
+    <button onclick="checkQ('q1','b','✅ 正確！等待時間有下限 0、無上限，多數人等待不久、少數人等很久——長尾拖向右方，是典型的右偏分布。')">Submit</button>
+    <div class="quiz-feedback" id="q1-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q2. 「2025 年 12 月，全臺 22 縣市各自的平均房價」屬於哪一種資料結構？</p>
+    <label><input type="radio" name="q2" value="a"> A. 時間序列資料，因為有標年月</label>
+    <label><input type="radio" name="q2" value="b"> B. 橫斷面資料，因為是同一時間點觀察多個對象</label>
+    <label><input type="radio" name="q2" value="c"> C. 順序資料</label>
+    <label><input type="radio" name="q2" value="d"> D. 名目資料</label>
+    <button onclick="checkQ('q2','b','✅ 正確！同一個時間點（2025 年 12 月）觀察多個不同對象（22 縣市）＝橫斷面資料。若改成「臺北市 2015–2025 每月房價」才是時間序列。')">Submit</button>
+    <div class="quiz-feedback" id="q2-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q3. 某課程成績直方圖出現明顯雙峰，最合理的第一步是？</p>
+    <label><input type="radio" name="q3" value="a"> A. 增加類組數讓圖形變平滑</label>
+    <label><input type="radio" name="q3" value="b"> B. 直接以全班平均數作為代表值</label>
+    <label><input type="radio" name="q3" value="c"> C. 尋找可能把資料分成兩群的隱藏變數</label>
+    <label><input type="radio" name="q3" value="d"> D. 刪除較低的那個峰的資料</label>
+    <button onclick="checkQ('q3','c','✅ 正確！雙峰通常代表資料混合了兩個群體（例如：有無先修經驗）。平均數會落在兩峰之間的低谷，代表性極差；刪資料則是嚴重的分析錯誤。')">Submit</button>
+    <div class="quiz-feedback" id="q3-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q4. 散佈圖中，點群緊密地沿「左下到右上」的直線分布，代表兩變數？</p>
+    <label><input type="radio" name="q4" value="a"> A. 強烈的正向線性關係</label>
+    <label><input type="radio" name="q4" value="b"> B. 強烈的負向線性關係</label>
+    <label><input type="radio" name="q4" value="c"> C. 沒有關係</label>
+    <label><input type="radio" name="q4" value="d"> D. 一定存在因果關係</label>
+    <button onclick="checkQ('q4','a','✅ 正確！左下→右上＝正向；點緊貼直線＝關係強。注意 D 是陷阱：再強的相關也不能直接證明因果。')">Submit</button>
+    <div class="quiz-feedback" id="q4-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q5. 一張長條圖的縱軸從 95 開始（而非 0），呈現兩家公司市占率 96% 與 98%。這張圖最主要的問題是？</p>
+    <label><input type="radio" name="q5" value="a"> A. 應該改用圓餅圖</label>
+    <label><input type="radio" name="q5" value="b"> B. 截斷縱軸使 2 個百分點的差距在視覺上被放大數倍</label>
+    <label><input type="radio" name="q5" value="c"> C. 顏色不夠鮮豔</label>
+    <label><input type="radio" name="q5" value="d"> D. 沒有問題，這是標準做法</label>
+    <button onclick="checkQ('q5','b','✅ 正確！縱軸從 95 開始，98 的長條看起來是 96 的三倍高，但實際只差約 2%。長條圖縱軸原則上應從 0 開始，必要的截斷須明確標示。')">Submit</button>
+    <div class="quiz-feedback" id="q5-fb"></div>
+</div>
+
+</div>
+
+<hr>
+
+<!-- ══ Exercises ══ -->
+<h2 id="exercises">📚 綜合練習 (Comprehensive Practice)</h2>
+<p>以下習題涵蓋直方圖編製、形狀判讀、資料結構辨識、散佈圖與誤導圖形，請先獨立作答，再展開解答確認。</p>
+
+<h3>I. 概念複習</h3>
+<ol class="exercises-list">
+
+    <li>
+        <p>一組資料有 500 個觀測值，最小值 12、最大值 96。請建議適當的類組數與類組寬度。</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>查表：$n = 500$ 建議約 9–10 組（Sturges：$1 + 3.3\log_{10}500 \approx 9.9$，取 10 組）。</p>
+            <p>類組寬度 $\approx (96 - 12)/10 = 8.4$，向上取整為 <strong>10</strong>；類組可設為 10–20、20–30、⋯⋯、90–100，共 9 組，界限好讀。</p>
+            <p class="note" style="background:#f0f6ff;border-left:3px solid #4a90d9;padding:8px 12px;border-radius:0 4px 4px 0;">合理即可——類組數與寬度是「建議值」，重點是圖形能忠實呈現分布型態。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <p>判斷下列各資料集是「橫斷面資料」還是「時間序列資料」：<br>
+        a. 某超商 2020–2025 年每季的咖啡銷售量。<br>
+        b. 今年全國 160 所大專院校的註冊率。<br>
+        c. 某位病人住院期間每小時的體溫紀錄。<br>
+        d. 本月全臺各加油站的油品售價。</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <ul>
+                <li><strong>a. 時間序列</strong>——同一對象（該超商）依時間記錄多期。</li>
+                <li><strong>b. 橫斷面</strong>——同一時間點觀察多個對象（160 所學校）。</li>
+                <li><strong>c. 時間序列</strong>——同一對象（病人）依時間記錄。</li>
+                <li><strong>d. 橫斷面</strong>——同一時間（本月）觀察多個對象（各加油站）。</li>
+            </ul>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <p>直方圖與長條圖（第 2 章）外觀相似，請說出兩者至少三個不同之處。</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <table>
+                <thead><tr><th></th><th>長條圖</th><th>直方圖</th></tr></thead>
+                <tbody>
+                    <tr><td>適用資料</td><td>名目／順序（類別）</td><td>區間（數值）</td></tr>
+                    <tr><td>橫軸意義</td><td>互不相連的類別</td><td>連續數值切成的類組</td></tr>
+                    <tr><td>長條間距</td><td>留空隙（類別彼此獨立）</td><td>不留空隙（數值連續）</td></tr>
+                    <tr><td>可否重排</td><td>名目資料可依次數重排</td><td>不可重排（數值有天然順序）</td></tr>
+                </tbody>
+            </table>
+        </div>
+        </details>
+    </li>
+
+</ol>
+
+<h3>II. 應用練習</h3>
+<ol class="exercises-list">
+
+    <li>
+        <strong>3.1　外送平台的送達時間</strong>
+        <p>某外送平台抽出 40 筆訂單的送達時間（分鐘）：</p>
+        <p style="text-align:center; font-family:monospace; background:#f5f5f5; padding:10px; border-radius:6px;">
+            18 22 25 31 27 35 24 29 41 26 33 21 28 38 23 30 45 27 32 20<br>
+            36 25 52 29 34 22 40 28 31 26 58 24 37 30 27 43 33 25 39 28
+        </p>
+        <ul>
+            <li>a. 建議類組數與類組寬度，編製次數分配表。</li>
+            <li>b. 描述此分布的形狀。</li>
+            <li>c. 若平台廣告「30 分鐘內送達」，這批資料中有多少比例的訂單超過 30 分鐘？</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> $n = 40$，建議 5–7 組（Sturges $\approx 6.3$，取 6 組）。全距 $= 58 - 18 = 40$，寬度 $\approx 40/6 = 6.7$，取整為 <strong>7</strong>（或用寬度 8、起點 16 亦可）。以寬度 7、起點 15 為例：</p>
+            <table>
+                <thead><tr><th>送達時間（分）</th><th>次數</th><th>相對次數</th></tr></thead>
+                <tbody>
+                    <tr><td>15 ～ 22</td><td>6</td><td>0.150</td></tr>
+                    <tr><td>22 ～ 29</td><td>15</td><td>0.375</td></tr>
+                    <tr><td>29 ～ 36</td><td>11</td><td>0.275</td></tr>
+                    <tr><td>36 ～ 43</td><td>5</td><td>0.125</td></tr>
+                    <tr><td>43 ～ 50</td><td>1</td><td>0.025</td></tr>
+                    <tr><td>50 ～ 57</td><td>1</td><td>0.025</td></tr>
+                    <tr><td>57 ～ 64</td><td>1</td><td>0.025</td></tr>
+                    <tr style="font-weight:700;"><td>合計</td><td>40</td><td>1.000</td></tr>
+                </tbody>
+            </table>
+            <p>（觀測值等於上限時歸入該組；不同的合理分組會得到略不同的表。）</p>
+            <p><strong>b.</strong> 單峰、<strong>右偏</strong>——多數訂單在 22–36 分鐘，少數嚴重延遲（52、58 分）拖出右尾。等待型資料的典型形狀。</p>
+            <p><strong>c.</strong> 超過 30 分鐘的訂單：31、35、41、33、38、45、32、36、52、40、31、58、37、43、33、39 共 <strong>16 筆</strong>，占 $16/40 = 40\%$。廣告與現實有明顯落差。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>3.2　左偏還是右偏？</strong>
+        <p>推測下列變數的直方圖形狀，並說明理由：</p>
+        <ul>
+            <li>a. 某科技公司全體員工的月薪（含少數高階主管）。</li>
+            <li>b. 一批 LED 燈泡的實際使用壽命（設計壽命上限約 50,000 小時，多數接近上限，少數提早故障）。</li>
+            <li>c. 全國成年男性的身高。</li>
+            <li>d. 某簡單線上測驗的成績（多數人接近滿分）。</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <ul>
+                <li><strong>a. 右偏</strong>——多數員工薪資集中，少數高階主管的高薪拖出右尾。</li>
+                <li><strong>b. 左偏</strong>——多數燈泡壽命貼近上限，少數提早故障者拖出左尾。</li>
+                <li><strong>c. 對稱鐘形</strong>——身高是典型的常態分布近似。</li>
+                <li><strong>d. 左偏</strong>——分數擠在滿分附近（天花板效應），少數低分拖出左尾。</li>
+            </ul>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>3.3　健身 App 的使用數據</strong>
+        <p>某健身 App 產品經理取得 12 位會員的資料：每週開啟 App 次數 $X$ 與每月運動總時數 $Y$：</p>
+        <table>
+            <thead><tr><th>$X$（次/週）</th><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>12</td><td>13</td><td>15</td></tr></thead>
+            <tbody><tr><th>$Y$（時/月）</th><td>3</td><td>5</td><td>4</td><td>7</td><td>8</td><td>7</td><td>10</td><td>9</td><td>12</td><td>14</td><td>13</td><td>17</td></tr></tbody>
+        </table>
+        <ul>
+            <li>a. 哪個變數適合放橫軸？為什麼？</li>
+            <li>b. 描述散佈圖會呈現的型態（線性程度、方向、強弱）。</li>
+            <li>c. 產品經理宣稱「只要想辦法讓會員多開啟 App，運動時數就會增加」。這個推論有什麼問題？</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> 開啟次數 $X$ 放橫軸——研究目的是「以使用頻率推測運動行為」，$X$ 是自變數、$Y$ 是應變數。</p>
+            <p><strong>b.</strong> 點群沿左下→右上的直線緊密分布：<strong>強烈的正向線性關係</strong>。</p>
+            <p><strong>c.</strong> <strong>相關不代表因果</strong>。更可能的解釋是「運動意願高」這個第三變數同時推高了開啟次數與運動時數；強迫低意願會員多開 App（例如推播轟炸），未必能增加運動時數。要驗證因果，需要實驗設計（例如隨機分組推播），見第 5 章。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>3.4　拆穿誤導圖形</strong>
+        <p>指出下列圖形手法的問題，並提出修正建議：</p>
+        <ul>
+            <li>a. 新聞圖表呈現兩黨支持率 33% 與 35%，縱軸從 32% 畫到 36%，標題「支持率大幅領先」。</li>
+            <li>b. 某理財頻道呈現基金十年績效，橫軸前八年每年一格，最近兩年卻每季一格，讓近期漲勢看起來又長又陡。</li>
+            <li>c. 廣告用兩個咖啡杯圖示表達「銷量成長 2 倍」，右邊杯子的高度與寬度都畫成左邊的 2 倍。</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> 截斷縱軸——2 個百分點的差距被視覺放大成數倍。修正：縱軸從 0 開始，或明確標示斷軸並在標題避免誇大用語。</p>
+            <p><strong>b.</strong> 時間軸刻度不等距——後段被拉伸，趨勢陡峭度失真。修正：整條時間軸使用一致的刻度單位。</p>
+            <p><strong>c.</strong> 高、寬同時加倍使<strong>面積變成 4 倍</strong>，視覺印象遠超過實際的 2 倍。修正：讓面積與數量成正比，或改用長條圖（只放大單一維度）。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>3.5　為資料選對圖形</strong>
+        <p>為下列每個分析目的選擇最適當的圖形（長條圖／圓餅圖／直方圖／線圖／散佈圖），並簡述理由：</p>
+        <ul>
+            <li>a. 呈現某月全公司 800 筆差旅費報帳金額的分布。</li>
+            <li>b. 呈現公司近 36 個月的月營收走勢。</li>
+            <li>c. 呈現五個部門的人數占全公司的比重。</li>
+            <li>d. 探索「廣告支出」與「當月新客數」之間的關係。</li>
+            <li>e. 比較六個門市上季的來客數多寡。</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <ul>
+                <li><strong>a. 直方圖</strong>——一組區間資料的分布。</li>
+                <li><strong>b. 線圖</strong>——時間序列資料的趨勢。</li>
+                <li><strong>c. 圓餅圖</strong>——類別占整體的比重（僅 5 類，適用）。</li>
+                <li><strong>d. 散佈圖</strong>——兩個區間變數的關係。</li>
+                <li><strong>e. 長條圖</strong>——比較各類別（門市）的次數多寡。</li>
+            </ul>
+        </div>
+        </details>
+    </li>
+
+</ol>
+
+<hr>
+
+<!-- ══ Summary ══ -->
+<div class="summary" id="summary">
+<h2>📌 Chapter Summary</h2>
+<ul>
+    <li><strong>直方圖</strong>描述一組區間資料的分布：決定類組數（查表或 Sturges 公式）→ 決定類組寬度（全距 ÷ 類組數，取整）→ 計次繪圖；長條間不留空隙。</li>
+    <li><strong>判讀形狀三問</strong>：幾個峰（單峰／雙峰）？對稱嗎？往哪邊偏（右偏＝長尾在右）？雙峰暗示資料混合了兩個群體；「有下限無上限」的變數常右偏。</li>
+    <li><strong>橫斷面資料</strong>（同時間、多對象）用直方圖；<strong>時間序列資料</strong>（同對象、多期間）用<strong>線圖</strong>，注意趨勢與季節性；比較不同年代的金額應以物價指數平減。</li>
+    <li><strong>散佈圖</strong>描述兩個區間變數的關係，判讀三面向：線性程度、方向（正向／負向）、強弱。<strong>相關不等於因果</strong>——留意背後的第三變數。</li>
+    <li><strong>誤導圖形三手法</strong>：截斷縱軸、不等距時間軸、以面積／立體誇大倍數。誠實製圖：縱軸從 0 開始、刻度等距、圖示面積與數量成正比、標示完整。</li>
+</ul>
+</div>
+
+<!-- ══ Scripts ══ -->
+<script>
+// ── Quiz ──
+function checkQ(qid, correct, msg) {
+    const selected = document.querySelector(`input[name="${qid}"]:checked`);
+    const fb = document.getElementById(`${qid}-fb`);
+    if (!selected) { fb.style.display='block'; fb.className='quiz-feedback wrong'; fb.textContent='請先選擇一個答案。'; return; }
+    fb.style.display = 'block';
+    if (selected.value === correct) {
+        fb.className = 'quiz-feedback correct';
+        fb.innerHTML = msg;
+    } else {
+        fb.className = 'quiz-feedback wrong';
+        fb.innerHTML = '❌ 不正確，請再想想。提示：' + msg;
+    }
+}
+
+// ── 通用直方圖繪製 ──
+function drawHist(canvasId, edges, counts, opts) {
+    const cv = document.getElementById(canvasId);
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    const pL = 52, pR = 18, pT = 34, pB = 46;
+    const pW = W - pL - pR, pH = H - pT - pB;
+    const maxV = Math.max(...counts) * 1.12;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    if (opts && opts.title) {
+        ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 13px "Noto Sans TC", sans-serif';
+        ctx.textAlign = 'center'; ctx.fillText(opts.title, W/2, 18);
+    }
+    // y 格線
+    ctx.font = '10px sans-serif'; ctx.textAlign = 'right';
+    for (let i = 0; i <= 4; i++) {
+        const v = maxV / 4 * i;
+        const y = pT + pH - v / maxV * pH;
+        ctx.strokeStyle = i === 0 ? '#999' : '#eef2f8';
+        ctx.beginPath(); ctx.moveTo(pL, y); ctx.lineTo(W - pR, y); ctx.stroke();
+        ctx.fillStyle = '#777'; ctx.fillText(Math.round(v), pL - 5, y + 3);
+    }
+    const n = counts.length;
+    const xMin = edges[0], xMax = edges[n];
+    function px(x){ return pL + (x - xMin) / (xMax - xMin) * pW; }
+    for (let i = 0; i < n; i++) {
+        const x1 = px(edges[i]), x2 = px(edges[i+1]);
+        const h = counts[i] / maxV * pH;
+        ctx.fillStyle = 'rgba(46,108,184,0.82)';
+        ctx.fillRect(x1, pT + pH - h, x2 - x1 - 1, h);
+    }
+    // x 刻度（最多 9 個標籤）
+    ctx.fillStyle = '#555'; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
+    const step = Math.ceil((n + 1) / 9);
+    for (let i = 0; i <= n; i += step) {
+        const lab = (opts && opts.fmt) ? opts.fmt(edges[i]) : edges[i];
+        ctx.fillText(lab, px(edges[i]), pT + pH + 14);
+    }
+    if (opts && opts.xlabel) {
+        ctx.fillStyle = '#555'; ctx.font = '11px "Noto Sans TC", sans-serif';
+        ctx.fillText(opts.xlabel, pL + pW / 2, H - 8);
+    }
+}
+
+// ── 形狀小圖 ──
+function drawShape(canvasId, counts) {
+    const cv = document.getElementById(canvasId);
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    const pad = 12, base = H - 16;
+    const bw = (W - 2 * pad) / counts.length;
+    const maxV = Math.max(...counts);
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = '#bbb';
+    ctx.beginPath(); ctx.moveTo(pad, base); ctx.lineTo(W - pad, base); ctx.stroke();
+    for (let i = 0; i < counts.length; i++) {
+        const h = counts[i] / maxV * (H - 40);
+        ctx.fillStyle = 'rgba(46,108,184,0.8)';
+        ctx.fillRect(pad + i * bw, base - h, bw - 1.5, h);
+    }
+}
+
+// ── 線圖 ──
+function drawLine(canvasId, labels, values, opts) {
+    const cv = document.getElementById(canvasId);
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    const pL = 52, pR = 18, pT = 34, pB = 46;
+    const pW = W - pL - pR, pH = H - pT - pB;
+    const maxV = Math.max(...values) * 1.1, minV = 0;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    if (opts && opts.title) {
+        ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 13px "Noto Sans TC", sans-serif';
+        ctx.textAlign = 'center'; ctx.fillText(opts.title, W/2, 18);
+    }
+    ctx.font = '10px sans-serif'; ctx.textAlign = 'right';
+    for (let i = 0; i <= 4; i++) {
+        const v = minV + (maxV - minV) / 4 * i;
+        const y = pT + pH - (v - minV) / (maxV - minV) * pH;
+        ctx.strokeStyle = i === 0 ? '#999' : '#eef2f8';
+        ctx.beginPath(); ctx.moveTo(pL, y); ctx.lineTo(W - pR, y); ctx.stroke();
+        ctx.fillStyle = '#777'; ctx.fillText(Math.round(v), pL - 5, y + 3);
+    }
+    function px(i){ return pL + i / (values.length - 1) * pW; }
+    function py(v){ return pT + pH - (v - minV) / (maxV - minV) * pH; }
+    ctx.beginPath(); ctx.strokeStyle = '#2e6cb8'; ctx.lineWidth = 2;
+    values.forEach((v, i) => i === 0 ? ctx.moveTo(px(i), py(v)) : ctx.lineTo(px(i), py(v)));
+    ctx.stroke();
+    values.forEach((v, i) => {
+        ctx.beginPath(); ctx.fillStyle = '#1a3a6b';
+        ctx.arc(px(i), py(v), 2.6, 0, 7); ctx.fill();
+    });
+    ctx.fillStyle = '#555'; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
+    const step = Math.ceil(labels.length / 12);
+    for (let i = 0; i < labels.length; i += step) ctx.fillText(labels[i], px(i), pT + pH + 14);
+    if (opts && opts.xlabel) ctx.fillText(opts.xlabel, pL + pW/2, H - 8);
+}
+
+// ── 散佈圖 ──
+function drawScatter(canvasId, xs, ys, opts) {
+    const cv = document.getElementById(canvasId);
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    const pL = 56, pR = 18, pT = 34, pB = 50;
+    const pW = W - pL - pR, pH = H - pT - pB;
+    const xMin = Math.min(...xs) - 2, xMax = Math.max(...xs) + 2;
+    const yMin = Math.min(...ys) * 0.9, yMax = Math.max(...ys) * 1.06;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    if (opts && opts.title) {
+        ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 13px "Noto Sans TC", sans-serif';
+        ctx.textAlign = 'center'; ctx.fillText(opts.title, W/2, 18);
+    }
+    function px(x){ return pL + (x - xMin) / (xMax - xMin) * pW; }
+    function py(y){ return pT + pH - (y - yMin) / (yMax - yMin) * pH; }
+    // 軸
+    ctx.strokeStyle = '#999';
+    ctx.beginPath(); ctx.moveTo(pL, pT + pH); ctx.lineTo(W - pR, pT + pH); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(pL, pT); ctx.lineTo(pL, pT + pH); ctx.stroke();
+    ctx.font = '10px sans-serif'; ctx.fillStyle = '#777';
+    ctx.textAlign = 'center';
+    for (let i = 0; i <= 5; i++) {
+        const x = xMin + (xMax - xMin) / 5 * i;
+        ctx.fillText(x.toFixed(0), px(x), pT + pH + 14);
+    }
+    ctx.textAlign = 'right';
+    for (let i = 0; i <= 4; i++) {
+        const y = yMin + (yMax - yMin) / 4 * i;
+        ctx.fillText(y.toFixed(0), pL - 5, py(y) + 3);
+    }
+    // 點
+    for (let i = 0; i < xs.length; i++) {
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(192,57,43,0.8)';
+        ctx.arc(px(xs[i]), py(ys[i]), 4.5, 0, 7);
+        ctx.fill();
+    }
+    ctx.fillStyle = '#555'; ctx.font = '11px "Noto Sans TC", sans-serif'; ctx.textAlign = 'center';
+    if (opts && opts.xlabel) ctx.fillText(opts.xlabel, pL + pW / 2, H - 6);
+    if (opts && opts.ylabel) {
+        ctx.save(); ctx.translate(14, pT + pH / 2); ctx.rotate(-Math.PI / 2);
+        ctx.fillText(opts.ylabel, 0, 0); ctx.restore();
+    }
+}
+
+// ── 散佈圖型態小畫廊 ──
+function drawGallery() {
+    const cv = document.getElementById('scatterGallery');
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    const panels = [
+        { title: '強正向線性', fn: (x, r) => 0.8 * x + r * 8 },
+        { title: '弱正向線性', fn: (x, r) => 0.8 * x + r * 30 },
+        { title: '強負向線性', fn: (x, r) => 80 - 0.8 * x + r * 8 },
+        { title: '無線性關係', fn: (x, r) => 40 + r * 35 }
+    ];
+    // 固定偽亂數
+    let seed = 7;
+    function rnd(){ seed = (seed * 16807) % 2147483647; return seed / 2147483647 * 2 - 1; }
+    const pw = W / 4;
+    panels.forEach((p, k) => {
+        const ox = k * pw;
+        ctx.strokeStyle = '#dde'; ctx.strokeRect(ox + 8, 26, pw - 16, H - 44);
+        ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 12px "Noto Sans TC", sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText(p.title, ox + pw / 2, 16);
+        for (let i = 0; i < 26; i++) {
+            const x = 5 + i * 3.5 + rnd() * 2;
+            const y = p.fn(x, rnd());
+            const sx = ox + 8 + (x / 100) * (pw - 16);
+            const sy = 26 + (H - 44) * (1 - Math.max(0.02, Math.min(0.98, y / 100)));
+            ctx.beginPath(); ctx.fillStyle = 'rgba(46,108,184,0.75)';
+            ctx.arc(sx, sy, 3, 0, 7); ctx.fill();
+        }
+    });
+}
+
+// ── 誤導圖形對照 ──
+function drawMislead() {
+    const cv = document.getElementById('misleadPair');
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    const vals = [42.1, 43.7], labs = ['甲瀏覽器', '乙瀏覽器'];
+    function panel(ox, yStart, title, titleColor) {
+        const pw = W / 2, pL2 = ox + 60, pR2 = ox + pw - 24, pT2 = 42, pB2 = H - 44;
+        const ph = pB2 - pT2;
+        const yMax = 44;
+        ctx.fillStyle = titleColor; ctx.font = 'bold 13px "Noto Sans TC", sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText(title, ox + pw / 2, 22);
+        ctx.font = '10px sans-serif'; ctx.textAlign = 'right';
+        for (let i = 0; i <= 4; i++) {
+            const v = yStart + (yMax - yStart) / 4 * i;
+            const y = pB2 - (v - yStart) / (yMax - yStart) * ph;
+            ctx.strokeStyle = i === 0 ? '#999' : '#eef2f8';
+            ctx.beginPath(); ctx.moveTo(pL2, y); ctx.lineTo(pR2, y); ctx.stroke();
+            ctx.fillStyle = '#777'; ctx.fillText(v.toFixed(1) + '%', pL2 - 5, y + 3);
+        }
+        const bw = (pR2 - pL2) / 3;
+        vals.forEach((v, i) => {
+            const x = pL2 + bw * (0.5 + i * 1.2);
+            const h = (v - yStart) / (yMax - yStart) * ph;
+            ctx.fillStyle = i === 0 ? '#7fb3e8' : '#c0392b';
+            ctx.fillRect(x, pB2 - h, bw * 0.8, h);
+            ctx.fillStyle = '#333'; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'center';
+            ctx.fillText(v + '%', x + bw * 0.4, pB2 - h - 6);
+            ctx.font = '11px "Noto Sans TC", sans-serif';
+            ctx.fillText(labs[i], x + bw * 0.4, pB2 + 16);
+        });
+    }
+    panel(0, 41, '（誤導）縱軸從 41% 開始', '#c0392b');
+    panel(W / 2, 0, '（誠實）縱軸從 0% 開始', '#27ae60');
+}
+
+// ── 租金資料（與範例 3.1 一致的 180 筆，供類組實驗室使用）──
+const rentData = (function () {
+    const classCounts = [
+        [5000, 7500, 24], [7500, 10000, 58], [10000, 12500, 44], [12500, 15000, 26],
+        [15000, 17500, 14], [17500, 20000, 8], [20000, 22500, 5], [22500, 25000, 1]
+    ];
+    const data = [];
+    let seed = 42;
+    function rnd(){ seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+    classCounts.forEach(c => {
+        for (let i = 0; i < c[2]; i++) {
+            data.push(Math.round((c[0] + (c[1] - c[0]) * ((i + 0.5) / c[2] * 0.7 + rnd() * 0.3)) / 100) * 100);
+        }
+    });
+    return data;
+})();
+
+function updateBins() {
+    const k = parseInt(document.getElementById('binSlider').value);
+    document.getElementById('binVal').textContent = k + ' 組';
+    const lo = 5000, hi = 25000;
+    const w = (hi - lo) / k;
+    const edges = [], counts = new Array(k).fill(0);
+    for (let i = 0; i <= k; i++) edges.push(lo + w * i);
+    rentData.forEach(v => {
+        let idx = Math.min(k - 1, Math.floor((v - lo) / w));
+        counts[idx]++;
+    });
+    drawHist('labHist', edges, counts, {
+        title: '套房租金直方圖（n = 180，' + k + ' 組）',
+        fmt: v => (v / 1000) + 'k', xlabel: '月租金（元）'
+    });
+}
+
+// ── 初始化 ──
+document.addEventListener('DOMContentLoaded', function () {
+    drawHist('rentHist',
+        [5000,7500,10000,12500,15000,17500,20000,22500,25000],
+        [24,58,44,26,14,8,5,1],
+        { title: '圖 3.1　學區套房租金直方圖（n = 180）', fmt: v => (v/1000) + 'k', xlabel: '月租金（元）' });
+
+    drawShape('shpSym',  [3,7,14,22,26,22,14,7,3]);
+    drawShape('shpRight',[8,22,26,18,12,8,5,3,2]);
+    drawShape('shpLeft', [2,3,5,8,12,18,26,22,8]);
+    drawShape('shpUni',  [4,9,18,26,20,11,6,3,2]);
+    drawShape('shpBi',   [5,14,22,12,6,10,20,24,9]);
+    drawShape('shpBell', [2,6,13,22,26,22,13,6,2]);
+
+    drawHist('gradeHist',
+        [0,10,20,30,40,50,60,70,80,90,100],
+        [1,2,6,14,18,9,5,12,20,13],
+        { title: '圖 3.2　程式設計課期末成績（n = 100）：雙峰分布', fmt: v => v, xlabel: '期末成績（分）' });
+
+    drawLine('tsChart',
+        ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月',
+         '1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+        [31,28,36,45,58,79,92,96,74,52,40,33,
+         35,32,41,50,64,86,101,105,81,58,45,38],
+        { title: '圖 3.3　北極熊冰舖 24 個月營業額（萬元）', xlabel: '（第一年 → 第二年）' });
+
+    drawScatter('scatter1',
+        [13,15,17,19,21,23,25,26,28,30,31,33,34,35],
+        [352,331,338,296,285,271,250,262,224,212,221,186,178,170],
+        { title: '圖 3.4　當日最高氣溫 vs 熱飲銷量', xlabel: '當日最高氣溫（°C）', ylabel: '熱飲銷量（杯）' });
+
+    drawGallery();
+    drawMislead();
+    updateBins();
+});
+</script>
+
+</body>
+</html>
