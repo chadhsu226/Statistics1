@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 2　圖表敘述法（一）</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false }
+                ],
+                throwOnError: false,
+                strict: "ignore"
+            });
+        });
+    </script>
+    <style>
+        :root {
+            --navy: #1a3a6b;
+            --blue: #2e6cb8;
+            --blue-light: #4a90d9;
+            --accent: #c0392b;
+            --gold: #d4a017;
+            --green: #27ae60;
+            --bg: #f7f9fc;
+            --card: #ffffff;
+            --border: #d0dcea;
+            --text: #2c3e50;
+            --muted: #5a6a7a;
+            --math-bg: #eaf3ff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Noto Sans TC', 'Source Serif 4', Georgia, serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 36px 24px 80px;
+        }
+        h1 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 2rem; font-weight: 700;
+            color: var(--navy);
+            border-bottom: 4px solid var(--blue-light);
+            padding-bottom: 12px; margin-bottom: 20px;
+        }
+        h2 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 1.45rem; font-weight: 600;
+            color: var(--navy);
+            margin-top: 48px; margin-bottom: 14px;
+            border-left: 5px solid var(--blue-light);
+            padding-left: 12px;
+        }
+        h3 { font-size: 1.1rem; font-weight: 700; color: var(--blue); margin-top: 28px; margin-bottom: 10px; }
+        p { margin-bottom: 12px; }
+        ul, ol { margin-left: 24px; margin-bottom: 12px; }
+        li { margin-bottom: 6px; }
+        hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+        .chapter-intro {
+            font-size: 1.05rem; color: var(--muted);
+            border-left: 3px solid var(--blue-light);
+            padding: 10px 16px; background: #eef4fb;
+            border-radius: 0 6px 6px 0; margin-bottom: 24px;
+        }
+        .learning-goals {
+            background: #fffbea; border: 1.5px solid var(--gold);
+            border-radius: 8px; padding: 18px 22px; margin: 24px 0;
+        }
+        .learning-goals h3 { color: #8a6000; margin-top: 0; }
+        .toc {
+            background: var(--card); border: 1.5px solid var(--border);
+            border-radius: 8px; padding: 18px 24px; margin: 24px 0;
+            box-shadow: 0 2px 8px rgba(30,60,110,0.06);
+        }
+        .toc h3 { color: var(--navy); margin-top: 0; }
+        .toc a { color: var(--blue); text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+        .highlight {
+            background: #fffbe6; border-left: 4px solid var(--gold);
+            padding: 12px 16px; margin: 16px 0; border-radius: 0 6px 6px 0;
+        }
+        .math-block {
+            background: var(--math-bg); border-radius: 6px;
+            padding: 14px 18px; margin: 14px 0;
+            overflow-x: auto; font-size: 1.05em; text-align: center;
+        }
+        .formula-card {
+            background: var(--card); border: 2px solid var(--blue-light);
+            border-radius: 10px; padding: 18px 22px; margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(74,144,217,0.1);
+        }
+        .formula-card h3 { margin-top: 0; color: var(--navy); }
+        .formula-card .note {
+            font-size: 0.9em; color: var(--muted);
+            background: #f0f6ff; border-left: 3px solid #aac4ee;
+            padding: 8px 12px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .example-block {
+            background: #f0faff; border-left: 5px solid var(--blue-light);
+            border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 20px 0;
+        }
+        .example-block h3 { color: var(--navy); margin-top: 0; }
+        .example-block .note {
+            font-size: 0.92em; color: #333;
+            background: #e6f7e6; border-left: 3px solid var(--green);
+            padding: 10px 14px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .example-block .warn {
+            font-size: 0.92em; background: #fff3cd;
+            border-left: 3px solid var(--gold);
+            padding: 10px 14px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .scenario {
+            background: #f8f4ff; border: 1.5px dashed #9b7fd4;
+            border-radius: 8px; padding: 12px 18px; margin-bottom: 14px;
+            font-size: 0.97em; color: #3d2070;
+        }
+        .scenario strong { color: #6a3fbf; }
+        table {
+            width: 100%; border-collapse: collapse;
+            margin: 14px 0; font-size: 0.95em;
+        }
+        th, td { border: 1px solid #c8d8ec; padding: 8px 12px; text-align: center; }
+        th { background: #ddeeff; color: var(--navy); font-weight: 600; }
+        tr:nth-child(even) { background: #f5f8ff; }
+        .type-table th { background: var(--navy); color: white; }
+
+        canvas.chart {
+            display: block; margin: 14px auto;
+            border: 1px solid #ddd; border-radius: 6px; background: #fff;
+            max-width: 100%;
+        }
+
+        /* ── Quiz ── */
+        .quiz-box {
+            background: #f0f6ff; border: 1.5px solid var(--blue-light);
+            border-radius: 10px; padding: 22px 26px; margin: 28px 0;
+        }
+        .quiz-box h3 { color: var(--navy); margin-top: 0; }
+        .quiz-q { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin-bottom: 16px; }
+        .quiz-q p { font-weight: 600; margin-bottom: 10px; }
+        .quiz-q label { display: block; margin: 6px 0; cursor: pointer; font-size: 0.97em; font-weight: 400; }
+        .quiz-q button { margin-top: 10px; padding: 7px 18px; background: var(--blue); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9em; }
+        .quiz-q button:hover { background: var(--navy); }
+        .quiz-feedback { display: none; margin-top: 10px; padding: 10px 14px; border-radius: 6px; font-size: 0.95em; }
+        .quiz-feedback.correct { background: #d4edda; border-left: 4px solid var(--green); color: #155724; }
+        .quiz-feedback.wrong { background: #f8d7da; border-left: 4px solid var(--accent); color: #721c24; }
+
+        /* ── Exercises ── */
+        .exercises-list { counter-reset: ex-counter; list-style: none; padding: 0; margin-left: 0; }
+        .exercises-list > li {
+            counter-increment: ex-counter;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 8px; padding: 16px 20px; margin-bottom: 16px;
+        }
+        .exercises-list > li strong { color: var(--navy); }
+        details summary { cursor: pointer; color: var(--blue); font-weight: 700; margin-top: 12px; user-select: none; }
+        details summary:hover { color: var(--navy); }
+        details > div { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+
+        /* ── Summary ── */
+        .summary {
+            background: var(--navy); color: #e8f0fc;
+            border-radius: 10px; padding: 22px 26px; margin-top: 40px;
+        }
+        .summary h2 { color: #c8dcf8; border-left-color: #6aaae8; }
+        .summary ul { margin-bottom: 0; }
+        .summary li { margin-bottom: 10px; color: #d8e8f8; }
+        .summary strong { color: #a8d0f8; }
+
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+        .col-box { border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; background: #fafbff; }
+        .col-box h3 { font-size: 0.98em; margin-top: 0; text-align: center; }
+
+        /* ── 互動工具 ── */
+        .calc-box {
+            background: var(--card); border: 1.5px solid var(--border);
+            border-radius: 10px; padding: 22px 26px; margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(30,60,110,0.06);
+        }
+        .calc-box h3 { margin-top: 0; color: var(--navy); }
+        .calc-box button { padding: 8px 22px; background: var(--blue); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.95em; margin: 4px 8px 4px 0; }
+        .calc-box button:hover { background: var(--navy); }
+        .tool-row { display: flex; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+        .tool-row input[type="text"] { flex: 2; min-width: 120px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 5px; }
+        .tool-row input[type="number"] { flex: 1; min-width: 80px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 5px; }
+        .charts-wrap { display: grid; grid-template-columns: 3fr 2fr; gap: 12px; align-items: start; }
+        @media (max-width: 640px) {
+            .two-col, .charts-wrap { grid-template-columns: 1fr; }
+            body { padding: 20px 14px 60px; }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Chapter 2　圖表敘述法（一） (Graphical Descriptive Techniques I)</h1>
+
+<p class="chapter-intro">
+選對統計方法的第一步，是認清手上的資料是「哪一種資料」。本章先建立資料類型（區間、順序、名目）的判斷能力——這個判斷將貫穿整個課程；接著學習如何用次數分配表、長條圖與圓餅圖描述類別型資料，以及如何用交叉分類表觀察兩個名目變數之間的關係。
+</p>
+
+<div class="learning-goals">
+<h3>🎯 Learning Objectives</h3>
+<ul>
+    <li>能區分<strong>區間資料、順序資料、名目資料</strong>，並判斷各類型允許的運算。</li>
+    <li>能編製<strong>次數分配表</strong>與<strong>相對次數分配表</strong>。</li>
+    <li>能繪製並判讀<strong>長條圖</strong>與<strong>圓餅圖</strong>，並知道兩者各自適用的時機。</li>
+    <li>理解描述<strong>順序資料</strong>時「類別順序不可打亂」的原則。</li>
+    <li>能編製<strong>交叉分類表</strong>並計算列（行）相對次數，判斷兩個名目變數是否存在關聯。</li>
+</ul>
+</div>
+
+<div class="toc">
+<h3>📋 本章內容</h3>
+<ol>
+    <li><a href="#s21">§2.1　資料與資訊的類型</a>
+        <ol style="margin-top:4px;">
+            <li><a href="#s21-1">變數與資料</a></li>
+            <li><a href="#s21-2">三種資料類型</a></li>
+            <li><a href="#s21-3">各類型允許的運算與層級關係</a></li>
+        </ol>
+    </li>
+    <li><a href="#s22">§2.2　描述一組名目資料</a>
+        <ol style="margin-top:4px;">
+            <li><a href="#s22-1">次數分配表</a></li>
+            <li><a href="#s22-2">長條圖與圓餅圖</a></li>
+            <li><a href="#s22-3">描述順序資料</a></li>
+        </ol>
+    </li>
+    <li><a href="#s23">§2.3　描述兩個名目變數的關係</a></li>
+    <li><a href="#tool">🔢 互動工具：長條圖／圓餅圖產生器</a></li>
+    <li><a href="#quiz">🧠 Quick Quiz</a></li>
+    <li><a href="#exercises">📚 綜合練習</a></li>
+    <li><a href="#summary">📌 Chapter Summary</a></li>
+</ol>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 2.1
+══════════════════════════════════════════ -->
+<h2 id="s21">§2.1　資料與資訊的類型 (Types of Data and Information)</h2>
+
+<h3 id="s21-1">一、變數與資料</h3>
+<ul>
+    <li><strong>變數 (Variable)</strong>：研究對象身上某種會變動的特性。例如：大學生的「通勤方式」、「每月餐費」、「宿舍滿意度」。</li>
+    <li><strong>資料 (Data)</strong>：變數的實際觀測值。例如：某位同學的通勤方式是「捷運」、每月餐費是 $6,200。</li>
+</ul>
+
+<h3 id="s21-2">二、三種資料類型</h3>
+
+<div class="formula-card">
+<h3>📐 資料類型的定義</h3>
+<ul>
+    <li><strong>區間資料 (Interval Data)</strong>：觀測值是<strong>真實的數字</strong>，數字的差距有實質意義，可以進行算術運算。又稱定量資料 (quantitative) 或數值資料 (numerical)。<br>
+    <span style="color:var(--muted); font-size:0.92em;">例：通勤時間 35 分鐘、月租金 $8,300、手機電池容量 5,000 mAh。</span></li>
+    <li><strong>順序資料 (Ordinal Data)</strong>：觀測值是類別，但類別之間<strong>有明確的順序（等級）</strong>；然而「等級之間的差距」沒有固定意義。<br>
+    <span style="color:var(--muted); font-size:0.92em;">例：滿意度（非常滿意／滿意／普通／不滿意／非常不滿意）、手搖飲甜度（正常糖／少糖／半糖／微糖／無糖）、成績等第（A / B / C / D）。</span></li>
+    <li><strong>名目資料 (Nominal Data)</strong>：觀測值是類別，且類別之間<strong>沒有任何順序關係</strong>。又稱定性資料 (qualitative) 或類別資料 (categorical)。<br>
+    <span style="color:var(--muted); font-size:0.92em;">例：通勤方式（步行／機車／公車／捷運）、行動支付品牌、血型、就讀學院。</span></li>
+</ul>
+<p class="note">判斷心法：先問「是數字嗎？數字的差有意義嗎？」→ 是：區間資料。再問「類別有天生的大小順序嗎？」→ 有：順序資料；沒有：名目資料。</p>
+</div>
+
+<div class="highlight">
+<strong>⚠️ 常見陷阱：</strong>「用數字編碼」不代表是區間資料！問卷上把「非常滿意」記成 5、「非常不滿意」記成 1，這些數字只是<strong>代碼</strong>——5 和 4 的差距，未必等於 2 和 1 的差距。同理，學號、郵遞區號、球衣背號都是數字形式的<strong>名目資料</strong>，拿去計算平均毫無意義。
+</div>
+
+<div class="example-block">
+<h3>📝 範例 2.1　判斷資料類型</h3>
+<div class="scenario">
+<strong>情境：</strong>學校宿舍管理中心對住宿生進行年度調查，問卷包含下列項目。請判斷每一項蒐集到的資料類型。
+</div>
+<ol style="margin-bottom:10px;">
+    <li>你每月支出的住宿相關費用（元）</li>
+    <li>你對宿舍網路品質的評價（非常滿意～非常不滿意，五個等級）</li>
+    <li>你所屬的學院（文、理、工、商、設計）</li>
+    <li>你房間所在的樓層高度（樓層數，用於分析與滿意度的關係）</li>
+    <li>你最常使用的洗衣時段（早上／下午／晚上／深夜）</li>
+    <li>你認為宿舍公共空間需要改善的優先順序（第 1 優先～第 4 優先）</li>
+</ol>
+<details><summary>▶ 點此展開解答</summary>
+<div>
+<table>
+    <thead><tr><th>項目</th><th>資料類型</th><th>理由</th></tr></thead>
+    <tbody>
+        <tr><td>1. 住宿費用</td><td><strong>區間</strong></td><td style="text-align:left;">真實數字，$7,000 與 $6,000 相差 $1,000 有實質意義</td></tr>
+        <tr><td>2. 網路滿意度</td><td><strong>順序</strong></td><td style="text-align:left;">類別有高低之分，但等級間差距無固定意義</td></tr>
+        <tr><td>3. 學院</td><td><strong>名目</strong></td><td style="text-align:left;">類別之間沒有順序（工學院並不「大於」文學院）</td></tr>
+        <tr><td>4. 樓層數</td><td><strong>區間</strong></td><td style="text-align:left;">數字差距有意義（8 樓比 3 樓高 5 層）</td></tr>
+        <tr><td>5. 洗衣時段</td><td><strong>名目</strong></td><td style="text-align:left;">時段是類別；此處僅區分種類、無高低之分</td></tr>
+        <tr><td>6. 改善優先順序</td><td><strong>順序</strong></td><td style="text-align:left;">「第 1 優先」高於「第 2 優先」，有明確等級</td></tr>
+    </tbody>
+</table>
+<p class="note" style="background:#f0f6ff;border-left:3px solid #4a90d9;padding:8px 12px;border-radius:0 4px 4px 0;">第 5 題若情境改成「依離峰折扣高低排列時段」，時段就帶有順序意義——<strong>資料類型取決於研究目的與衡量方式，不是名詞本身</strong>。</p>
+</div>
+</details>
+</div>
+
+<h3 id="s21-3">三、各類型允許的運算與層級關係</h3>
+
+<table class="type-table">
+    <thead>
+        <tr><th>資料類型</th><th>允許的運算／處理</th><th>典型的統計方法</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>區間</strong></td>
+            <td style="text-align:left;">全部算術運算（加減乘除）、排序、計次</td>
+            <td style="text-align:left;">平均數、標準差（ch4）、直方圖（ch3）</td>
+        </tr>
+        <tr>
+            <td><strong>順序</strong></td>
+            <td style="text-align:left;">排序（比大小）、計次；<strong>不可</strong>加減乘除</td>
+            <td style="text-align:left;">中位數、百分位數（ch4）、依序排列的長條圖</td>
+        </tr>
+        <tr>
+            <td><strong>名目</strong></td>
+            <td style="text-align:left;">只能計次（算各類別出現幾次）</td>
+            <td style="text-align:left;">次數分配表、長條圖、圓餅圖（本章）、眾數（ch4）</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="highlight">
+<strong>💡 層級關係（可降不可升）：</strong>區間 &gt; 順序 &gt; 名目。高層級資料可以「降級」使用較低層級的方法（例如把「月餐費」分成高／中／低三組來計次），但會損失資訊；低層級資料<strong>不能升級</strong>（滿意度代碼 1–5 不能拿來算平均——雖然實務上常有人這麼做，詮釋時必須非常小心）。
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 2.2
+══════════════════════════════════════════ -->
+<h2 id="s22">§2.2　描述一組名目資料 (Describing Nominal Data)</h2>
+
+<p>名目資料唯一能做的運算是<strong>計次</strong>，因此描述名目資料的方法都建立在「數每個類別出現幾次」之上。</p>
+
+<h3 id="s22-1">一、次數分配表 (Frequency Distribution)</h3>
+
+<div class="formula-card">
+<h3>📐 兩個基本工具</h3>
+<ul>
+    <li><strong>次數分配表</strong>：列出每個類別及其出現次數（frequency）。</li>
+    <li><strong>相對次數分配表</strong>：列出每個類別出現次數<strong>占總數的比例</strong>。</li>
+</ul>
+<div class="math-block">$$\text{相對次數} = \frac{\text{該類別的次數}}{\text{觀測值總數}}$$</div>
+<p class="note">當我們想比較「兩組大小不同的資料」時，相對次數比次數更有用——600 人中的 150 人與 200 人中的 80 人，誰的占比高？換成相對次數（25% vs 40%）一目瞭然。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 2.2　大學生行動支付使用調查</h3>
+<div class="scenario">
+<strong>情境：</strong>某大學商學院學生會想了解全校學生最常使用的行動支付工具，以決定園遊會攤位該優先支援哪些支付方式。隨機調查 600 位學生「最常使用的行動支付」，原始回答經整理後如下。
+</div>
+<table>
+    <thead>
+        <tr><th>行動支付工具</th><th>次數</th><th>相對次數</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>LINE Pay</td><td>168</td><td>168 / 600 = 0.280</td></tr>
+        <tr><td>街口支付</td><td>132</td><td>132 / 600 = 0.220</td></tr>
+        <tr><td>Apple Pay</td><td>120</td><td>120 / 600 = 0.200</td></tr>
+        <tr><td>全盈／全支付</td><td>90</td><td>90 / 600 = 0.150</td></tr>
+        <tr><td>其他</td><td>60</td><td>60 / 600 = 0.100</td></tr>
+        <tr><td>未使用行動支付</td><td>30</td><td>30 / 600 = 0.050</td></tr>
+        <tr style="font-weight:700;"><td>合計</td><td>600</td><td>1.000</td></tr>
+    </tbody>
+</table>
+<div class="note">✅ 判讀：LINE Pay 以 28% 居冠，前三名合計即涵蓋 70% 的學生。對學生會而言，攤位只要支援前三種工具，就能服務約七成使用行動支付的同學。</div>
+</div>
+
+<h3 id="s22-2">二、長條圖與圓餅圖 (Bar Chart & Pie Chart)</h3>
+
+<div class="two-col">
+    <div class="col-box">
+        <h3>長條圖 Bar Chart</h3>
+        <p style="font-size:0.93em;">以長條的<strong>高度</strong>表示各類別的次數（或相對次數）。適合<strong>比較各類別的多寡</strong>，尤其類別較多時仍然清晰。</p>
+    </div>
+    <div class="col-box">
+        <h3>圓餅圖 Pie Chart</h3>
+        <p style="font-size:0.93em;">以扇形的<strong>角度</strong>表示各類別占整體的比例（類別比例 × 360°）。適合<strong>強調「占整體的比重」</strong>，類別過多（&gt;6 個）時不易判讀。</p>
+    </div>
+</div>
+
+<p>以範例 2.2 的資料繪製兩種圖形：</p>
+<canvas id="payBar" class="chart" width="560" height="300"></canvas>
+<canvas id="payPie" class="chart" width="560" height="300"></canvas>
+
+<div class="highlight">
+<strong>💡 選圖原則：</strong>想回答「<em>哪個類別最多？各類別差多少？</em>」→ 長條圖；想回答「<em>某類別占整體多少比重？</em>」→ 圓餅圖。兩者呈現的是同一份次數分配表，只是視覺重點不同。
+</div>
+
+<h3 id="s22-3">三、描述順序資料</h3>
+<p>順序資料同樣以計次為基礎，但繪圖時必須遵守一個原則：<strong>類別必須依照天生的順序排列</strong>，不可像名目資料一樣按次數高低重排，否則會破壞資料的順序資訊。</p>
+
+<div class="example-block">
+<h3>📝 範例 2.3　宿舍網路品質滿意度</h3>
+<div class="scenario">
+<strong>情境：</strong>延續範例 2.1 的宿舍調查，共回收 500 份有效問卷，網路品質滿意度的分布如下。
+</div>
+<table>
+    <thead>
+        <tr><th>滿意度等級</th><th>次數</th><th>相對次數</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>非常滿意</td><td>45</td><td>0.09</td></tr>
+        <tr><td>滿意</td><td>140</td><td>0.28</td></tr>
+        <tr><td>普通</td><td>170</td><td>0.34</td></tr>
+        <tr><td>不滿意</td><td>105</td><td>0.21</td></tr>
+        <tr><td>非常不滿意</td><td>40</td><td>0.08</td></tr>
+        <tr style="font-weight:700;"><td>合計</td><td>500</td><td>1.00</td></tr>
+    </tbody>
+</table>
+<canvas id="dormBar" class="chart" width="560" height="280"></canvas>
+<div class="note">✅ 長條圖依「非常滿意 → 非常不滿意」的順序排列，可以直接看出分布<strong>偏向哪一端</strong>：滿意端（37%）略多於不滿意端（29%），但「普通」占最大宗，顯示多數住宿生感受平平。</div>
+<div class="warn">⚠️ 若把長條依次數高低重排（普通、滿意、不滿意⋯⋯），圖形會失去「偏向哪一端」的資訊——這是順序資料與名目資料在繪圖上最大的差異。</div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 2.3
+══════════════════════════════════════════ -->
+<h2 id="s23">§2.3　描述兩個名目變數的關係 (Describing the Relationship between Two Nominal Variables)</h2>
+
+<p>單一變數的次數分配回答「這個變數長什麼樣」；當我們想知道<strong>兩個名目變數之間有沒有關聯</strong>，就需要<strong>交叉分類表 (cross-classification table / contingency table)</strong>。</p>
+
+<div class="formula-card">
+<h3>📐 交叉分類表的編製與判讀</h3>
+<ol>
+    <li>將變數一的類別放在<strong>列 (row)</strong>，變數二的類別放在<strong>行 (column)</strong>，數出每個組合的次數。</li>
+    <li>計算<strong>列相對次數</strong>（每格次數 ÷ 該列總和），使各列可以互相比較。</li>
+    <li>判讀原則：
+        <ul>
+            <li>若各列的相對次數分布<strong>大致相同</strong> → 兩變數<strong>沒有明顯關聯</strong>。</li>
+            <li>若各列的相對次數分布<strong>明顯不同</strong> → 兩變數<strong>存在關聯</strong>。</li>
+        </ul>
+    </li>
+</ol>
+<p class="note">第 15 章的卡方檢定會用統計方法正式檢驗這種關聯是否顯著；本章先學會用表格與圖形「看出」關聯。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 2.4　健身房會員的入會管道與續約行為</h3>
+<div class="scenario">
+<strong>情境：</strong>某連鎖健身房想了解「會員的入會管道」與「一年後是否續約」有沒有關聯，作為行銷預算分配的依據。整理 800 名到期會員的紀錄如下（次數）。
+</div>
+<table>
+    <thead>
+        <tr><th>入會管道 ＼ 續約行為</th><th>續約</th><th>未續約</th><th>列總和</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>朋友推薦</strong></td><td>168</td><td>72</td><td>240</td></tr>
+        <tr><td><strong>社群廣告</strong></td><td>112</td><td>168</td><td>280</td></tr>
+        <tr><td><strong>路過門市</strong></td><td>96</td><td>64</td><td>160</td></tr>
+        <tr><td><strong>企業特約</strong></td><td>84</td><td>36</td><td>120</td></tr>
+        <tr style="font-weight:700;"><td>行總和</td><td>460</td><td>340</td><td>800</td></tr>
+    </tbody>
+</table>
+<p><strong>Step 1　計算列相對次數</strong>（每格 ÷ 列總和）：</p>
+<table>
+    <thead>
+        <tr><th>入會管道</th><th>續約率</th><th>未續約率</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>朋友推薦</td><td>168/240 = <strong>0.70</strong></td><td>0.30</td></tr>
+        <tr><td>社群廣告</td><td>112/280 = <strong>0.40</strong></td><td>0.60</td></tr>
+        <tr><td>路過門市</td><td>96/160 = <strong>0.60</strong></td><td>0.40</td></tr>
+        <tr><td>企業特約</td><td>84/120 = <strong>0.70</strong></td><td>0.30</td></tr>
+    </tbody>
+</table>
+<canvas id="gymBar" class="chart" width="620" height="300"></canvas>
+<p><strong>Step 2　判讀</strong></p>
+<ul>
+    <li>四個管道的續約率<strong>明顯不同</strong>（40% ～ 70%）→「入會管道」與「續約行為」<strong>存在關聯</strong>。</li>
+    <li>朋友推薦與企業特約的會員續約率最高（70%）；社群廣告吸引來的會員雖然人數最多（280 人），續約率卻只有 40%。</li>
+</ul>
+<div class="note">✅ 決策意涵：社群廣告帶來大量「嘗鮮型」會員但留存差。健身房可考慮把部分廣告預算移往「推薦獎勵方案」，或針對廣告入會者設計前三個月的留存計畫。──這就是把「資料」變成「資訊」的完整過程。</div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     互動工具
+══════════════════════════════════════════ -->
+<h2 id="tool">🔢 互動工具：長條圖／圓餅圖產生器</h2>
+
+<div class="calc-box">
+<h3>📊 輸入你的次數分配表，立即產生圖形</h3>
+<p style="font-size:0.93em; color:var(--muted);">預設為範例 2.2 的行動支付資料。你可以修改類別名稱與次數、增減類別（2–8 個），觀察長條圖與圓餅圖如何變化。</p>
+<div id="toolRows"></div>
+<button onclick="addRow()">＋ 新增類別</button>
+<button onclick="removeRow()" style="background:#7a8aa0;">－ 移除最後一列</button>
+<button onclick="drawCharts()">🎨 產生圖形</button>
+<div class="charts-wrap">
+    <canvas id="toolBar" class="chart" width="440" height="300"></canvas>
+    <canvas id="toolPie" class="chart" width="300" height="300"></canvas>
+</div>
+</div>
+
+<hr>
+
+<!-- ══ Quiz ══ -->
+<div class="quiz-box" id="quiz">
+<h3>🧠 Quick Quiz</h3>
+
+<div class="quiz-q">
+    <p>Q1. 「外送平台顧客給餐廳的星等評分（1～5 顆星）」屬於哪一種資料？</p>
+    <label><input type="radio" name="q1" value="a"> A. 區間資料，因為星等是數字</label>
+    <label><input type="radio" name="q1" value="b"> B. 順序資料，因為星等有高低但差距無固定意義</label>
+    <label><input type="radio" name="q1" value="c"> C. 名目資料，因為星等只是類別</label>
+    <label><input type="radio" name="q1" value="d"> D. 以上皆可，看心情決定</label>
+    <button onclick="checkQ('q1','b','✅ 正確！星等有明確順序（5 星優於 4 星），但「5 星與 4 星的差距」未必等於「2 星與 1 星的差距」，數字只是等級代碼，因此是順序資料。')">Submit</button>
+    <div class="quiz-feedback" id="q1-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q2. 下列哪一種資料「只能計次，不能排序也不能做算術運算」？</p>
+    <label><input type="radio" name="q2" value="a"> A. 每月電費金額</label>
+    <label><input type="radio" name="q2" value="b"> B. 教學評量等第（優／良／可／差）</label>
+    <label><input type="radio" name="q2" value="c"> C. 學生證上的學號</label>
+    <label><input type="radio" name="q2" value="d"> D. 一週運動時數</label>
+    <button onclick="checkQ('q2','c','✅ 正確！學號雖然是數字，但只是識別代碼——沒有大小意義、不能比較也不能運算，是名目資料。A、D 是區間資料；B 是順序資料（可排序）。')">Submit</button>
+    <div class="quiz-feedback" id="q2-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q3. 想向店長呈現「本店五種飲品類別各占總銷量的比重」，最適合的圖形是？</p>
+    <label><input type="radio" name="q3" value="a"> A. 圓餅圖，因為重點是各類別占整體的比例</label>
+    <label><input type="radio" name="q3" value="b"> B. 散佈圖，因為有兩個變數</label>
+    <label><input type="radio" name="q3" value="c"> C. 折線圖，因為要看趨勢</label>
+    <label><input type="radio" name="q3" value="d"> D. 直方圖，因為銷量是數字</label>
+    <button onclick="checkQ('q3','a','✅ 正確！強調「占整體比重」用圓餅圖。散佈圖與折線圖用於區間資料（ch3）；直方圖描述的是一組區間資料的分布，不是類別的占比。')">Submit</button>
+    <div class="quiz-feedback" id="q3-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q4. 繪製「顧客滿意度（非常滿意～非常不滿意）」的長條圖時，下列何者正確？</p>
+    <label><input type="radio" name="q4" value="a"> A. 應把次數最多的類別排最左邊，視覺上比較好看</label>
+    <label><input type="radio" name="q4" value="b"> B. 應依滿意度等級的天生順序排列長條</label>
+    <label><input type="radio" name="q4" value="c"> C. 順序資料不能畫長條圖</label>
+    <label><input type="radio" name="q4" value="d"> D. 應改用圓餅圖，因為滿意度是比例</label>
+    <button onclick="checkQ('q4','b','✅ 正確！順序資料的類別必須依天生順序排列，讀者才能看出分布「偏向滿意端還是不滿意端」。按次數重排是名目資料才允許的做法。')">Submit</button>
+    <div class="quiz-feedback" id="q4-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q5. 某交叉分類表中，「大一、大二、大三、大四」四個列的『列相對次數分布』幾乎一模一樣。正確的解讀是？</p>
+    <label><input type="radio" name="q5" value="a"> A. 年級與該行變數之間存在強烈關聯</label>
+    <label><input type="radio" name="q5" value="b"> B. 年級與該行變數之間沒有明顯關聯</label>
+    <label><input type="radio" name="q5" value="c"> C. 樣本一定出了問題</label>
+    <label><input type="radio" name="q5" value="d"> D. 應該改用圓餅圖分析</label>
+    <button onclick="checkQ('q5','b','✅ 正確！各列的相對次數分布相似，代表不管哪個年級，行變數的分布都差不多——即兩變數沒有明顯關聯。分布明顯不同才代表有關聯。')">Submit</button>
+    <div class="quiz-feedback" id="q5-fb"></div>
+</div>
+
+</div>
+
+<hr>
+
+<!-- ══ Exercises ══ -->
+<h2 id="exercises">📚 綜合練習 (Comprehensive Practice)</h2>
+<p>以下習題涵蓋資料類型判斷、次數分配與圖形繪製、交叉分類表判讀，請先獨立作答，再展開解答確認。</p>
+
+<h3>I. 概念複習</h3>
+<ol class="exercises-list">
+
+    <li>
+        <p>請說明區間資料、順序資料、名目資料的定義，並指出每一種資料允許的運算。</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <ul>
+                <li><strong>區間資料</strong>：真實數字、差距有實質意義。允許全部算術運算、排序、計次。</li>
+                <li><strong>順序資料</strong>：有序類別，等級間差距無固定意義。允許排序與計次，不可做算術運算。</li>
+                <li><strong>名目資料</strong>：無序類別。只能計次。</li>
+                <li>層級：區間 &gt; 順序 &gt; 名目；高層級可降級處理（損失資訊），低層級不可升級。</li>
+            </ul>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <p>長條圖與圓餅圖各適合回答什麼問題？各舉一個適用情境。</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <ul>
+                <li><strong>長條圖</strong>：適合比較各類別次數的多寡。例：比較五個社團的招生人數誰多誰少。</li>
+                <li><strong>圓餅圖</strong>：適合呈現各類別占整體的比重。例：呈現公司營收中各產品線的占比。</li>
+                <li>補充：類別很多（超過 6 個）或各類別占比接近時，圓餅圖不易判讀，建議改用長條圖。</li>
+            </ul>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <p>為什麼問卷中「非常同意 = 5、⋯⋯、非常不同意 = 1」的資料，計算平均數時必須特別小心？</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>這是<strong>順序資料</strong>——數字只是等級代碼。計算平均數隱含「等級之間差距相等」的假設（5 到 4 的差距 = 2 到 1 的差距），但這個假設通常無法驗證。</p>
+            <p>例如兩組回答 {5, 1, 3} 與 {3, 3, 3} 的「平均」都是 3，但兩組的意見結構完全不同（極端對立 vs 一致中立）。較穩妥的做法是報告<strong>各等級的次數分配</strong>或使用<strong>中位數</strong>。實務上（如學術問卷）仍常見對順序資料取平均，但詮釋結論時必須保守。</p>
+        </div>
+        </details>
+    </li>
+
+</ol>
+
+<h3>II. 應用練習</h3>
+<ol class="exercises-list">
+
+    <li>
+        <strong>2.1　資料類型大會考</strong>
+        <p>判斷下列各項資料的類型（區間／順序／名目）：</p>
+        <ul>
+            <li>a. 便利商店會員 App 的月消費金額</li>
+            <li>b. 咖啡烘焙程度（淺焙／中焙／中深焙／深焙）</li>
+            <li>c. 機車的廠牌</li>
+            <li>d. 電影分級（普遍級／保護級／輔導級／限制級）</li>
+            <li>e. 高鐵列車的實際誤點分鐘數</li>
+            <li>f. 手機門號的電信業者</li>
+            <li>g. 颱風強度分級（輕度／中度／強烈）</li>
+            <li>h. 網購包裹的重量（公斤）</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <table>
+                <thead><tr><th>項目</th><th>類型</th><th>關鍵理由</th></tr></thead>
+                <tbody>
+                    <tr><td>a. 月消費金額</td><td>區間</td><td style="text-align:left;">真實數字，差距有意義</td></tr>
+                    <tr><td>b. 烘焙程度</td><td>順序</td><td style="text-align:left;">有淺→深的天生順序</td></tr>
+                    <tr><td>c. 機車廠牌</td><td>名目</td><td style="text-align:left;">類別無高低之分</td></tr>
+                    <tr><td>d. 電影分級</td><td>順序</td><td style="text-align:left;">分級有年齡限制的高低順序</td></tr>
+                    <tr><td>e. 誤點分鐘數</td><td>區間</td><td style="text-align:left;">真實數字（0 分、7 分、15 分⋯⋯）</td></tr>
+                    <tr><td>f. 電信業者</td><td>名目</td><td style="text-align:left;">類別無順序</td></tr>
+                    <tr><td>g. 颱風強度</td><td>順序</td><td style="text-align:left;">輕度＜中度＜強烈</td></tr>
+                    <tr><td>h. 包裹重量</td><td>區間</td><td style="text-align:left;">真實數字</td></tr>
+                </tbody>
+            </table>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>2.2　社團博覽會的攤位人氣</strong>
+        <p>社團博覽會結束後，主辦單位統計 480 位新生「最有興趣加入的社團類型」：運動類 156 人、音樂表演類 108 人、學術研究類 84 人、康樂遊憩類 72 人、志工服務類 60 人。</p>
+        <ul>
+            <li>a. 編製次數與相對次數分配表。</li>
+            <li>b. 這是哪一種資料？適合用哪些圖形呈現？</li>
+            <li>c. 若明年場地只能容納三個大型攤位區，你會建議優先給哪些類型？依據為何？</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong></p>
+            <table>
+                <thead><tr><th>社團類型</th><th>次數</th><th>相對次數</th></tr></thead>
+                <tbody>
+                    <tr><td>運動類</td><td>156</td><td>0.325</td></tr>
+                    <tr><td>音樂表演類</td><td>108</td><td>0.225</td></tr>
+                    <tr><td>學術研究類</td><td>84</td><td>0.175</td></tr>
+                    <tr><td>康樂遊憩類</td><td>72</td><td>0.150</td></tr>
+                    <tr><td>志工服務類</td><td>60</td><td>0.125</td></tr>
+                    <tr style="font-weight:700;"><td>合計</td><td>480</td><td>1.000</td></tr>
+                </tbody>
+            </table>
+            <p><strong>b.</strong> 名目資料（社團類型無天生順序）。適合長條圖（比較人氣高低）與圓餅圖（呈現占比）。</p>
+            <p><strong>c.</strong> 運動、音樂表演、學術研究三類合計占 72.5%，優先配置大型攤位區能服務最多新生。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>2.3　外送 App 的評分分布</strong>
+        <p>某餐廳整理最近 400 筆外送訂單的顧客星等：5 星 148 筆、4 星 120 筆、3 星 72 筆、2 星 36 筆、1 星 24 筆。</p>
+        <ul>
+            <li>a. 這是哪一種資料？</li>
+            <li>b. 繪製長條圖時，橫軸類別應如何排列？為什麼？</li>
+            <li>c. 計算相對次數，並描述這個分布「偏向哪一端」。</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> 順序資料——星等有高低，但差距無固定意義。</p>
+            <p><strong>b.</strong> 依星等順序排列（1★→5★ 或 5★→1★），不可按次數重排，否則會失去「分布偏向哪一端」的資訊。</p>
+            <p><strong>c.</strong> 相對次數：5★ 0.37、4★ 0.30、3★ 0.18、2★ 0.09、1★ 0.06。分布明顯<strong>偏向高分端</strong>——4 星以上合計 67%，2 星以下僅 15%，整體評價良好。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>2.4　通識課程的選課管道與滿意度</strong>
+        <p>教務處想了解「學生得知通識課程的管道」與「修畢後是否推薦該課程」有無關聯，調查 600 位修課學生：</p>
+        <table>
+            <thead><tr><th>得知管道 ＼ 是否推薦</th><th>推薦</th><th>不推薦</th><th>列總和</th></tr></thead>
+            <tbody>
+                <tr><td>選課地圖網站</td><td>144</td><td>96</td><td>240</td></tr>
+                <tr><td>同學口碑</td><td>150</td><td>50</td><td>200</td></tr>
+                <tr><td>隨機亂選</td><td>64</td><td>96</td><td>160</td></tr>
+                <tr style="font-weight:700;"><td>行總和</td><td>358</td><td>242</td><td>600</td></tr>
+            </tbody>
+        </table>
+        <ul>
+            <li>a. 計算各列的列相對次數（推薦率）。</li>
+            <li>b. 「得知管道」與「是否推薦」有關聯嗎？請說明判讀依據。</li>
+            <li>c. 從教務處的角度，這個結果有什麼實務意涵？</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> 推薦率：選課地圖 144/240 = <strong>0.60</strong>；同學口碑 150/200 = <strong>0.75</strong>；隨機亂選 64/160 = <strong>0.40</strong>。</p>
+            <p><strong>b.</strong> <strong>有關聯</strong>——三列的相對次數分布明顯不同（推薦率 40% ～ 75%）。若無關聯，三個管道的推薦率應該都接近整體平均 59.7%。</p>
+            <p><strong>c.</strong> 透過口碑選課的學生滿意度最高，隨機亂選的最低。教務處可強化選課資訊的流通（例如公開課程評價系統），減少「資訊不足下亂選課」的情況，提升整體修課滿意度。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>2.5　幫圖形挑錯</strong>
+        <p>學弟製作了一份報告，其中兩個圖形有問題。請指出問題並提出修正建議：</p>
+        <ul>
+            <li>a. 用<strong>圓餅圖</strong>呈現「12 個縣市的觀光人次占比」，扇形多到需要用 12 種顏色標示。</li>
+            <li>b. 把「教學評量等第（優／良／可／差）」的長條圖按次數高低重排成「良、優、差、可」。</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> 類別過多（12 個）導致扇形太細碎、顏色難以對應，圓餅圖失去可讀性。建議：改用<strong>長條圖</strong>（可依人次排序），或只列前 5 大縣市、其餘合併為「其他」。</p>
+            <p><strong>b.</strong> 教學評量等第是<strong>順序資料</strong>，按次數重排會破壞「優→差」的天生順序，讀者無法看出分布偏向哪一端。建議：依「優、良、可、差」的順序排列長條。</p>
+        </div>
+        </details>
+    </li>
+
+</ol>
+
+<hr>
+
+<!-- ══ Summary ══ -->
+<div class="summary" id="summary">
+<h2>📌 Chapter Summary</h2>
+<ul>
+    <li><strong>三種資料類型</strong>：區間資料（真實數字，可做全部運算）、順序資料（有序類別，只能排序與計次）、名目資料（無序類別，只能計次）。層級可降不可升，且「數字編碼」不等於區間資料。</li>
+    <li><strong>資料類型決定統計方法</strong>——這是每一章開頭都要先問的問題。</li>
+    <li><strong>描述名目資料</strong>：次數分配表、相對次數分配表；圖形用長條圖（比較多寡）與圓餅圖（呈現占比，類別勿超過 6 個）。</li>
+    <li><strong>描述順序資料</strong>：方法與名目資料相同，但類別必須依天生順序排列，以保留「分布偏向哪一端」的資訊。</li>
+    <li><strong>交叉分類表</strong>：描述兩個名目變數的關係；計算列相對次數後比較各列——分布相似則無關聯，分布明顯不同則有關聯（正式檢定見第 15 章卡方檢定）。</li>
+</ul>
+</div>
+
+<!-- ══ Scripts ══ -->
+<script>
+// ── Quiz ──
+function checkQ(qid, correct, msg) {
+    const selected = document.querySelector(`input[name="${qid}"]:checked`);
+    const fb = document.getElementById(`${qid}-fb`);
+    if (!selected) { fb.style.display='block'; fb.className='quiz-feedback wrong'; fb.textContent='請先選擇一個答案。'; return; }
+    fb.style.display = 'block';
+    if (selected.value === correct) {
+        fb.className = 'quiz-feedback correct';
+        fb.innerHTML = msg;
+    } else {
+        fb.className = 'quiz-feedback wrong';
+        fb.innerHTML = '❌ 不正確，請再想想。提示：' + msg;
+    }
+}
+
+// ── 圖形繪製引擎 ──
+const PALETTE = ['#2e6cb8','#4a90d9','#7fb3e8','#d4a017','#27ae60','#c0392b','#8e6cc0','#5a6a7a'];
+
+function drawBarChart(canvasId, labels, values, opts) {
+    const cv = document.getElementById(canvasId);
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    const pL = 52, pR = 20, pT = 34, pB = 56;
+    const pW = W - pL - pR, pH = H - pT - pB;
+    const maxV = Math.max(...values) * 1.15;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+
+    // 標題
+    if (opts && opts.title) {
+        ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 14px "Noto Sans TC", sans-serif';
+        ctx.textAlign = 'center'; ctx.fillText(opts.title, W/2, 20);
+    }
+    // y 軸格線與刻度
+    ctx.font = '11px sans-serif'; ctx.textAlign = 'right';
+    const steps = 5;
+    for (let i = 0; i <= steps; i++) {
+        const v = maxV / steps * i;
+        const y = pT + pH - (v / maxV) * pH;
+        ctx.strokeStyle = i === 0 ? '#999' : '#e8eef6';
+        ctx.beginPath(); ctx.moveTo(pL, y); ctx.lineTo(W - pR, y); ctx.stroke();
+        ctx.fillStyle = '#777';
+        ctx.fillText(Math.round(v), pL - 6, y + 4);
+    }
+    // 長條
+    const n = labels.length;
+    const gap = pW / n * 0.25;
+    const bw = pW / n - gap;
+    ctx.textAlign = 'center';
+    for (let i = 0; i < n; i++) {
+        const x = pL + i * (bw + gap) + gap / 2;
+        const h = (values[i] / maxV) * pH;
+        const y = pT + pH - h;
+        ctx.fillStyle = (opts && opts.mono) ? PALETTE[0] : PALETTE[i % PALETTE.length];
+        ctx.fillRect(x, y, bw, h);
+        // 數值標籤
+        ctx.fillStyle = '#333'; ctx.font = 'bold 11px sans-serif';
+        ctx.fillText(values[i], x + bw / 2, y - 5);
+        // 類別標籤（過長換行）
+        ctx.fillStyle = '#444'; ctx.font = '11px "Noto Sans TC", sans-serif';
+        const lab = labels[i];
+        if (lab.length > 5) {
+            ctx.fillText(lab.slice(0, 5), x + bw / 2, pT + pH + 16);
+            ctx.fillText(lab.slice(5), x + bw / 2, pT + pH + 29);
+        } else {
+            ctx.fillText(lab, x + bw / 2, pT + pH + 16);
+        }
+    }
+}
+
+function drawPieChart(canvasId, labels, values, opts) {
+    const cv = document.getElementById(canvasId);
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    if (opts && opts.title) {
+        ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 14px "Noto Sans TC", sans-serif';
+        ctx.textAlign = 'center'; ctx.fillText(opts.title, W/2, 20);
+    }
+    const total = values.reduce((a, b) => a + b, 0);
+    const hasLegend = W > 380;
+    const cx = hasLegend ? H / 2 + 10 : W / 2;
+    const cy = H / 2 + 10;
+    const r = Math.min(W, H) / 2 - 40;
+    let ang = -Math.PI / 2;
+    for (let i = 0; i < values.length; i++) {
+        const slice = values[i] / total * 2 * Math.PI;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, r, ang, ang + slice);
+        ctx.closePath();
+        ctx.fillStyle = PALETTE[i % PALETTE.length];
+        ctx.fill();
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+        // 百分比標籤
+        const mid = ang + slice / 2;
+        const pct = (values[i] / total * 100);
+        if (pct >= 4) {
+            ctx.fillStyle = '#fff'; ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'center';
+            ctx.fillText(pct.toFixed(1) + '%', cx + Math.cos(mid) * r * 0.62, cy + Math.sin(mid) * r * 0.62 + 4);
+        }
+        ang += slice;
+    }
+    // 圖例
+    ctx.textAlign = 'left'; ctx.font = '12px "Noto Sans TC", sans-serif';
+    const lx = hasLegend ? cx + r + 24 : 10;
+    let ly = hasLegend ? cy - r + 6 : H - values.length * 9;
+    if (hasLegend) {
+        for (let i = 0; i < labels.length; i++) {
+            ctx.fillStyle = PALETTE[i % PALETTE.length];
+            ctx.fillRect(lx, ly - 9, 12, 12);
+            ctx.fillStyle = '#333';
+            ctx.fillText(labels[i] + '（' + values[i] + '）', lx + 18, ly + 2);
+            ly += 22;
+        }
+    }
+}
+
+function drawGroupedBar(canvasId, groups, series, opts) {
+    // groups: 類別名稱陣列; series: [{name, values, color}]
+    const cv = document.getElementById(canvasId);
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    const pL = 56, pR = 20, pT = 40, pB = 56;
+    const pW = W - pL - pR, pH = H - pT - pB;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    if (opts && opts.title) {
+        ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 14px "Noto Sans TC", sans-serif';
+        ctx.textAlign = 'center'; ctx.fillText(opts.title, W/2, 18);
+    }
+    const maxV = 1.0; // 相對次數
+    ctx.font = '11px sans-serif'; ctx.textAlign = 'right';
+    for (let i = 0; i <= 5; i++) {
+        const v = maxV / 5 * i;
+        const y = pT + pH - (v / maxV) * pH;
+        ctx.strokeStyle = i === 0 ? '#999' : '#e8eef6';
+        ctx.beginPath(); ctx.moveTo(pL, y); ctx.lineTo(W - pR, y); ctx.stroke();
+        ctx.fillStyle = '#777';
+        ctx.fillText((v * 100).toFixed(0) + '%', pL - 6, y + 4);
+    }
+    const nG = groups.length, nS = series.length;
+    const groupW = pW / nG;
+    const bw = groupW * 0.7 / nS;
+    ctx.textAlign = 'center';
+    for (let g = 0; g < nG; g++) {
+        for (let s = 0; s < nS; s++) {
+            const x = pL + g * groupW + groupW * 0.15 + s * bw;
+            const v = series[s].values[g];
+            const h = (v / maxV) * pH;
+            const y = pT + pH - h;
+            ctx.fillStyle = series[s].color;
+            ctx.fillRect(x, y, bw - 3, h);
+            ctx.fillStyle = '#333'; ctx.font = 'bold 10px sans-serif';
+            ctx.fillText((v * 100).toFixed(0) + '%', x + (bw - 3) / 2, y - 4);
+        }
+        ctx.fillStyle = '#444'; ctx.font = '11px "Noto Sans TC", sans-serif';
+        ctx.fillText(groups[g], pL + g * groupW + groupW / 2, pT + pH + 16);
+    }
+    // 圖例
+    let lx = pL;
+    const ly = H - 12;
+    ctx.textAlign = 'left'; ctx.font = '12px "Noto Sans TC", sans-serif';
+    for (let s = 0; s < nS; s++) {
+        ctx.fillStyle = series[s].color;
+        ctx.fillRect(lx, ly - 10, 12, 12);
+        ctx.fillStyle = '#333';
+        ctx.fillText(series[s].name, lx + 16, ly);
+        lx += ctx.measureText(series[s].name).width + 42;
+    }
+}
+
+// ── 課文內建圖形 ──
+document.addEventListener('DOMContentLoaded', function () {
+    drawBarChart('payBar',
+        ['LINE Pay','街口支付','Apple Pay','全盈/全支付','其他','未使用'],
+        [168,132,120,90,60,30],
+        { title: '圖 2.1　行動支付使用調查長條圖（n = 600）' });
+    drawPieChart('payPie',
+        ['LINE Pay','街口支付','Apple Pay','全盈/全支付','其他','未使用'],
+        [168,132,120,90,60,30],
+        { title: '圖 2.2　行動支付使用調查圓餅圖' });
+    drawBarChart('dormBar',
+        ['非常滿意','滿意','普通','不滿意','非常不滿意'],
+        [45,140,170,105,40],
+        { title: '圖 2.3　宿舍網路滿意度（依等級順序排列）', mono: true });
+    drawGroupedBar('gymBar',
+        ['朋友推薦','社群廣告','路過門市','企業特約'],
+        [
+            { name: '續約', values: [0.70,0.40,0.60,0.70], color: '#27ae60' },
+            { name: '未續約', values: [0.30,0.60,0.40,0.30], color: '#c0392b' }
+        ],
+        { title: '圖 2.4　各入會管道的續約率（列相對次數）' });
+    initTool();
+    drawCharts();
+});
+
+// ── 互動工具 ──
+const defaultData = [
+    ['LINE Pay', 168], ['街口支付', 132], ['Apple Pay', 120],
+    ['全盈/全支付', 90], ['其他', 60], ['未使用', 30]
+];
+function initTool() {
+    const wrap = document.getElementById('toolRows');
+    wrap.innerHTML = '';
+    defaultData.forEach(d => appendRow(d[0], d[1]));
+}
+function appendRow(name, val) {
+    const wrap = document.getElementById('toolRows');
+    const div = document.createElement('div');
+    div.className = 'tool-row';
+    div.innerHTML = `<input type="text" value="${name}" placeholder="類別名稱">
+                     <input type="number" value="${val}" min="0" placeholder="次數">`;
+    wrap.appendChild(div);
+}
+function addRow() {
+    const wrap = document.getElementById('toolRows');
+    if (wrap.children.length >= 8) { alert('最多 8 個類別（類別太多時圓餅圖會難以判讀）'); return; }
+    appendRow('新類別', 50);
+}
+function removeRow() {
+    const wrap = document.getElementById('toolRows');
+    if (wrap.children.length <= 2) { alert('至少保留 2 個類別'); return; }
+    wrap.removeChild(wrap.lastChild);
+}
+function drawCharts() {
+    const rows = document.querySelectorAll('#toolRows .tool-row');
+    const labels = [], values = [];
+    rows.forEach(r => {
+        const name = r.children[0].value.trim() || '(未命名)';
+        const v = parseFloat(r.children[1].value);
+        if (!isNaN(v) && v >= 0) { labels.push(name); values.push(v); }
+    });
+    if (values.length < 2 || values.reduce((a,b)=>a+b,0) === 0) return;
+    drawBarChart('toolBar', labels, values, { title: '長條圖' });
+    drawPieChart('toolPie', labels, values, { title: '圓餅圖' });
+}
+</script>
+
+</body>
+</html>
