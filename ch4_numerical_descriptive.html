@@ -507,10 +507,15 @@ $$s_B^2 = \frac{(-10)^2 + (-5)^2 + 0^2 + 5^2 + 10^2}{5-1} = \frac{250}{4} = 62.5
 <div class="example-block">
 <h3>📝 範例 4.7　氣溫與熱飲銷量的相關係數（延續第 3 章範例 3.4）</h3>
 <div class="scenario">
-<strong>情境：</strong>店長從第 3 章的資料中取 8 天，想把散佈圖上「強烈負向」的目測印象量化。<br>
-氣溫 $x$（°C）：<span style="font-family:monospace;">16, 18, 22, 24, 28, 30, 34, 36</span><br>
-熱飲 $y$（杯）：<span style="font-family:monospace;">330, 310, 290, 260, 240, 220, 180, 170</span>
+<strong>情境：</strong>店長從第 3 章的資料中取 8 天，想把散佈圖上「強烈負向」的目測印象量化。
 </div>
+<table>
+    <thead><tr><th>天</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th></tr></thead>
+    <tbody>
+        <tr><th>氣溫 $x$（°C）</th><td>16</td><td>18</td><td>22</td><td>24</td><td>28</td><td>30</td><td>34</td><td>36</td></tr>
+        <tr><th>熱飲 $y$（杯）</th><td>330</td><td>310</td><td>290</td><td>260</td><td>240</td><td>220</td><td>180</td><td>170</td></tr>
+    </tbody>
+</table>
 <p><strong>Step 1　平均數</strong>：$\bar{x} = 208/8 = 26$、$\bar{y} = 2000/8 = 250$</p>
 <p><strong>Step 2　離差與乘積和</strong>：</p>
 <table>
@@ -965,12 +970,4 @@ Q1 = ${q1.toFixed(4)}　Q3 = ${q3.toFixed(4)}　IQR = ${iqr.toFixed(4)}
 document.addEventListener('DOMContentLoaded', function () {
     drawEmpRule();
     drawBoxPlot('boxDemo', {
-        q1: 14, med: 15, q3: 17, wLo: 12, wHi: 18,
-        outliers: [45], lo: 10, hi: 47
-    }, { title: '圖 4.1　日光咖啡 11 天營業額盒鬚圖（千元）：45 為離群值' });
-    calcStats();
-});
-</script>
-
-</body>
-</html>
+        q
