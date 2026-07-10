@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 5　資料蒐集與抽樣</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false }
+                ],
+                throwOnError: false,
+                strict: "ignore"
+            });
+        });
+    </script>
+    <style>
+        :root {
+            --navy: #1a3a6b;
+            --blue: #2e6cb8;
+            --blue-light: #4a90d9;
+            --accent: #c0392b;
+            --gold: #d4a017;
+            --green: #27ae60;
+            --bg: #f7f9fc;
+            --card: #ffffff;
+            --border: #d0dcea;
+            --text: #2c3e50;
+            --muted: #5a6a7a;
+            --math-bg: #eaf3ff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Noto Sans TC', 'Source Serif 4', Georgia, serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 36px 24px 80px;
+        }
+        h1 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 2rem; font-weight: 700;
+            color: var(--navy);
+            border-bottom: 4px solid var(--blue-light);
+            padding-bottom: 12px; margin-bottom: 20px;
+        }
+        h2 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 1.45rem; font-weight: 600;
+            color: var(--navy);
+            margin-top: 48px; margin-bottom: 14px;
+            border-left: 5px solid var(--blue-light);
+            padding-left: 12px;
+        }
+        h3 { font-size: 1.1rem; font-weight: 700; color: var(--blue); margin-top: 28px; margin-bottom: 10px; }
+        p { margin-bottom: 12px; }
+        ul, ol { margin-left: 24px; margin-bottom: 12px; }
+        li { margin-bottom: 6px; }
+        hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+        .chapter-intro {
+            font-size: 1.05rem; color: var(--muted);
+            border-left: 3px solid var(--blue-light);
+            padding: 10px 16px; background: #eef4fb;
+            border-radius: 0 6px 6px 0; margin-bottom: 24px;
+        }
+        .learning-goals {
+            background: #fffbea; border: 1.5px solid var(--gold);
+            border-radius: 8px; padding: 18px 22px; margin: 24px 0;
+        }
+        .learning-goals h3 { color: #8a6000; margin-top: 0; }
+        .toc {
+            background: var(--card); border: 1.5px solid var(--border);
+            border-radius: 8px; padding: 18px 24px; margin: 24px 0;
+            box-shadow: 0 2px 8px rgba(30,60,110,0.06);
+        }
+        .toc h3 { color: var(--navy); margin-top: 0; }
+        .toc a { color: var(--blue); text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+        .highlight {
+            background: #fffbe6; border-left: 4px solid var(--gold);
+            padding: 12px 16px; margin: 16px 0; border-radius: 0 6px 6px 0;
+        }
+        .formula-card {
+            background: var(--card); border: 2px solid var(--blue-light);
+            border-radius: 10px; padding: 18px 22px; margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(74,144,217,0.1);
+        }
+        .formula-card h3 { margin-top: 0; color: var(--navy); }
+        .formula-card .note {
+            font-size: 0.9em; color: var(--muted);
+            background: #f0f6ff; border-left: 3px solid #aac4ee;
+            padding: 8px 12px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .example-block {
+            background: #f0faff; border-left: 5px solid var(--blue-light);
+            border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 20px 0;
+        }
+        .example-block h3 { color: var(--navy); margin-top: 0; }
+        .example-block .note {
+            font-size: 0.92em; color: #333;
+            background: #e6f7e6; border-left: 3px solid var(--green);
+            padding: 10px 14px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .example-block .warn {
+            font-size: 0.92em; background: #fff3cd;
+            border-left: 3px solid var(--gold);
+            padding: 10px 14px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .scenario {
+            background: #f8f4ff; border: 1.5px dashed #9b7fd4;
+            border-radius: 8px; padding: 12px 18px; margin-bottom: 14px;
+            font-size: 0.97em; color: #3d2070;
+        }
+        .scenario strong { color: #6a3fbf; }
+        table {
+            width: 100%; border-collapse: collapse;
+            margin: 14px 0; font-size: 0.95em;
+        }
+        th, td { border: 1px solid #c8d8ec; padding: 8px 12px; text-align: center; }
+        th { background: #ddeeff; color: var(--navy); font-weight: 600; }
+        tr:nth-child(even) { background: #f5f8ff; }
+        .type-table th { background: var(--navy); color: white; }
+
+        canvas.chart {
+            display: block; margin: 14px auto;
+            border: 1px solid #ddd; border-radius: 6px; background: #fff;
+            max-width: 100%;
+        }
+
+        .quiz-box {
+            background: #f0f6ff; border: 1.5px solid var(--blue-light);
+            border-radius: 10px; padding: 22px 26px; margin: 28px 0;
+        }
+        .quiz-box h3 { color: var(--navy); margin-top: 0; }
+        .quiz-q { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin-bottom: 16px; }
+        .quiz-q p { font-weight: 600; margin-bottom: 10px; }
+        .quiz-q label { display: block; margin: 6px 0; cursor: pointer; font-size: 0.97em; font-weight: 400; }
+        .quiz-q button { margin-top: 10px; padding: 7px 18px; background: var(--blue); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9em; }
+        .quiz-q button:hover { background: var(--navy); }
+        .quiz-feedback { display: none; margin-top: 10px; padding: 10px 14px; border-radius: 6px; font-size: 0.95em; }
+        .quiz-feedback.correct { background: #d4edda; border-left: 4px solid var(--green); color: #155724; }
+        .quiz-feedback.wrong { background: #f8d7da; border-left: 4px solid var(--accent); color: #721c24; }
+
+        .exercises-list { counter-reset: ex-counter; list-style: none; padding: 0; margin-left: 0; }
+        .exercises-list > li {
+            counter-increment: ex-counter;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 8px; padding: 16px 20px; margin-bottom: 16px;
+        }
+        .exercises-list > li strong { color: var(--navy); }
+        details summary { cursor: pointer; color: var(--blue); font-weight: 700; margin-top: 12px; user-select: none; }
+        details summary:hover { color: var(--navy); }
+        details > div { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+
+        .summary {
+            background: var(--navy); color: #e8f0fc;
+            border-radius: 10px; padding: 22px 26px; margin-top: 40px;
+        }
+        .summary h2 { color: #c8dcf8; border-left-color: #6aaae8; }
+        .summary ul { margin-bottom: 0; }
+        .summary li { margin-bottom: 10px; color: #d8e8f8; }
+        .summary strong { color: #a8d0f8; }
+
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+        .col-box { border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; background: #fafbff; }
+        .col-box h3 { font-size: 0.98em; margin-top: 0; text-align: center; }
+
+        .calc-box {
+            background: var(--card); border: 1.5px solid var(--border);
+            border-radius: 10px; padding: 22px 26px; margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(30,60,110,0.06);
+        }
+        .calc-box h3 { margin-top: 0; color: var(--navy); }
+        .calc-box button { padding: 8px 20px; background: var(--blue); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.93em; margin: 4px 6px 4px 0; }
+        .calc-box button:hover { background: var(--navy); }
+        .sim-note {
+            margin-top: 10px; background: #f0f6ff; border-left: 4px solid var(--blue-light);
+            padding: 10px 14px; border-radius: 0 6px 6px 0; font-size: 0.92em;
+        }
+        @media (max-width: 640px) {
+            .two-col { grid-template-columns: 1fr; }
+            body { padding: 20px 14px 60px; }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Chapter 5　資料蒐集與抽樣 (Data Collection and Sampling)</h1>
+
+<p class="chapter-intro">
+統計方法再精巧，也救不了品質低劣的資料——「垃圾進，垃圾出」。本章討論推論統計的地基：資料從哪裡來（觀察、實驗、調查）、樣本怎麼抽（簡單隨機、分層、集群），以及哪些誤差會讓調查結果失真（抽樣誤差與非抽樣誤差）。學會這一章，你會開始用懷疑的眼光看待新聞裡的每一份民調。
+</p>
+
+<div class="learning-goals">
+<h3>🎯 Learning Objectives</h3>
+<ul>
+    <li>能區分<strong>直接觀察、實驗、調查</strong>三種資料蒐集方法，並理解為何只有實驗能支持因果推論。</li>
+    <li>認識問卷設計的基本原則，能辨識<strong>引導性問題</strong>等常見缺陷。</li>
+    <li>能區分<strong>目標母體</strong>與<strong>抽樣母體</strong>，理解兩者不一致的後果。</li>
+    <li>能說明並辨識<strong>簡單隨機抽樣、分層隨機抽樣、集群抽樣</strong>的做法與適用時機。</li>
+    <li>能區分<strong>抽樣誤差</strong>與<strong>非抽樣誤差</strong>（取得資料的誤差、無回應誤差、選樣偏差），並理解「大樣本救不了偏差」。</li>
+</ul>
+</div>
+
+<div class="toc">
+<h3>📋 本章內容</h3>
+<ol>
+    <li><a href="#s51">§5.1　蒐集資料的方法</a></li>
+    <li><a href="#s52">§5.2　抽樣的概念</a></li>
+    <li><a href="#s53">§5.3　抽樣計畫</a></li>
+    <li><a href="#s54">§5.4　抽樣誤差與非抽樣誤差</a></li>
+    <li><a href="#tool">🔢 互動工具：抽樣方法模擬器</a></li>
+    <li><a href="#quiz">🧠 Quick Quiz</a></li>
+    <li><a href="#exercises">📚 綜合練習</a></li>
+    <li><a href="#summary">📌 Chapter Summary</a></li>
+</ol>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 5.1
+══════════════════════════════════════════ -->
+<h2 id="s51">§5.1　蒐集資料的方法 (Methods of Collecting Data)</h2>
+
+<h3>一、直接觀察 (Direct Observation)</h3>
+<p>在<strong>不介入</strong>的情況下記錄自然發生的資料。成本最低、最容易取得，但研究者無法控制任何條件。</p>
+
+<div class="example-block">
+<h3>📝 範例 5.1　觀察資料的極限：早餐與上課表現</h3>
+<div class="scenario">
+<strong>情境：</strong>某研究者記錄 300 位學生「是否吃早餐」與「上午課程的小考成績」，發現吃早餐的學生平均高 6 分，於是下標題：「吃早餐讓成績變好！」
+</div>
+<p><strong>問題出在哪？</strong>吃不吃早餐是學生<strong>自己選擇</strong>的。有吃早餐的學生可能同時也「作息規律、前一晚有唸書、住家離學校近」——這些因素才可能是成績較高的真正原因。觀察資料只能建立<strong>相關</strong>，無法排除這些混雜因素。</p>
+<div class="note">✅ 這正是第 3、4 章「相關不等於因果」的資料蒐集面解釋：因為觀察者沒有控制「誰吃早餐」，所以無法歸因。</div>
+</div>
+
+<h3>二、實驗 (Experiment)</h3>
+<p>研究者<strong>主動控制</strong>條件——最關鍵的手段是<strong>隨機分組</strong>：隨機決定誰接受處理（實驗組）、誰不接受（對照組）。隨機化使兩組在「其他所有因素」上平均而言相同，組間差異才能歸因於處理本身。</p>
+
+<div class="example-block">
+<h3>📝 範例 5.2　把觀察變成實驗：新配方的盲測</h3>
+<div class="scenario">
+<strong>情境：</strong>手搖飲品牌「沐茶」研發了新的烏龍茶底，想知道顧客是否真的更喜歡。企劃部提出兩個方案：<br>
+<strong>方案 A</strong>：新舊配方同時上架一個月，比較兩者的銷量。<br>
+<strong>方案 B</strong>：招募 200 位顧客，隨機分成兩組各 100 人，分別試喝新、舊配方（杯子無標示），記錄喜好評分。
+</div>
+<p><strong>分析：</strong></p>
+<ul>
+    <li><strong>方案 A 是觀察</strong>——選擇喝哪一款的是顧客自己。若新配方定價較高、或陳列位置較顯眼，銷量差異就混入了價格與陳列的效果。</li>
+    <li><strong>方案 B 是實驗</strong>——隨機分組讓兩組顧客的口味偏好、年齡結構平均而言相同；無標示（盲測）排除品牌預期心理。評分差異可以歸因於<strong>配方本身</strong>。</li>
+</ul>
+<div class="note">✅ 實驗成本較高，但能回答「因果」問題。現代網路產業的 A/B 測試（第 1 章範例 1.2）本質上就是大規模的隨機實驗。</div>
+</div>
+
+<h3>三、調查 (Survey)</h3>
+<p>直接詢問受訪者以蒐集資料，形式包括面訪、電話訪問、網路問卷等。回應率 (response rate)——實際完成訪問的比例——是調查品質的重要指標。</p>
+
+<div class="formula-card">
+<h3>📐 問卷設計的基本原則</h3>
+<ol>
+    <li><strong>簡短</strong>：問卷越長，回應率越低、後段作答品質越差。</li>
+    <li><strong>問題明確、用詞中性</strong>：避免模糊與引導性措辭。</li>
+    <li><strong>由淺入深</strong>：簡單問題在前，敏感問題（收入、政治傾向）在後。</li>
+    <li><strong>封閉式為主</strong>：提供選項方便量化，輔以少量開放式問題。</li>
+    <li><strong>試測 (pretest)</strong>：正式施測前先小規模試填，找出看不懂的題目。</li>
+</ol>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 5.3　抓出引導性問題</h3>
+<div class="scenario">
+<strong>情境：</strong>某校務調查的原始題目：「許多研究顯示課後運動有益身心健康，你是否同意學校應該增加體育課時數？」
+</div>
+<p><strong>問題：</strong>題目先鋪陳「許多研究顯示⋯⋯有益」，把受訪者推向「同意」——這是<strong>引導性問題 (leading question)</strong>，測到的不是真實意見，而是問卷設計者的立場。</p>
+<p><strong>中性改寫：</strong>「你認為學校目前的體育課時數應該增加、維持不變，還是減少？」</p>
+<div class="note">✅ 判斷心法：把題目的立場反過來寫一次（「許多研究顯示課業壓力大，你是否同意減少體育課？」），如果兩個版本會得到明顯不同的答案，原題就有引導性。</div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 5.2
+══════════════════════════════════════════ -->
+<h2 id="s52">§5.2　抽樣的概念 (Sampling)</h2>
+
+<p>第 1 章已說明抽樣的動機（成本、時間、可行性）。本節補上一個關鍵的品質概念：</p>
+
+<div class="formula-card">
+<h3>📐 目標母體 vs 抽樣母體</h3>
+<ul>
+    <li><strong>目標母體 (Target Population)</strong>：研究者<strong>想要</strong>推論的母體。</li>
+    <li><strong>抽樣母體 (Sampled Population)</strong>：樣本<strong>實際上</strong>被抽出的母體。</li>
+</ul>
+<p class="note">理想上兩者應一致；不一致時，再漂亮的統計方法也只是「精準地推論了錯誤的母體」。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 5.4　App 內問卷的陷阱</h3>
+<div class="scenario">
+<strong>情境：</strong>某連鎖書店想了解「全體會員」對新的點數制度的滿意度（目標母體：全體 50 萬會員），行銷部門在自家 App 內發送問卷，回收 8,000 份，結果 82% 滿意。
+</div>
+<p><strong>分析：</strong>問卷只觸及「有下載且常開 App 的會員」——這是<strong>抽樣母體</strong>，它明顯偏向年輕、高互動、高忠誠度的客群。不使用 App 的會員（可能正是對新制度最無感或最不滿的一群）完全沒有被抽到的機會。</p>
+<div class="warn">⚠️ 「82% 滿意」正確的解讀範圍只有「App 活躍會員」，不能推廣到全體會員。樣本數 8,000 很大，但<strong>大樣本無法修復抽樣母體與目標母體的落差</strong>。</div>
+</div>
+
+<h3>自我選擇樣本 (Self-selected Sample)</h3>
+<p>網路投票、call-in 節目、留言區民調⋯⋯這類「誰想回答誰回答」的樣本，參與者通常是<strong>意見最強烈</strong>的人，幾乎必然偏差。統計上稱為自我選擇偏差——樣本再大，也只是「很多個有強烈意見的人」。</p>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 5.3
+══════════════════════════════════════════ -->
+<h2 id="s53">§5.3　抽樣計畫 (Sampling Plans)</h2>
+
+<h3>一、簡單隨機抽樣 (Simple Random Sampling)</h3>
+<div class="formula-card">
+<h3>📐 定義</h3>
+<p>母體中<strong>每一組同樣大小的樣本</strong>被抽中的機率都相等（等價地：每個個體被抽中的機率相等且獨立）。做法：將母體編號 $1 \sim N$，以亂數產生器抽出 $n$ 個號碼。</p>
+<p class="note">這是最基本的抽樣計畫，也是後續所有統計推論公式（ch9–16）的預設假設。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 5.5　宿舍抽檢的公平做法</h3>
+<div class="scenario">
+<strong>情境：</strong>宿舍管理中心要從 480 間寢室中抽出 24 間進行消防安全抽檢。輔導員提議「每層樓走廊上遇到誰就檢查誰」，被主任否決。
+</div>
+<p><strong>正確做法：</strong>寢室編號 1–480，用亂數產生器（Excel 的 <code>RANDBETWEEN</code>、Python 的 <code>random.sample</code>）抽出 24 個號碼。每間寢室被抽中的機率都是 $24/480 = 5\%$，不受樓層、位置、與輔導員熟識程度影響。</p>
+<div class="note">✅ 「隨便抽」不等於「隨機抽」——人為的「隨便」總是帶有規律（順路的、顯眼的、熟的），只有亂數機制能保證等機率。</div>
+</div>
+
+<h3>二、分層隨機抽樣 (Stratified Random Sampling)</h3>
+<div class="formula-card">
+<h3>📐 定義與做法</h3>
+<p>先依某個特性把母體分成互斥的<strong>層 (strata)</strong>，再<strong>在每一層內</strong>分別做簡單隨機抽樣，通常按各層占母體的比例分配樣本數。</p>
+<p class="note">適用時機：層與層之間差異大、層內相對同質（例如：不同學院的通勤方式差很多）。好處：① 保證每一層都有代表；② 可分層報告結果；③ 通常能提高估計精確度。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 5.6　通勤方式調查的分層設計</h3>
+<div class="scenario">
+<strong>情境：</strong>總務處想調查全校 12,000 名學生的通勤方式，計畫抽 600 人。已知學生分布：住宿生 3,600 人（30%）、在地通勤生 6,000 人（50%）、跨縣市通勤生 2,400 人（20%）。三群的通勤行為顯然不同。
+</div>
+<p><strong>比例分層設計：</strong></p>
+<table>
+    <thead><tr><th>層</th><th>母體人數</th><th>比例</th><th>樣本配額</th></tr></thead>
+    <tbody>
+        <tr><td>住宿生</td><td>3,600</td><td>30%</td><td>600 × 0.3 = 180 人</td></tr>
+        <tr><td>在地通勤生</td><td>6,000</td><td>50%</td><td>600 × 0.5 = 300 人</td></tr>
+        <tr><td>跨縣市通勤生</td><td>2,400</td><td>20%</td><td>600 × 0.2 = 120 人</td></tr>
+        <tr style="font-weight:700;"><td>合計</td><td>12,000</td><td>100%</td><td>600 人</td></tr>
+    </tbody>
+</table>
+<p>每一層內再以簡單隨機抽樣抽出配額人數。</p>
+<div class="note">✅ 若改用整體簡單隨機抽樣，跨縣市通勤生「平均」會抽到 120 人，但運氣不好時可能只抽到 90 人，該群體的估計就不穩。分層保證了每群的代表性。</div>
+</div>
+
+<h3>三、集群抽樣 (Cluster Sampling)</h3>
+<div class="formula-card">
+<h3>📐 定義與做法</h3>
+<p>把母體分成許多<strong>群 (clusters)</strong>（通常是地理或組織單位，如班級、里、門市），隨機抽出<strong>若干群</strong>，對抽中的群做<strong>全查</strong>（或群內再抽樣）。</p>
+<p class="note">適用時機：母體名冊難以取得、或面訪成本與距離成正比時。代價：群內成員通常相似（同班同學背景接近），資訊重疊，同樣的樣本數之下精確度通常<strong>低於</strong>簡單隨機抽樣。</p>
+</div>
+
+<div class="two-col">
+    <div class="col-box">
+        <h3>分層 vs 集群，怎麼分？</h3>
+        <p style="font-size:0.92em; margin-bottom:0;"><strong>分層</strong>：每一層都要抽（層數少、層間異質）；<strong>集群</strong>：只抽部分群（群數多、希望群內像母體縮影）。記法：分層是「每層都拿一點」，集群是「整籃整籃地拿」。</p>
+    </div>
+    <div class="col-box">
+        <h3>實務案例</h3>
+        <p style="font-size:0.92em; margin-bottom:0;">要面訪全國國中生：先隨機抽 40 所國中（群），再在每校內隨機抽 2 個班全查——這是<strong>多階段抽樣</strong>，大型官方調查（如 PISA）的標準做法。</p>
+    </div>
+</div>
+
+<h3>四、樣本大小的直覺</h3>
+<p>樣本越大，抽樣誤差越小——但精確度的提升與 $\sqrt{n}$ 成正比：樣本擴大 4 倍，誤差只縮小一半。第 10 章將給出「要達到指定精確度需要多大樣本」的正式公式。</p>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 5.4
+══════════════════════════════════════════ -->
+<h2 id="s54">§5.4　抽樣誤差與非抽樣誤差 (Sampling and Nonsampling Errors)</h2>
+
+<div class="two-col">
+    <div class="col-box">
+        <h3>抽樣誤差 (Sampling Error)</h3>
+        <p style="font-size:0.93em;">樣本統計量與母體參數之間<strong>因為只觀察部分母體</strong>而產生的自然差異。<br><br>
+        <strong>性質：</strong>無法避免、但可量化（ch9–10 的主題），且<strong>增大樣本可縮小</strong>。</p>
+    </div>
+    <div class="col-box">
+        <h3>非抽樣誤差 (Nonsampling Error)</h3>
+        <p style="font-size:0.93em;">來自調查<strong>執行過程的缺陷</strong>，與樣本大小無關。<br><br>
+        <strong>性質：</strong>增大樣本<strong>不會</strong>縮小它——只會讓你「更有信心地得到錯誤答案」。</p>
+    </div>
+</div>
+
+<h3>非抽樣誤差的三大來源</h3>
+<ol>
+    <li><strong>取得資料的誤差 (Errors in data acquisition)</strong>：記錄錯誤、儀器不準、受訪者記憶失真或故意誤報（例如低報飲酒量、高報運動量）。</li>
+    <li><strong>無回應誤差 (Nonresponse error)</strong>：拒答或聯絡不上的人，往往與願意回答的人<strong>系統性不同</strong>（工時長的人接不到電話訪問）。回應率過低時，結果只代表「願意回答的那群人」。</li>
+    <li><strong>選樣偏差 (Selection bias)</strong>：抽樣計畫本身排除了母體中的某些成員——即抽樣母體 ≠ 目標母體（範例 5.4 的 App 問卷）。</li>
+</ol>
+
+<div class="example-block">
+<h3>📝 範例 5.7　三百萬份問卷輸給五萬份：歷史的教訓</h3>
+<div class="scenario">
+<strong>情境：</strong>1936 年美國總統大選，《文學文摘》(Literary Digest) 雜誌寄出 1,000 萬份問卷、回收 <strong>240 萬份</strong>，預測蘭登 (Landon) 將以 57% 大勝；蓋洛普 (Gallup) 只用約 <strong>5 萬人</strong>的配額樣本，卻正確預測羅斯福 (Roosevelt) 當選——實際結果羅斯福拿下 62% 的普選票，是美國史上最懸殊的勝利之一。
+</div>
+<p><strong>《文學文摘》錯在哪？</strong></p>
+<ul>
+    <li><strong>選樣偏差</strong>：問卷名單來自電話簿與汽車登記名冊——1936 年大蕭條期間，裝得起電話、買得起車的家庭明顯偏向經濟優渥的共和黨選民。抽樣母體 ≠ 目標母體（全體選民）。</li>
+    <li><strong>無回應誤差</strong>：回收率僅 24%，主動回寄問卷的人以「想表達不滿（反羅斯福）」者居多。</li>
+</ul>
+<div class="note">✅ 這是統計史上最著名的教訓：<strong>240 萬份有偏差的問卷，不如 5 萬份設計良好的樣本</strong>。誤差的關鍵是「怎麼抽」，不是「抽多少」。《文學文摘》因此信譽掃地，兩年後停刊。</div>
+</div>
+
+<div class="highlight">
+<strong>💡 看民調的三個檢查點：</strong>① 抽樣母體是誰（市話？手機？網路會員？）能否代表目標母體；② 回應率多少；③ 題目怎麼問（有無引導性）。樣本數反而是最不需要擔心的——正規民調的千人樣本已足夠（ch10 會算給你看）。
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     互動工具
+══════════════════════════════════════════ -->
+<h2 id="tool">🔢 互動工具：抽樣方法模擬器</h2>
+
+<div class="calc-box">
+<h3>🎯 同一個母體，三種抽法</h3>
+<p style="font-size:0.93em; color:var(--muted);">下方 240 個點代表某大學的學生母體，顏色代表四個學院（每個學院聚集成 3 個「班級」方塊）。按按鈕比較三種抽樣計畫各抽 24 人的結果。</p>
+<button onclick="simSample('srs')">🎲 簡單隨機抽樣</button>
+<button onclick="simSample('strat')">📊 分層隨機抽樣</button>
+<button onclick="simSample('cluster')">🧺 集群抽樣</button>
+<button onclick="simSample('none')" style="background:#7a8aa0;">清除</button>
+<canvas id="simCanvas" class="chart" width="760" height="330"></canvas>
+<div class="sim-note" id="simNote">尚未抽樣。母體：甲學院 80 人（藍）、乙學院 60 人（綠）、丙學院 60 人（橘）、丁學院 40 人（紫），各分成 3 個班級方塊。</div>
+</div>
+
+<hr>
+
+<!-- ══ Quiz ══ -->
+<div class="quiz-box" id="quiz">
+<h3>🧠 Quick Quiz</h3>
+
+<div class="quiz-q">
+    <p>Q1. 想確認「新的網頁排版<em>導致</em>更高的購買率」，最適當的資料蒐集方法是？</p>
+    <label><input type="radio" name="q1" value="a"> A. 觀察改版前後的購買率變化</label>
+    <label><input type="radio" name="q1" value="b"> B. 隨機把使用者分成兩組，分別顯示新舊排版，比較購買率</label>
+    <label><input type="radio" name="q1" value="c"> C. 問卷詢問使用者比較喜歡哪個排版</label>
+    <label><input type="radio" name="q1" value="d"> D. 訪問購買量最高的前 100 名顧客</label>
+    <button onclick="checkQ('q1','b','✅ 正確！要建立因果必須用實驗（隨機分組）。改版前後比較會混入季節、行銷活動等因素；問卷測的是「說出來的偏好」而非實際行為。')">Submit</button>
+    <div class="quiz-feedback" id="q1-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q2. 某電視節目開放觀眾以簡訊投票「是否支持調漲基本工資」，共收到 12 萬則回覆。這個樣本最主要的問題是？</p>
+    <label><input type="radio" name="q2" value="a"> A. 樣本太小</label>
+    <label><input type="radio" name="q2" value="b"> B. 自我選擇偏差——參與者是意見強烈、且收看該節目的人</label>
+    <label><input type="radio" name="q2" value="c"> C. 沒有分層</label>
+    <label><input type="radio" name="q2" value="d"> D. 沒有問題，12 萬人已足夠代表全國</label>
+    <button onclick="checkQ('q2','b','✅ 正確！自我選擇樣本必然偏差：會發簡訊的是意見最強烈的觀眾，且該節目觀眾本身就不是全民的縮影。12 萬只是「12 萬個有強烈意見的人」。')">Submit</button>
+    <div class="quiz-feedback" id="q2-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q3. 研究者把全國高中依區域分成北中南東四類，<strong>每類都</strong>隨機抽出學校進行調查。這屬於？</p>
+    <label><input type="radio" name="q3" value="a"> A. 簡單隨機抽樣</label>
+    <label><input type="radio" name="q3" value="b"> B. 集群抽樣</label>
+    <label><input type="radio" name="q3" value="c"> C. 分層抽樣（每一層都有抽到）</label>
+    <label><input type="radio" name="q3" value="d"> D. 自我選擇抽樣</label>
+    <button onclick="checkQ('q3','c','✅ 正確！關鍵字是「每類都抽」——區域是層，每層內再隨機抽，是分層抽樣。若是「隨機抽出其中兩個區域、只查那兩區」才是集群抽樣。')">Submit</button>
+    <div class="quiz-feedback" id="q3-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q4. 下列何者屬於「非抽樣誤差」？</p>
+    <label><input type="radio" name="q4" value="a"> A. 樣本平均 52，母體平均其實是 50，因為只抽了 200 人</label>
+    <label><input type="radio" name="q4" value="b"> B. 受訪者在「每週飲酒量」上系統性低報</label>
+    <label><input type="radio" name="q4" value="c"> C. 兩次隨機抽樣得到不同的樣本平均數</label>
+    <label><input type="radio" name="q4" value="d"> D. 樣本比例與母體比例相差 1.8 個百分點</label>
+    <button onclick="checkQ('q4','b','✅ 正確！系統性誤報是「取得資料的誤差」，屬非抽樣誤差——加大樣本也修不掉。A、C、D 都是抽樣誤差：因只觀察部分母體而生的自然變異。')">Submit</button>
+    <div class="quiz-feedback" id="q4-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q5. 「把樣本從 2,000 人擴大到 20 萬人」對哪一種誤差有幫助？</p>
+    <label><input type="radio" name="q5" value="a"> A. 抽樣誤差會縮小；選樣偏差不會改善</label>
+    <label><input type="radio" name="q5" value="b"> B. 兩種誤差都會縮小</label>
+    <label><input type="radio" name="q5" value="c"> C. 選樣偏差會縮小；抽樣誤差不變</label>
+    <label><input type="radio" name="q5" value="d"> D. 兩種誤差都不變</label>
+    <button onclick="checkQ('q5','a','✅ 正確！加大樣本只能縮小抽樣誤差。若抽樣母體本身有偏（如只抽 App 用戶），樣本再大也是精準地量測了偏差的母體——《文學文摘》的 240 萬份問卷就是史上最貴的證明。')">Submit</button>
+    <div class="quiz-feedback" id="q5-fb"></div>
+</div>
+
+</div>
+
+<hr>
+
+<!-- ══ Exercises ══ -->
+<h2 id="exercises">📚 綜合練習 (Comprehensive Practice)</h2>
+<p>以下習題涵蓋資料蒐集方法、抽樣計畫辨識與誤差分析，請先獨立作答，再展開解答確認。</p>
+
+<h3>I. 概念複習</h3>
+<ol class="exercises-list">
+
+    <li>
+        <p>為什麼「直接觀察」得到的資料難以支持因果結論，而「實驗」可以？隨機分組在其中扮演什麼角色？</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>觀察資料中，「接受處理與否」是研究對象自己決定的，選擇背後的因素（動機、習慣、資源）同時影響結果變數，形成混雜；因此組間差異無法歸因於處理。</p>
+            <p>實驗以<strong>隨機分組</strong>決定誰接受處理——隨機化使兩組在所有其他因素（觀察得到與觀察不到的）上平均而言相同，組間差異便可歸因於處理本身。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <p>比較簡單隨機抽樣、分層隨機抽樣、集群抽樣的做法與適用時機。</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <table>
+                <thead><tr><th></th><th>做法</th><th>適用時機</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>簡單隨機</strong></td><td style="text-align:left;">母體編號後以亂數抽出 n 個</td><td style="text-align:left;">有完整名冊、母體相對同質</td></tr>
+                    <tr><td><strong>分層隨機</strong></td><td style="text-align:left;">先分層，每層內按比例隨機抽</td><td style="text-align:left;">層間差異大、需保證各層代表性或分層報告</td></tr>
+                    <tr><td><strong>集群</strong></td><td style="text-align:left;">隨機抽出部分群，群內全查</td><td style="text-align:left;">缺乏個體名冊、面訪成本與距離相關</td></tr>
+                </tbody>
+            </table>
+            <p>精確度（同樣本數）通常：分層 ≥ 簡單隨機 ≥ 集群。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <p>「回應率只有 15% 的調查，就算回收了十萬份問卷也可能嚴重失真。」請說明這句話的道理。</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>無回應誤差的關鍵在：<strong>回答者與拒答者往往系統性不同</strong>（時間彈性、對議題的關心程度、對調查單位的信任）。回應率 15% 意味著結果只代表「那 15% 願意回答的人」。</p>
+            <p>十萬份的規模只縮小抽樣誤差，對無回應造成的偏差毫無幫助——這是非抽樣誤差「加大樣本救不了」的典型情況。可行的補救：追蹤拒答者的特徵、加權調整、或提高回應率（多次追訪、誘因）。</p>
+        </div>
+        </details>
+    </li>
+
+</ol>
+
+<h3>II. 情境判讀</h3>
+<ol class="exercises-list">
+
+    <li>
+        <strong>5.1　辨識抽樣方法</strong>
+        <p>判斷下列各情境使用的抽樣計畫（簡單隨機／分層／集群／自我選擇）：</p>
+        <ul>
+            <li>a. 品管人員把本日生產的 5,000 瓶飲料編號，以亂數抽出 50 瓶檢驗。</li>
+            <li>b. 縣政府從全縣 268 個村里中隨機抽出 12 個里，對抽中里的所有住戶進行面訪。</li>
+            <li>c. 電商平台把會員分成「新會員／一般／VIP」三級，每級各隨機抽 200 人訪問。</li>
+            <li>d. 健身房在櫃檯放 QR Code，邀請「願意的會員」掃碼填滿意度問卷。</li>
+            <li>e. 動物園想估計園內鳥類寄生蟲感染率：隨機抽出 6 個鳥舍，檢查舍內全部鳥隻。</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <ul>
+                <li><strong>a. 簡單隨機抽樣</strong>——完整編號＋亂數。</li>
+                <li><strong>b. 集群抽樣</strong>——村里是群，抽中的群全查。</li>
+                <li><strong>c. 分層隨機抽樣</strong>——會員等級是層，每層都抽。</li>
+                <li><strong>d. 自我選擇樣本</strong>——誰想填誰填，必然偏差。</li>
+                <li><strong>e. 集群抽樣</strong>——鳥舍是群。</li>
+            </ul>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>5.2　設計一份分層抽樣計畫</strong>
+        <p>某市有 40,000 名國小教師：市區 24,000 人、郊區 12,000 人、偏鄉 4,000 人。教育局想抽 1,000 人調查數位教學資源使用情況，且特別關心偏鄉的狀況。</p>
+        <ul>
+            <li>a. 按比例分層，各層應抽多少人？</li>
+            <li>b. 按比例分層下，偏鄉樣本是否足以單獨分析？有什麼替代做法？</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> 市區 60% → 600 人；郊區 30% → 300 人；偏鄉 10% → 100 人。</p>
+            <p><strong>b.</strong> 偏鄉只有 100 人，單獨分析的精確度有限。替代：<strong>不等比例分層（超額抽樣）</strong>——例如偏鄉抽 300 人、市區 500、郊區 200，讓偏鄉的單獨估計更穩定；估計全市整體時再依母體比例加權還原。這是官方調查處理「小而重要的次群體」的標準手法。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>5.3　問卷題目健檢</strong>
+        <p>指出下列題目的缺陷並改寫：</p>
+        <ul>
+            <li>a. 「你不覺得外送平台的服務費貴得不合理嗎？」</li>
+            <li>b. 「你每個月花多少錢？」</li>
+            <li>c. 「你是否同意學校應該把停車場改建為既能舉辦活動又能提供自習空間的多功能學生中心？」</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a. 引導性＋否定句誘導</strong>。改寫：「你認為外送平台目前的服務費水準：太高／合理／太低？」</p>
+            <p><strong>b. 模糊不清</strong>——「花錢」範圍未定義（總支出？餐飲？娛樂？）、期間不明。改寫：「過去一個月，你在餐飲外食上的支出大約是多少元？（提供級距選項）」</p>
+            <p><strong>c. 一題多問 (double-barreled)</strong>——「辦活動」與「自習空間」是兩件事，且未提及「失去停車場」的代價。改寫成兩題，或改為：「若將停車場改建為學生中心（將減少 200 個車位），你支持或反對？」</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>5.4　新聞民調的診斷</strong>
+        <p>某新聞台公布：「本台官網投票，共 35,000 人參與，78% 反對某交通新政策。」隔週，某民調中心以電話（市話＋手機雙底冊）隨機訪問 1,068 人，反對比例僅 44%。</p>
+        <ul>
+            <li>a. 兩份調查為何差距如此大？哪一份較可信？</li>
+            <li>b. 有人說「35,000 人比 1,068 人多 30 倍，當然官網投票比較準」。請反駁。</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> 官網投票是<strong>自我選擇樣本</strong>：會去投票的是對政策不滿、且收看該台的觀眾，抽樣母體與全體民眾差距極大。電話雙底冊隨機抽樣的抽樣母體接近目標母體（全體成年人），較可信。</p>
+            <p><strong>b.</strong> 樣本大小隻能縮小<strong>抽樣誤差</strong>，不能修復<strong>選樣偏差</strong>。1,068 人的隨機樣本抽樣誤差約 ±3 個百分點；35,000 人的自我選擇樣本則可能偏差數十個百分點——這正是 1936 年《文學文摘》240 萬份問卷慘敗給蓋洛普 5 萬人樣本的原因。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>5.5　綜合設計題</strong>
+        <p>你要為學校餐廳規劃一份「用餐滿意度與改善需求」調查，目標母體是全校 15,000 名學生（其中約 35% 幾乎不在校內用餐）。請規劃：</p>
+        <ul>
+            <li>a. 資料蒐集方法與抽樣計畫（含理由）。</li>
+            <li>b. 指出兩個你預期會遇到的非抽樣誤差，與對應的緩解措施。</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>參考答案（合理即可）：</strong></p>
+            <p><strong>a.</strong> 以學籍名冊為底冊做<strong>分層隨機抽樣</strong>（層：學院或年級，另依「是否住宿」分層，因住宿生用餐頻率高），抽 600–800 人以 Email＋簡訊發送問卷。不可只在餐廳門口攔訪——那會把「幾乎不在校內用餐」的 35% 排除在抽樣母體外，恰好漏掉最需要了解的「為什麼不來吃」的群體。</p>
+            <p><strong>b.</strong> 例如：① <strong>無回應誤差</strong>——不常用餐者覺得事不關己而不填；緩解：強調「不在餐廳用餐者的意見尤其重要」、提供抽獎誘因、兩次提醒。② <strong>取得資料的誤差</strong>——「每週用餐次數」憑印象回答失真；緩解：問「過去 7 天」的具體行為而非「通常」，選項用級距。</p>
+        </div>
+        </details>
+    </li>
+
+</ol>
+
+<hr>
+
+<!-- ══ Summary ══ -->
+<div class="summary" id="summary">
+<h2>📌 Chapter Summary</h2>
+<ul>
+    <li><strong>三種蒐集方法</strong>：直接觀察（便宜，只能建立相關）、實驗（隨機分組，能支持因果）、調查（注意問卷設計與回應率）。</li>
+    <li><strong>問卷原則</strong>：簡短、中性措辭、由淺入深、封閉式為主、先試測；警惕引導性與一題多問。</li>
+    <li><strong>抽樣母體應等於目標母體</strong>——不一致時就是選樣偏差；自我選擇樣本（網路投票）幾乎必然偏差。</li>
+    <li><strong>三種抽樣計畫</strong>：簡單隨機（亂數等機率）、分層（每層都抽、保代表性）、集群（整群地抽、省成本但精確度較低）。</li>
+    <li><strong>抽樣誤差</strong>：因只看部分母體而生，可量化、隨 $n$ 增大而縮小；<strong>非抽樣誤差</strong>（資料取得、無回應、選樣偏差）：大樣本救不了。「怎麼抽」比「抽多少」重要——記住《文學文摘》的教訓。</li>
+</ul>
+</div>
+
+<!-- ══ Scripts ══ -->
+<script>
+// ── Quiz ──
+function checkQ(qid, correct, msg) {
+    const selected = document.querySelector(`input[name="${qid}"]:checked`);
+    const fb = document.getElementById(`${qid}-fb`);
+    if (!selected) { fb.style.display='block'; fb.className='quiz-feedback wrong'; fb.textContent='請先選擇一個答案。'; return; }
+    fb.style.display = 'block';
+    if (selected.value === correct) {
+        fb.className = 'quiz-feedback correct';
+        fb.innerHTML = msg;
+    } else {
+        fb.className = 'quiz-feedback wrong';
+        fb.innerHTML = '❌ 不正確，請再想想。提示：' + msg;
+    }
+}
+
+// ── 抽樣模擬器 ──
+(function(){
+    // 母體結構：4 學院 × 各 3 班級方塊
+    // 甲 80 (藍, 2×10 per block? -> 80/3...) 用固定格：每班級方塊 5x4=20 人
+    // 甲：4 班 80 人？改：甲 4 blocks? 保持敘述一致：甲80(4塊)、乙60(3塊)、丙60(3塊)、丁40(2塊) = 12 塊 × 20 人 = 240
+    const COLORS = { A: '#2e6cb8', B: '#27ae60', C: '#e67e22', D: '#8e6cc0' };
+    const NAMES = { A: '甲學院', B: '乙學院', C: '丙學院', D: '丁學院' };
+    const blocks = [];
+    const layout = [
+        ['A','A','A','A'],
+        ['B','B','B','C'],
+        ['C','C','D','D']
+    ];
+    // 每塊 20 人 (5×4)
+    const BW = 170, BH = 96, GX = 18, GY = 12, OX = 24, OY = 16;
+    let students = [];
+    let blockList = [];
+    (function build(){
+        let id = 0;
+        for (let r = 0; r < 3; r++) {
+            for (let c = 0; c < 4; c++) {
+                const col = layout[r][c];
+                const bx = OX + c * (BW + GX), by = OY + r * (BH + GY);
+                const members = [];
+                for (let i = 0; i < 20; i++) {
+                    const px = bx + 14 + (i % 5) * 36;
+                    const py = by + 22 + Math.floor(i / 5) * 19;
+                    const s = { id: id++, college: col, x: px, y: py };
+                    students.push(s);
+                    members.push(s);
+                }
+                blockList.push({ college: col, x: bx, y: by, members: members });
+            }
+        }
+    })();
+
+    function draw(selected, clusterBlocks) {
+        const cv = document.getElementById('simCanvas');
+        if (!cv) return;
+        const ctx = cv.getContext('2d');
+        ctx.clearRect(0, 0, cv.width, cv.height);
+        ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, cv.width, cv.height);
+        // 班級方塊
+        blockList.forEach((b, i) => {
+            ctx.fillStyle = 'rgba(0,0,0,0.02)';
+            ctx.strokeStyle = (clusterBlocks && clusterBlocks.includes(i)) ? '#c0392b' : '#d5dde8';
+            ctx.lineWidth = (clusterBlocks && clusterBlocks.includes(i)) ? 3 : 1;
+            ctx.fillRect(b.x, b.y, BW, BH);
+            ctx.strokeRect(b.x, b.y, BW, BH);
+            ctx.fillStyle = COLORS[b.college]; ctx.font = 'bold 10px "Noto Sans TC", sans-serif'; ctx.textAlign = 'left';
+            ctx.fillText(NAMES[b.college] + ' 班級', b.x + 6, b.y + 12);
+        });
+        // 學生點
+        const selSet = new Set(selected || []);
+        students.forEach(s => {
+            ctx.beginPath();
+            ctx.fillStyle = selSet.has(s.id) ? '#c0392b' : COLORS[s.college];
+            ctx.globalAlpha = selSet.has(s.id) ? 1 : 0.35;
+            ctx.arc(s.x, s.y, selSet.has(s.id) ? 6 : 4.5, 0, 7);
+            ctx.fill();
+            ctx.globalAlpha = 1;
+            if (selSet.has(s.id)) {
+                ctx.beginPath(); ctx.strokeStyle = '#7a1010'; ctx.lineWidth = 1.5;
+                ctx.arc(s.x, s.y, 6, 0, 7); ctx.stroke();
+            }
+        });
+    }
+
+    function countByCollege(ids) {
+        const cnt = { A: 0, B: 0, C: 0, D: 0 };
+        const set = new Set(ids);
+        students.forEach(s => { if (set.has(s.id)) cnt[s.college]++; });
+        return `甲 ${cnt.A}、乙 ${cnt.B}、丙 ${cnt.C}、丁 ${cnt.D}`;
+    }
+
+    function pick(arr, k) {
+        const pool = [...arr];
+        const out = [];
+        for (let i = 0; i < k && pool.length; i++) {
+            out.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
+        }
+        return out;
+    }
+
+    window.simSample = function(mode) {
+        const note = document.getElementById('simNote');
+        if (mode === 'none') {
+            draw([], null);
+            note.textContent = '已清除。母體：甲 80（藍）、乙 60（綠）、丙 60（橘）、丁 40（紫），共 240 人。';
+            return;
+        }
+        if (mode === 'srs') {
+            const sel = pick(students, 24).map(s => s.id);
+            draw(sel, null);
+            note.textContent = '簡單隨機抽樣 n=24：每人中選機率相同（10%）。本次各學院抽到：' + countByCollege(sel) +
+                '。注意：各學院人數隨機浮動，運氣不好時小學院可能代表不足。多按幾次觀察變化！';
+        } else if (mode === 'strat') {
+            const sel = [];
+            ['A','B','C','D'].forEach(c => {
+                const grp = students.filter(s => s.college === c);
+                const quota = Math.round(24 * grp.length / 240);
+                pick(grp, quota).forEach(s => sel.push(s.id));
+            });
+            draw(sel, null);
+            note.textContent = '分層隨機抽樣 n=24：按比例配額（甲 8、乙 6、丙 6、丁 4），每層內隨機抽。本次抽到：' + countByCollege(sel) +
+                '——每次都精準符合母體結構，保證各學院的代表性。';
+        } else if (mode === 'cluster') {
+            const bIdx = pick(blockList.map((_, i) => i), 2);
+            const sel = [];
+            bIdx.forEach(i => blockList[i].members.forEach(s => sel.push(s.id)));
+            draw(sel, bIdx);
+            note.textContent = '集群抽樣：隨機抽 2 個班級（紅框），班內全查（不含未抽中班級）。本次抽到：' + countByCollege(sel) +
+                '——執行成本低（只跑 2 個班），但同班同學背景相似、且可能整個學院掛零，精確度通常較差。';
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', function(){ draw([], null); });
+})();
+</script>
+
+</body>
+</html>
