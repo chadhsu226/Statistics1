@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 6　機率</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false }
+                ],
+                throwOnError: false,
+                strict: "ignore"
+            });
+        });
+    </script>
+    <style>
+        :root {
+            --navy: #1a3a6b;
+            --blue: #2e6cb8;
+            --blue-light: #4a90d9;
+            --accent: #c0392b;
+            --gold: #d4a017;
+            --green: #27ae60;
+            --bg: #f7f9fc;
+            --card: #ffffff;
+            --border: #d0dcea;
+            --text: #2c3e50;
+            --muted: #5a6a7a;
+            --math-bg: #eaf3ff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Noto Sans TC', 'Source Serif 4', Georgia, serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 36px 24px 80px;
+        }
+        h1 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 2rem; font-weight: 700;
+            color: var(--navy);
+            border-bottom: 4px solid var(--blue-light);
+            padding-bottom: 12px; margin-bottom: 20px;
+        }
+        h2 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 1.45rem; font-weight: 600;
+            color: var(--navy);
+            margin-top: 48px; margin-bottom: 14px;
+            border-left: 5px solid var(--blue-light);
+            padding-left: 12px;
+        }
+        h3 { font-size: 1.1rem; font-weight: 700; color: var(--blue); margin-top: 28px; margin-bottom: 10px; }
+        p { margin-bottom: 12px; }
+        ul, ol { margin-left: 24px; margin-bottom: 12px; }
+        li { margin-bottom: 6px; }
+        hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+        .chapter-intro {
+            font-size: 1.05rem; color: var(--muted);
+            border-left: 3px solid var(--blue-light);
+            padding: 10px 16px; background: #eef4fb;
+            border-radius: 0 6px 6px 0; margin-bottom: 24px;
+        }
+        .learning-goals {
+            background: #fffbea; border: 1.5px solid var(--gold);
+            border-radius: 8px; padding: 18px 22px; margin: 24px 0;
+        }
+        .learning-goals h3 { color: #8a6000; margin-top: 0; }
+        .toc {
+            background: var(--card); border: 1.5px solid var(--border);
+            border-radius: 8px; padding: 18px 24px; margin: 24px 0;
+            box-shadow: 0 2px 8px rgba(30,60,110,0.06);
+        }
+        .toc h3 { color: var(--navy); margin-top: 0; }
+        .toc a { color: var(--blue); text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+        .highlight {
+            background: #fffbe6; border-left: 4px solid var(--gold);
+            padding: 12px 16px; margin: 16px 0; border-radius: 0 6px 6px 0;
+        }
+        .math-block {
+            background: var(--math-bg); border-radius: 6px;
+            padding: 14px 18px; margin: 14px 0;
+            overflow-x: auto; font-size: 1.05em; text-align: center;
+        }
+        .formula-card {
+            background: var(--card); border: 2px solid var(--blue-light);
+            border-radius: 10px; padding: 18px 22px; margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(74,144,217,0.1);
+        }
+        .formula-card h3 { margin-top: 0; color: var(--navy); }
+        .formula-card .note {
+            font-size: 0.9em; color: var(--muted);
+            background: #f0f6ff; border-left: 3px solid #aac4ee;
+            padding: 8px 12px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .example-block {
+            background: #f0faff; border-left: 5px solid var(--blue-light);
+            border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 20px 0;
+        }
+        .example-block h3 { color: var(--navy); margin-top: 0; }
+        .example-block .note {
+            font-size: 0.92em; color: #333;
+            background: #e6f7e6; border-left: 3px solid var(--green);
+            padding: 10px 14px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .example-block .warn {
+            font-size: 0.92em; background: #fff3cd;
+            border-left: 3px solid var(--gold);
+            padding: 10px 14px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .scenario {
+            background: #f8f4ff; border: 1.5px dashed #9b7fd4;
+            border-radius: 8px; padding: 12px 18px; margin-bottom: 14px;
+            font-size: 0.97em; color: #3d2070;
+        }
+        .scenario strong { color: #6a3fbf; }
+        table {
+            width: 100%; border-collapse: collapse;
+            margin: 14px 0; font-size: 0.95em;
+        }
+        th, td { border: 1px solid #c8d8ec; padding: 8px 12px; text-align: center; }
+        th { background: #ddeeff; color: var(--navy); font-weight: 600; }
+        tr:nth-child(even) { background: #f5f8ff; }
+
+        canvas.chart {
+            display: block; margin: 14px auto;
+            border: 1px solid #ddd; border-radius: 6px; background: #fff;
+            max-width: 100%;
+        }
+
+        .quiz-box {
+            background: #f0f6ff; border: 1.5px solid var(--blue-light);
+            border-radius: 10px; padding: 22px 26px; margin: 28px 0;
+        }
+        .quiz-box h3 { color: var(--navy); margin-top: 0; }
+        .quiz-q { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin-bottom: 16px; }
+        .quiz-q p { font-weight: 600; margin-bottom: 10px; }
+        .quiz-q label { display: block; margin: 6px 0; cursor: pointer; font-size: 0.97em; font-weight: 400; }
+        .quiz-q button { margin-top: 10px; padding: 7px 18px; background: var(--blue); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9em; }
+        .quiz-q button:hover { background: var(--navy); }
+        .quiz-feedback { display: none; margin-top: 10px; padding: 10px 14px; border-radius: 6px; font-size: 0.95em; }
+        .quiz-feedback.correct { background: #d4edda; border-left: 4px solid var(--green); color: #155724; }
+        .quiz-feedback.wrong { background: #f8d7da; border-left: 4px solid var(--accent); color: #721c24; }
+
+        .exercises-list { counter-reset: ex-counter; list-style: none; padding: 0; margin-left: 0; }
+        .exercises-list > li {
+            counter-increment: ex-counter;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 8px; padding: 16px 20px; margin-bottom: 16px;
+        }
+        .exercises-list > li strong { color: var(--navy); }
+        details summary { cursor: pointer; color: var(--blue); font-weight: 700; margin-top: 12px; user-select: none; }
+        details summary:hover { color: var(--navy); }
+        details > div { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+
+        .summary {
+            background: var(--navy); color: #e8f0fc;
+            border-radius: 10px; padding: 22px 26px; margin-top: 40px;
+        }
+        .summary h2 { color: #c8dcf8; border-left-color: #6aaae8; }
+        .summary ul { margin-bottom: 0; }
+        .summary li { margin-bottom: 10px; color: #d8e8f8; }
+        .summary strong { color: #a8d0f8; }
+
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+        .col-box { border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; background: #fafbff; }
+        .col-box h3 { font-size: 0.98em; margin-top: 0; text-align: center; }
+
+        .calc-box {
+            background: var(--card); border: 1.5px solid var(--border);
+            border-radius: 10px; padding: 22px 26px; margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(30,60,110,0.06);
+        }
+        .calc-box h3 { margin-top: 0; color: var(--navy); }
+        .inputs-row { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 12px; }
+        .inputs-row label { display: flex; flex-direction: column; font-size: 0.88em; color: var(--muted); min-width: 150px; flex: 1; }
+        .inputs-row input {
+            margin-top: 4px; padding: 6px 8px;
+            border: 1px solid var(--border); border-radius: 5px; font-size: 1em;
+        }
+        .calc-box button { padding: 8px 22px; background: var(--blue); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.95em; }
+        .calc-box button:hover { background: var(--navy); }
+        .calc-result {
+            display: none; margin-top: 14px;
+            background: #f0f6ff; border-left: 4px solid var(--blue-light);
+            padding: 12px 16px; border-radius: 0 6px 6px 0;
+            font-family: monospace; font-size: 0.93em; white-space: pre-line;
+        }
+        @media (max-width: 640px) {
+            .two-col { grid-template-columns: 1fr; }
+            body { padding: 20px 14px 60px; }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Chapter 6　機率 (Probability)</h1>
+
+<p class="chapter-intro">
+第 1 章說過：統計推論的結論「有特定機率是正確的」。要讓這句話有意義，我們需要一套量化不確定性的數學語言——機率論。本章建立機率的基本詞彙（樣本空間、事件）、三種機率類型（聯合、邊際、條件）、三大運算法則（補集、加法、乘法），並以貝氏定理作壓軸：如何用新證據修正原有的判斷。
+</p>
+
+<div class="learning-goals">
+<h3>🎯 Learning Objectives</h3>
+<ul>
+    <li>理解隨機試驗、樣本空間、事件的定義，會用三種方法指派機率。</li>
+    <li>能從交叉分類表計算<strong>聯合機率、邊際機率、條件機率</strong>。</li>
+    <li>能判斷兩事件是否<strong>獨立</strong>、是否<strong>互斥</strong>，並理解兩者的差異。</li>
+    <li>能運用<strong>補集、加法、乘法法則</strong>與<strong>樹狀圖</strong>計算複合事件的機率。</li>
+    <li>能以<strong>貝氏定理</strong>計算後驗機率，並理解「篩檢陽性 ≠ 幾乎確定有病」的直覺翻轉。</li>
+</ul>
+</div>
+
+<div class="toc">
+<h3>📋 本章內容</h3>
+<ol>
+    <li><a href="#s61">§6.1　機率的基本概念</a></li>
+    <li><a href="#s62">§6.2　聯合、邊際與條件機率</a></li>
+    <li><a href="#s63">§6.3　機率法則與樹狀圖</a></li>
+    <li><a href="#s64">§6.4　貝氏定理</a></li>
+    <li><a href="#tool">🔢 互動工具：貝氏定理計算機</a></li>
+    <li><a href="#quiz">🧠 Quick Quiz</a></li>
+    <li><a href="#exercises">📚 綜合練習</a></li>
+    <li><a href="#summary">📌 Chapter Summary</a></li>
+</ol>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 6.1
+══════════════════════════════════════════ -->
+<h2 id="s61">§6.1　機率的基本概念 (Basic Concepts of Probability)</h2>
+
+<h3>一、核心術語</h3>
+
+<div class="formula-card">
+<h3>📐 三個基本詞彙</h3>
+<ul>
+    <li><strong>隨機試驗 (Random Experiment)</strong>：結果事先無法確定的過程。例：投擲骰子、觀察明天某飲料店的來客數。</li>
+    <li><strong>樣本空間 (Sample Space, $S$)</strong>：隨機試驗<strong>所有可能結果</strong>的集合。其中的每個結果稱為簡單事件，必須<strong>互斥且周延</strong>（不重複、不遺漏）。</li>
+    <li><strong>事件 (Event, $A$)</strong>：樣本空間的子集合——我們感興趣的一個或多個結果。</li>
+</ul>
+<p class="note">機率的兩條天條：① 每個結果的機率介於 0 與 1 之間：$0 \leq P(O_i) \leq 1$；② 所有結果的機率總和為 1：$\sum P(O_i) = 1$。任何違反這兩條的「機率」都是錯的。</p>
+</div>
+
+<h3>二、指派機率的三種方法</h3>
+
+<table>
+    <thead><tr><th>方法</th><th>做法</th><th>適用情境</th></tr></thead>
+    <tbody>
+        <tr>
+            <td><strong>古典方法</strong></td>
+            <td style="text-align:left;">結果機會均等時，$P(A) = \dfrac{A \text{ 包含的結果數}}{S \text{ 的總結果數}}$</td>
+            <td style="text-align:left;">骰子、撲克牌、抽籤等對稱機制</td>
+        </tr>
+        <tr>
+            <td><strong>相對頻率方法</strong></td>
+            <td style="text-align:left;">以大量重複觀察中事件發生的比例估計機率</td>
+            <td style="text-align:left;">商業數據：退貨率、點擊率、良率</td>
+        </tr>
+        <tr>
+            <td><strong>主觀方法</strong></td>
+            <td style="text-align:left;">依據知識、經驗做出的合理判斷</td>
+            <td style="text-align:left;">無法重複的事件：新產品成功機率、球賽勝率</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="example-block">
+<h3>📝 範例 6.1　三種方法各就各位</h3>
+<div class="scenario">
+<strong>情境：</strong>判斷下列機率各是用哪種方法指派的：<br>
+a. 夜市戳戳樂共 40 格，其中 5 格有大獎，戳中大獎的機率是 $5/40 = 0.125$。<br>
+b. 某電商過去一年 80,000 筆訂單中有 2,400 筆退貨，故估計退貨機率為 0.03。<br>
+c. 創投合夥人評估某新創公司三年內成功上市的機率約為 0.15。
+</div>
+<p><strong>解答：</strong>a. <strong>古典方法</strong>（40 格機會均等）；b. <strong>相對頻率方法</strong>（大量歷史資料的比例）；c. <strong>主觀方法</strong>（一次性事件，靠專業判斷）。</p>
+<div class="note">✅ 三種方法指派出的機率，後續的運算規則（§6.2–6.4）完全相同——機率的來源可以不同，數學是同一套。</div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 6.2
+══════════════════════════════════════════ -->
+<h2 id="s62">§6.2　聯合、邊際與條件機率 (Joint, Marginal, and Conditional Probability)</h2>
+
+<p>實務上最常見的機率問題涉及<strong>兩個事件的組合</strong>。先定義事件之間的關係：</p>
+
+<div class="formula-card">
+<h3>📐 事件的關係與三種機率</h3>
+<ul>
+    <li><strong>交集 $A \cap B$</strong>（「且」）：$A$、$B$ 同時發生 → 其機率稱為<strong>聯合機率</strong> $P(A \cap B)$。</li>
+    <li><strong>聯集 $A \cup B$</strong>（「或」）：$A$ 發生、$B$ 發生、或同時發生。</li>
+    <li><strong>補集 $A^C$</strong>：$A$ 不發生。</li>
+    <li><strong>邊際機率</strong> $P(A)$：單一事件發生的機率——在聯合機率表中，把對應的整列（或整行）加總。</li>
+    <li><strong>條件機率</strong>：已知 $B$ 發生的條件下，$A$ 發生的機率：
+        <div class="math-block">$$P(A \mid B) = \frac{P(A \cap B)}{P(B)}$$</div>
+    </li>
+</ul>
+<p class="note">條件機率的直覺：「已知 $B$ 發生」等於把世界縮小到 $B$ 這個圈圈裡，再問 $A$ 在圈圈裡占多大比例。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 主範例 6.2　線上課程平台：完課與加購</h3>
+<div class="scenario">
+<strong>情境：</strong>某線上課程平台分析大量學員紀錄，整理出「是否完課」與「是否加購進階課程」的聯合機率表。管理層想知道：完課行為與加購行為有沒有關係？
+</div>
+<table>
+    <thead>
+        <tr><th></th><th>加購進階課 $U$</th><th>未加購 $U^C$</th><th>邊際機率</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>完課 $C$</strong></td><td>0.18</td><td>0.22</td><td><strong>0.40</strong></td></tr>
+        <tr><td><strong>未完課 $C^C$</strong></td><td>0.06</td><td>0.54</td><td><strong>0.60</strong></td></tr>
+        <tr><td><strong>邊際機率</strong></td><td><strong>0.24</strong></td><td><strong>0.76</strong></td><td>1.00</td></tr>
+    </tbody>
+</table>
+<p><strong>a. 邊際機率</strong>：$P(C) = 0.18 + 0.22 = 0.40$（四成學員完課）；$P(U) = 0.18 + 0.06 = 0.24$（24% 學員加購）。</p>
+<p><strong>b. 條件機率</strong>——完課的學員中，加購的比例：</p>
+<div class="math-block">$$P(U \mid C) = \frac{P(U \cap C)}{P(C)} = \frac{0.18}{0.40} = 0.45$$</div>
+<p>未完課的學員中：$P(U \mid C^C) = 0.06 / 0.60 = 0.10$。</p>
+<p><strong>c. 判讀</strong>：完課學員的加購率（45%）是未完課者（10%）的 4.5 倍——兩個行為<strong>高度相關</strong>。</p>
+<div class="note">✅ 決策意涵：提高完課率（提醒推播、學習小組）可能連帶提升營收。但注意——這是觀察資料，「完課→更願意買」與「本來就積極的人既完課又加購」兩種解釋都成立（第 5 章的老朋友：相關 ≠ 因果）。</div>
+</div>
+
+<h3>獨立事件 (Independent Events)</h3>
+
+<div class="formula-card">
+<h3>📐 獨立的定義與檢驗</h3>
+<p>事件 $A$ 與 $B$ 獨立，若且唯若：</p>
+<div class="math-block">$$P(A \mid B) = P(A) \qquad \Leftrightarrow \qquad P(A \cap B) = P(A) \times P(B)$$</div>
+<p class="note">白話：「知道 $B$ 發生了」完全不改變你對 $A$ 的評估。檢驗方式：比較 $P(A \mid B)$ 與 $P(A)$ 是否相等（或聯合機率是否等於邊際機率的乘積）。</p>
+</div>
+
+<p>以主範例 6.2 檢驗：$P(U \mid C) = 0.45 \neq P(U) = 0.24$ → 完課與加購<strong>不獨立</strong>（相關）。</p>
+
+<div class="highlight">
+<strong>⚠️ 獨立 vs 互斥——最容易搞混的一對：</strong><br>
+<strong>互斥 (mutually exclusive)</strong>：$A$、$B$ 不能同時發生，$P(A \cap B) = 0$。<br>
+<strong>獨立 (independent)</strong>：$A$ 發生與否不影響 $B$ 的機率。<br>
+兩者不但不同，而且（當 $P(A), P(B) > 0$ 時）<strong>互斥的事件必然不獨立</strong>——因為知道 $A$ 發生，就確定 $B$ 沒發生，資訊影響巨大。
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 6.3
+══════════════════════════════════════════ -->
+<h2 id="s63">§6.3　機率法則與樹狀圖 (Probability Rules and Trees)</h2>
+
+<div class="formula-card">
+<h3>📐 三大法則</h3>
+<ul>
+    <li><strong>補集法則</strong>：$P(A^C) = 1 - P(A)$
+        <p style="font-size:0.92em; color:var(--muted); margin:4px 0 8px;">最重要的應用：「至少一次」問題——$P(\text{至少一次}) = 1 - P(\text{一次都沒有})$。</p></li>
+    <li><strong>加法法則</strong>：$P(A \cup B) = P(A) + P(B) - P(A \cap B)$
+        <p style="font-size:0.92em; color:var(--muted); margin:4px 0 8px;">減去交集是為了避免重複計算；互斥時交集為 0，可直接相加。</p></li>
+    <li><strong>乘法法則</strong>：$P(A \cap B) = P(A) \times P(B \mid A)$
+        <p style="font-size:0.92em; color:var(--muted); margin:4px 0 0;">獨立時簡化為 $P(A) \times P(B)$。這其實就是條件機率公式移項的結果。</p></li>
+</ul>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 6.3　加法法則：手搖飲的集點客群</h3>
+<div class="scenario">
+<strong>情境：</strong>「沐茶」的會員資料顯示：45% 的會員本月買過茶飲（$T$）、30% 買過咖啡（$F$）、15% 兩者都買過。隨機抽一位會員，本月<strong>至少買過其中一類</strong>的機率是多少？完全沒買的機率呢？
+</div>
+<div class="math-block">$$P(T \cup F) = 0.45 + 0.30 - 0.15 = 0.60$$</div>
+<div class="math-block">$$P(\text{都沒買}) = 1 - P(T \cup F) = 1 - 0.60 = 0.40$$</div>
+<div class="note">✅ 若直接 0.45 + 0.30 = 0.75，會把「兩者都買」的 15% 算兩次。畫文氏圖確認：只買茶 0.30、只買咖啡 0.15、都買 0.15、都沒買 0.40，總和 = 1 ✓。</div>
+</div>
+
+<div class="example-block">
+<h3>📝 主範例 6.4　樹狀圖：外送平台的遲到分析</h3>
+<div class="scenario">
+<strong>情境：</strong>某外送平台的訂單中，70% 來自市中心（$D$）、30% 來自郊區（$D^C$）。歷史資料顯示：市中心訂單的遲到率為 10%，郊區訂單的遲到率為 30%。隨機抽一筆訂單，遲到（$L$）的機率是多少？
+</div>
+<canvas id="treeCanvas" class="chart" width="680" height="300"></canvas>
+<p><strong>樹狀圖的規則：</strong>第一層分支放邊際機率，第二層放條件機率；<strong>沿路徑相乘</strong>得到終點的聯合機率；四條路徑的機率總和必為 1。</p>
+<div class="math-block">
+$$P(L) = P(D)P(L \mid D) + P(D^C)P(L \mid D^C) = (0.7)(0.1) + (0.3)(0.3) = 0.07 + 0.09 = 0.16$$
+</div>
+<div class="note">✅ 這條「把各分支的貢獻加總」的公式稱為<strong>全機率法則</strong>：整體遲到率 16%，其中市中心貢獻 7 個百分點、郊區貢獻 9 個百分點——郊區訂單雖只占三成，卻貢獻了超過一半的遲到。</div>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 6.5　「至少一次」的補集技巧</h3>
+<div class="scenario">
+<strong>情境：</strong>某手遊的抽卡機制中，每次抽卡獲得稀有角色的機率為 5%，且每次抽卡獨立。小安打算抽 10 次，「至少抽中一次稀有角色」的機率是多少？
+</div>
+<p>直接計算「至少一次」要窮舉抽中 1 次、2 次⋯⋯10 次，非常繁瑣。改用補集：</p>
+<div class="math-block">$$P(\text{至少一次}) = 1 - P(\text{十次全落空}) = 1 - (0.95)^{10} = 1 - 0.5987 = 0.4013$$</div>
+<div class="note">✅ 十連抽的中獎機率其實只有四成——不是很多人直覺的「5% × 10 = 50%」。（順帶一提：機率的直覺常常出錯，這正是要學機率論的原因。）</div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 6.4
+══════════════════════════════════════════ -->
+<h2 id="s64">§6.4　貝氏定理 (Bayes' Theorem)</h2>
+
+<p>樹狀圖是「順著時間算」：先知道訂單來源，再算遲到機率。貝氏定理則是「倒著推」：<strong>已經觀察到結果（遲到了），回推原因（來自哪一區）的機率</strong>。</p>
+
+<div class="formula-card">
+<h3>📐 貝氏定理</h3>
+<div class="math-block">
+$$P(A \mid E) = \frac{P(A)\,P(E \mid A)}{P(E)} = \frac{P(A)\,P(E \mid A)}{P(A)\,P(E \mid A) + P(A^C)\,P(E \mid A^C)}$$
+</div>
+<ul>
+    <li>$P(A)$：<strong>先驗機率</strong>——看到證據之前對 $A$ 的評估。</li>
+    <li>$P(E \mid A)$：<strong>似然</strong>——若 $A$ 為真，出現這個證據的機率。</li>
+    <li>$P(A \mid E)$：<strong>後驗機率</strong>——看到證據之後，修正過的評估。</li>
+</ul>
+<p class="note">分母就是全機率法則算出的 $P(E)$。實務操作：先畫樹狀圖算出所有聯合機率，後驗機率 ＝ 目標路徑 ÷ 所有含證據 $E$ 的路徑總和。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 主範例 6.6　遲到的訂單來自哪裡？（延續主範例 6.4）</h3>
+<div class="scenario">
+<strong>情境：</strong>客服接到一筆<strong>遲到</strong>的客訴訂單。在不看地址的情況下，這筆訂單來自郊區的機率是多少？
+</div>
+<p>用樹狀圖的結果直接組裝：</p>
+<div class="math-block">
+$$P(D^C \mid L) = \frac{P(D^C \cap L)}{P(L)} = \frac{0.09}{0.16} = 0.5625$$
+</div>
+<p><strong>判讀：</strong>先驗上郊區只占 30%，但「遲到」這個證據把它修正到 56%——證據讓機率翻了近一倍。</p>
+<div class="note">✅ 貝氏定理的本質就是條件機率＋全機率法則，沒有新的數學——新的是<strong>思考方向</strong>：從「原因 → 結果」翻轉成「結果 → 原因」。</div>
+</div>
+
+<div class="example-block">
+<h3>📝 主範例 6.7　篩檢陽性，該多恐慌？</h3>
+<div class="scenario">
+<strong>情境：</strong>某疾病在無症狀成人中的盛行率為 1%。快篩試劑的性能：真有病時呈陽性的機率（靈敏度）為 98%；沒病時誤呈陽性的機率（偽陽性率）為 2%。阿哲快篩呈<strong>陽性</strong>，他真的有病的機率是多少？
+</div>
+<p><strong>Step 1　列出資訊</strong>：$P(D) = 0.01$、$P(+ \mid D) = 0.98$、$P(+ \mid D^C) = 0.02$。</p>
+<p><strong>Step 2　全機率法則算 $P(+)$</strong>：</p>
+<div class="math-block">$$P(+) = (0.01)(0.98) + (0.99)(0.02) = 0.0098 + 0.0198 = 0.0296$$</div>
+<p><strong>Step 3　貝氏定理</strong>：</p>
+<div class="math-block">$$P(D \mid +) = \frac{0.0098}{0.0296} \approx 0.331$$</div>
+<p><strong>判讀：</strong>試劑「98% 準確」，但陽性者真正有病的機率只有 <strong>33%</strong>！</p>
+<p><strong>直覺化：</strong>想像 10,000 人受檢——有病的 100 人中約 98 人驗出陽性；沒病的 9,900 人中約 198 人<strong>誤判</strong>陽性。陽性總共 296 人，其中真有病的只有 98 人（33%）。<strong>因為沒病的人基數太大，偽陽性的「絕對人數」反而壓過真陽性。</strong></p>
+<div class="warn">⚠️ 這就是「基本率謬誤 (base rate neglect)」——忽略先驗機率（盛行率）的直覺錯誤。它解釋了為什麼醫師會要求陽性者「複檢」而不是直接開始治療，也是罕見疾病不宜全面普篩的統計學理由。</div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     互動工具
+══════════════════════════════════════════ -->
+<h2 id="tool">🔢 互動工具：貝氏定理計算機</h2>
+
+<div class="calc-box">
+<h3>🧮 輸入三個機率，看證據如何翻轉判斷</h3>
+<p style="font-size:0.93em; color:var(--muted);">預設為主範例 6.7 的篩檢情境。試試調整盛行率（0.01 → 0.10），看後驗機率如何劇烈變化。</p>
+<div class="inputs-row">
+    <label>先驗機率 P(A)（如：盛行率）<input type="number" id="bPrior" value="0.01" step="0.001" min="0" max="1"></label>
+    <label>P(證據 | A)（如：靈敏度）<input type="number" id="bSens" value="0.98" step="0.01" min="0" max="1"></label>
+    <label>P(證據 | A 不成立)（如：偽陽性率）<input type="number" id="bFp" value="0.02" step="0.01" min="0" max="1"></label>
+</div>
+<button onclick="calcBayes()">計算後驗機率</button>
+<div class="calc-result" id="bayesResult"></div>
+<canvas id="bayesCanvas" class="chart" width="680" height="150" style="display:none;"></canvas>
+</div>
+
+<hr>
+
+<!-- ══ Quiz ══ -->
+<div class="quiz-box" id="quiz">
+<h3>🧠 Quick Quiz</h3>
+
+<div class="quiz-q">
+    <p>Q1. 已知 $P(A) = 0.5$、$P(B) = 0.4$、$P(A \cap B) = 0.2$。事件 $A$ 與 $B$ 的關係是？</p>
+    <label><input type="radio" name="q1" value="a"> A. 互斥</label>
+    <label><input type="radio" name="q1" value="b"> B. 獨立（因為 0.5 × 0.4 = 0.2）</label>
+    <label><input type="radio" name="q1" value="c"> C. 不獨立</label>
+    <label><input type="radio" name="q1" value="d"> D. 互斥且獨立</label>
+    <button onclick="checkQ('q1','b','✅ 正確！檢驗獨立：P(A)×P(B) = 0.5×0.4 = 0.2 = P(A∩B) → 獨立。又 P(A∩B) ≠ 0，所以不互斥。')">Submit</button>
+    <div class="quiz-feedback" id="q1-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q2. 「顧客滿意（$A$）」與「顧客不滿意（$A^C$）」這兩個事件？</p>
+    <label><input type="radio" name="q2" value="a"> A. 互斥且互補，機率和為 1</label>
+    <label><input type="radio" name="q2" value="b"> B. 獨立</label>
+    <label><input type="radio" name="q2" value="c"> C. 互斥但機率和不一定是 1</label>
+    <label><input type="radio" name="q2" value="d"> D. 可能同時發生</label>
+    <button onclick="checkQ('q2','a','✅ 正確！事件與其補集：不能同時發生（互斥）、且涵蓋所有可能（互補），P(A) + P(Aᶜ) = 1。注意它們絕不獨立——知道 A 發生就完全確定 Aᶜ 沒發生。')">Submit</button>
+    <div class="quiz-feedback" id="q2-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q3. 某平台 60% 用戶開啟推播（$N$），開啟推播者中 25% 為日活躍用戶。$P(N \cap \text{日活躍})$ = ？</p>
+    <label><input type="radio" name="q3" value="a"> A. 0.85</label>
+    <label><input type="radio" name="q3" value="b"> B. 0.25</label>
+    <label><input type="radio" name="q3" value="c"> C. 0.15</label>
+    <label><input type="radio" name="q3" value="d"> D. 0.60</label>
+    <button onclick="checkQ('q3','c','✅ 正確！乘法法則：P(N ∩ 日活躍) = P(N) × P(日活躍 | N) = 0.6 × 0.25 = 0.15。「開啟推播者中 25%」是條件機率，不是聯合機率。')">Submit</button>
+    <div class="quiz-feedback" id="q3-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q4. 每次投籃命中率 40%（各次獨立），投 3 球「至少中一球」的機率？</p>
+    <label><input type="radio" name="q4" value="a"> A. 0.4 × 3 = 1.2</label>
+    <label><input type="radio" name="q4" value="b"> B. 1 − (0.6)³ = 0.784</label>
+    <label><input type="radio" name="q4" value="c"> C. (0.4)³ = 0.064</label>
+    <label><input type="radio" name="q4" value="d"> D. 0.4 + 0.6 = 1.0</label>
+    <button onclick="checkQ('q4','b','✅ 正確！至少一次 = 1 − 全部落空 = 1 − 0.6³ = 0.784。選項 A 超過 1，立刻違反機率天條——機率不能用「乘以次數」硬加。')">Submit</button>
+    <div class="quiz-feedback" id="q4-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q5. 貝氏定理中，若某疾病的盛行率（先驗機率）越低，則「陽性者真有病」的後驗機率會？</p>
+    <label><input type="radio" name="q5" value="a"> A. 越低——偽陽性人數相對壓過真陽性</label>
+    <label><input type="radio" name="q5" value="b"> B. 越高——因為檢測更難得呈陽性</label>
+    <label><input type="radio" name="q5" value="c"> C. 不變——後驗只取決於試劑準確率</label>
+    <label><input type="radio" name="q5" value="d"> D. 無法判斷</label>
+    <button onclick="checkQ('q5','a','✅ 正確！盛行率越低，「沒病的大基數 × 偽陽性率」產生的假警報越多，稀釋了真陽性。這就是基本率謬誤的核心：試劑準確率不變，後驗機率卻隨先驗劇烈變動。用上面的計算機試試 0.001 的盛行率！')">Submit</button>
+    <div class="quiz-feedback" id="q5-fb"></div>
+</div>
+
+</div>
+
+<hr>
+
+<!-- ══ Exercises ══ -->
+<h2 id="exercises">📚 綜合練習 (Comprehensive Practice)</h2>
+<p>以下習題涵蓋機率指派、聯合／條件機率、機率法則與貝氏定理，請先獨立作答，再展開解答確認。</p>
+
+<h3>I. 概念複習</h3>
+<ol class="exercises-list">
+
+    <li>
+        <p>樣本空間 $S$ 有 25 個機會均等的結果，事件 $A$ 包含 10 個結果。求 $P(A)$ 與 $P(A^C)$。</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>$P(A) = 10/25 = 0.4$；$P(A^C) = 1 - 0.4 = 0.6$。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <p>已知 $P(A) = 0.55$、$P(B) = 0.35$、$P(A \cup B) = 0.75$。求 $P(A \cap B)$，並判斷 $A$、$B$ 是否互斥、是否獨立。</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>由加法法則移項：$P(A \cap B) = 0.55 + 0.35 - 0.75 = 0.15$。</p>
+            <p>互斥？$P(A \cap B) = 0.15 \neq 0$ → <strong>不互斥</strong>。</p>
+            <p>獨立？$P(A)P(B) = 0.55 \times 0.35 = 0.1925 \neq 0.15$ → <strong>不獨立</strong>。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <p>解釋「互斥」與「獨立」的差異，並說明為何兩個機率皆為正的互斥事件必然不獨立。</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>互斥描述「能否同時發生」（$P(A \cap B) = 0$）；獨立描述「資訊是否互相影響」（$P(A \mid B) = P(A)$）。</p>
+            <p>若 $A$、$B$ 互斥且 $P(A), P(B) > 0$：知道 $B$ 發生後，$A$ 必不可能發生，$P(A \mid B) = 0 \neq P(A) > 0$——資訊影響巨大，故必不獨立。</p>
+        </div>
+        </details>
+    </li>
+
+</ol>
+
+<h3>II. 計算與應用</h3>
+<ol class="exercises-list">
+
+    <li>
+        <strong>6.1　戳戳樂的機率指派</strong>
+        <p>夜市戳戳樂共 40 格：大獎 4 格、中獎 10 格、小獎 26 格。每格被戳的機會均等，戳一格：</p>
+        <ul>
+            <li>a. 寫出這個隨機試驗的樣本空間（以獎項分類）。</li>
+            <li>b. 求戳中大獎、中獎、小獎的機率，並驗證總和為 1。</li>
+            <li>c. 求「戳中大獎或中獎」的機率。</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> $S = \{\text{大獎、中獎、小獎}\}$（互斥且周延）。</p>
+            <p><strong>b.</strong> $P(\text{大}) = 4/40 = 0.10$；$P(\text{中}) = 10/40 = 0.25$；$P(\text{小}) = 26/40 = 0.65$。總和 $= 1$ ✓</p>
+            <p><strong>c.</strong> 大獎與中獎互斥：$P(\text{大} \cup \text{中}) = 0.10 + 0.25 = 0.35$。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>6.2　打工與延畢的聯合機率表</strong>
+        <p>某校追蹤畢業生資料，整理出「在學期間每週打工超過 20 小時（$W$）」與「延畢（$Y$）」的聯合機率表：</p>
+        <table>
+            <thead><tr><th></th><th>延畢 $Y$</th><th>如期畢業 $Y^C$</th></tr></thead>
+            <tbody>
+                <tr><td><strong>高工時打工 $W$</strong></td><td>0.09</td><td>0.21</td></tr>
+                <tr><td><strong>非高工時 $W^C$</strong></td><td>0.07</td><td>0.63</td></tr>
+            </tbody>
+        </table>
+        <ul>
+            <li>a. 求 $P(W)$ 與 $P(Y)$（邊際機率）。</li>
+            <li>b. 求 $P(Y \mid W)$ 與 $P(Y \mid W^C)$，並比較。</li>
+            <li>c. 高工時打工與延畢是否獨立？</li>
+            <li>d. 「所以打工害人延畢」——這個結論妥當嗎？</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> $P(W) = 0.09 + 0.21 = 0.30$；$P(Y) = 0.09 + 0.07 = 0.16$。</p>
+            <p><strong>b.</strong> $P(Y \mid W) = 0.09/0.30 = 0.30$；$P(Y \mid W^C) = 0.07/0.70 = 0.10$。高工時者的延畢率是其他人的 3 倍。</p>
+            <p><strong>c.</strong> $P(Y \mid W) = 0.30 \neq P(Y) = 0.16$ → <strong>不獨立</strong>（相關）。</p>
+            <p><strong>d.</strong> 不妥。這是觀察資料——「經濟壓力」可能同時導致高工時打工與延畢（混雜因素）。相關支持進一步調查（如提供助學金後追蹤），但不能直接下因果結論。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>6.3　刮刮卡不放回抽取</strong>
+        <p>咖啡店促銷活動的抽獎箱有 10 張刮刮卡，其中 3 張中獎。小樂連抽 2 張（不放回）：</p>
+        <ul>
+            <li>a. 兩張都中獎的機率？</li>
+            <li>b. 恰好一張中獎的機率？</li>
+            <li>c. 至少一張中獎的機率？（用補集法則驗算）</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> $P(\text{中}_1 \cap \text{中}_2) = \frac{3}{10} \times \frac{2}{9} = \frac{6}{90} \approx 0.067$</p>
+            <p><strong>b.</strong> 兩條路徑：中→未 $= \frac{3}{10} \times \frac{7}{9} = \frac{21}{90}$；未→中 $= \frac{7}{10} \times \frac{3}{9} = \frac{21}{90}$。合計 $\frac{42}{90} \approx 0.467$。</p>
+            <p><strong>c.</strong> $P(\text{至少一張}) = 1 - P(\text{都沒中}) = 1 - \frac{7}{10} \times \frac{6}{9} = 1 - \frac{42}{90} = \frac{48}{90} \approx 0.533$。<br>
+            驗算：$\frac{6}{90} + \frac{42}{90} = \frac{48}{90}$ ✓（a + b = c）</p>
+            <p class="note" style="background:#f0f6ff;border-left:3px solid #4a90d9;padding:8px 12px;border-radius:0 4px 4px 0;">不放回 → 第二抽的機率依賴第一抽的結果（條件機率）；若「抽後放回」則兩抽獨立，機率變為 $0.3 \times 0.3 = 0.09$。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>6.4　雙重驗證的防護力</strong>
+        <p>某帳號有兩道獨立防線：密碼被破解的機率 0.05、手機驗證被攻破的機率 0.02。</p>
+        <ul>
+            <li>a. 帳號被完全入侵（兩道都被攻破）的機率？</li>
+            <li>b. 至少一道防線被攻破的機率？</li>
+            <li>c. 若兩道防線其實「不獨立」（例如手機裡存了密碼備忘錄），(a) 的答案會如何變化？</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> 獨立 → $P = 0.05 \times 0.02 = 0.001$（千分之一）。</p>
+            <p><strong>b.</strong> $1 - (0.95)(0.98) = 1 - 0.931 = 0.069$。</p>
+            <p><strong>c.</strong> 若手機被攻破時密碼幾乎必然一起洩漏，$P(\text{密碼破} \mid \text{手機破}) \gg 0.05$，聯合機率將遠大於 0.001（最壞情況接近 0.02）。<strong>「多重防護」的價值建立在獨立性上</strong>——把雞蛋放在會一起破的籃子裡，等於只有一個籃子。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>6.5　兩條產線的品質追溯（貝氏定理）</strong>
+        <p>某工廠的行動電源由兩條產線生產：A 線佔產量 60%（不良率 2%）、B 線佔 40%（不良率 5%）。品管在出貨區隨機抽到一顆<strong>不良品</strong>：</p>
+        <ul>
+            <li>a. 畫樹狀圖，求整體不良率 $P(F)$。</li>
+            <li>b. 這顆不良品來自 B 線的機率？</li>
+            <li>c. 廠長說「B 線只占四成產量，不良品應該多半來自 A 線」。請評論。</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> 聯合機率：A 且不良 $= 0.6 \times 0.02 = 0.012$；B 且不良 $= 0.4 \times 0.05 = 0.020$。</p>
+            <div class="math-block">$$P(F) = 0.012 + 0.020 = 0.032$$</div>
+            <p><strong>b.</strong></p>
+            <div class="math-block">$$P(B \mid F) = \frac{0.020}{0.032} = 0.625$$</div>
+            <p><strong>c.</strong> 廠長犯了忽略「不良率差異」的錯：B 線雖然產量較少，但不良率是 A 線的 2.5 倍，因此不良品中有 62.5% 來自 B 線。改善品質應優先督導 B 線。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>6.6　垃圾郵件過濾器（貝氏定理）</strong>
+        <p>已知 25% 的來信是垃圾郵件。過濾器對垃圾郵件的攔截率（判為垃圾）是 92%；對正常郵件的誤判率是 4%。</p>
+        <ul>
+            <li>a. 隨機一封信被判為垃圾郵件的機率？</li>
+            <li>b. 一封被判為垃圾的信，真的是垃圾郵件的機率？</li>
+            <li>c. 一封被放行的信，其實是垃圾郵件的機率？</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> $P(\text{判垃圾}) = (0.25)(0.92) + (0.75)(0.04) = 0.23 + 0.03 = 0.26$</p>
+            <p><strong>b.</strong> $P(\text{垃圾} \mid \text{判垃圾}) = \dfrac{0.23}{0.26} \approx 0.885$——攔下來的信約 88.5% 真的是垃圾。</p>
+            <p><strong>c.</strong> 被放行 $= 1 - 0.26 = 0.74$；其中漏網的垃圾 $= (0.25)(0.08) = 0.02$。$P(\text{垃圾} \mid \text{放行}) = 0.02/0.74 \approx 0.027$——收件匣裡約 2.7% 仍是漏網垃圾。</p>
+        </div>
+        </details>
+    </li>
+
+</ol>
+
+<hr>
+
+<!-- ══ Summary ══ -->
+<div class="summary" id="summary">
+<h2>📌 Chapter Summary</h2>
+<ul>
+    <li><strong>基礎</strong>：樣本空間互斥且周延；每個結果 $0 \leq P \leq 1$、總和 $= 1$。指派方法：古典（對稱機制）、相對頻率（歷史資料）、主觀（一次性事件）。</li>
+    <li><strong>三種機率</strong>：聯合 $P(A \cap B)$、邊際（表格整列/行加總）、條件 $P(A \mid B) = P(A \cap B)/P(B)$——「把世界縮小到 B 再看 A 的占比」。</li>
+    <li><strong>獨立</strong>：$P(A \mid B) = P(A)$，等價於 $P(A \cap B) = P(A)P(B)$。互斥 ≠ 獨立——互斥（且機率為正）的事件必不獨立。</li>
+    <li><strong>三大法則</strong>：補集（至少一次 = 1 − 全落空）、加法（減交集防重複）、乘法（$P(A)P(B \mid A)$，樹狀圖沿路徑相乘）。全機率法則：把各分支的聯合機率加總。</li>
+    <li><strong>貝氏定理</strong>：後驗 $= \dfrac{\text{目標路徑}}{\text{所有含證據的路徑總和}}$——從結果回推原因。先驗（基本率）很低時，即使檢測很準，後驗仍可能出乎意料地低（基本率謬誤）。</li>
+</ul>
+</div>
+
+<!-- ══ Scripts ══ -->
+<script>
+// ── Quiz ──
+function checkQ(qid, correct, msg) {
+    const selected = document.querySelector(`input[name="${qid}"]:checked`);
+    const fb = document.getElementById(`${qid}-fb`);
+    if (!selected) { fb.style.display='block'; fb.className='quiz-feedback wrong'; fb.textContent='請先選擇一個答案。'; return; }
+    fb.style.display = 'block';
+    if (selected.value === correct) {
+        fb.className = 'quiz-feedback correct';
+        fb.innerHTML = msg;
+    } else {
+        fb.className = 'quiz-feedback wrong';
+        fb.innerHTML = '❌ 不正確，請再想想。提示：' + msg;
+    }
+}
+
+// ── 樹狀圖 ──
+function drawTree() {
+    const cv = document.getElementById('treeCanvas');
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 13px "Noto Sans TC", sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('圖 6.1　外送訂單的樹狀圖（訂單來源 → 是否遲到）', W/2, 20);
+
+    const x0 = 60, x1 = 300, x2 = 540;
+    const yRoot = H/2 + 10;
+    const yD = 90, yDc = 230;
+    const leaves = [
+        { y: 60,  branch: 'P(L|D) = 0.1',  label: '市中心 ∩ 遲到', joint: '0.7×0.1 = 0.07', from: yD },
+        { y: 120, branch: 'P(Lᶜ|D) = 0.9', label: '市中心 ∩ 準時', joint: '0.7×0.9 = 0.63', from: yD },
+        { y: 200, branch: 'P(L|Dᶜ) = 0.3', label: '郊區 ∩ 遲到',   joint: '0.3×0.3 = 0.09', from: yDc },
+        { y: 260, branch: 'P(Lᶜ|Dᶜ) = 0.7',label: '郊區 ∩ 準時',   joint: '0.3×0.7 = 0.21', from: yDc }
+    ];
+    function line(xa, ya, xb, yb, col) {
+        ctx.beginPath(); ctx.strokeStyle = col || '#8aa8cc'; ctx.lineWidth = 1.6;
+        ctx.moveTo(xa, ya); ctx.lineTo(xb, yb); ctx.stroke();
+    }
+    // 第一層
+    line(x0 + 30, yRoot, x1 - 46, yD);
+    line(x0 + 30, yRoot, x1 - 46, yDc);
+    ctx.fillStyle = '#2c3e50'; ctx.font = '12px "Noto Sans TC", sans-serif';
+    ctx.save(); ctx.textAlign = 'center';
+    ctx.fillText('P(D) = 0.7', (x0 + x1)/2 - 14, (yRoot + yD)/2 - 8);
+    ctx.fillText('P(Dᶜ) = 0.3', (x0 + x1)/2 - 14, (yRoot + yDc)/2 + 18);
+    ctx.restore();
+    // 節點
+    function node(x, y, txt, col) {
+        ctx.beginPath(); ctx.fillStyle = col; ctx.arc(x, y, 5, 0, 7); ctx.fill();
+        ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 12.5px "Noto Sans TC", sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText(txt, x, y - 12);
+    }
+    node(x0 + 30, yRoot, '訂單', '#1a3a6b');
+    node(x1 - 40, yD, '市中心 D', '#2e6cb8');
+    node(x1 - 40, yDc, '郊區 Dᶜ', '#e67e22');
+    // 第二層
+    leaves.forEach(lf => {
+        line(x1 - 36, lf.from, x2 - 120, lf.y, lf.label.includes('遲到') && !lf.label.includes('準時') ? '#c0392b' : '#8aa8cc');
+        ctx.fillStyle = '#555'; ctx.font = '11.5px "Noto Sans TC", sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText(lf.branch, (x1 + x2 - 150)/2, (lf.from + lf.y)/2 - 5);
+        const isLate = lf.label.endsWith('遲到');
+        ctx.fillStyle = isLate ? '#c0392b' : '#2c3e50';
+        ctx.font = (isLate ? 'bold ' : '') + '12.5px "Noto Sans TC", sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(lf.label + '： ' + lf.joint, x2 - 110, lf.y + 4);
+    });
+    ctx.fillStyle = '#c0392b'; ctx.font = 'bold 12px "Noto Sans TC", sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText('P(L) = 0.07 + 0.09 = 0.16', x2 - 110, H - 8);
+}
+
+// ── 貝氏計算機 ──
+function calcBayes() {
+    const prior = parseFloat(document.getElementById('bPrior').value);
+    const sens = parseFloat(document.getElementById('bSens').value);
+    const fp = parseFloat(document.getElementById('bFp').value);
+    const out = document.getElementById('bayesResult');
+    if ([prior, sens, fp].some(v => isNaN(v) || v < 0 || v > 1)) {
+        out.style.display = 'block'; out.textContent = '三個輸入都必須是 0 到 1 之間的機率。'; return;
+    }
+    const pTrueP = prior * sens;          // 真陽性
+    const pFalseP = (1 - prior) * fp;     // 偽陽性
+    const pE = pTrueP + pFalseP;
+    const post = pE > 0 ? pTrueP / pE : 0;
+    out.style.display = 'block';
+    out.textContent =
+`P(證據) = ${prior}×${sens} + ${(1-prior).toFixed(4)}×${fp} = ${pTrueP.toFixed(4)} + ${pFalseP.toFixed(4)} = ${pE.toFixed(4)}
+後驗機率 P(A | 證據) = ${pTrueP.toFixed(4)} / ${pE.toFixed(4)} = ${(post).toFixed(4)}　（約 ${(post*100).toFixed(1)}%）
+
+以 10,000 人想像：
+  真陽性 ≈ ${Math.round(pTrueP*10000)} 人
+  偽陽性 ≈ ${Math.round(pFalseP*10000)} 人
+  → 陽性者中真正為真的比例 = ${(post*100).toFixed(1)}%`;
+    // 視覺化
+    const cv = document.getElementById('bayesCanvas');
+    cv.style.display = 'block';
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 12px "Noto Sans TC", sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText('呈現「證據為真」的人裡面：', 20, 24);
+    const barX = 20, barY = 40, barW = W - 40, barH = 44;
+    const wTrue = pE > 0 ? barW * (pTrueP / pE) : 0;
+    ctx.fillStyle = '#27ae60';
+    ctx.fillRect(barX, barY, wTrue, barH);
+    ctx.fillStyle = '#c0392b';
+    ctx.fillRect(barX + wTrue, barY, barW - wTrue, barH);
+    ctx.fillStyle = '#fff'; ctx.font = 'bold 13px "Noto Sans TC", sans-serif'; ctx.textAlign = 'center';
+    if (wTrue > 90) ctx.fillText('真陽性 ' + (post*100).toFixed(1) + '%', barX + wTrue/2, barY + 28);
+    if (barW - wTrue > 90) ctx.fillText('偽陽性 ' + ((1-post)*100).toFixed(1) + '%', barX + wTrue + (barW - wTrue)/2, barY + 28);
+    ctx.fillStyle = '#555'; ctx.font = '11.5px "Noto Sans TC", sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText('綠 = 證據為真且事件為真（如：陽性且有病）　紅 = 證據為真但事件為假（假警報）', 20, barY + barH + 24);
+    if (wTrue <= 90 && wTrue > 0) {
+        ctx.fillStyle = '#27ae60';
+        ctx.fillText('← 綠色部分僅 ' + (post*100).toFixed(1) + '%', barX + wTrue + 6, barY - 6);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    drawTree();
+    calcBayes();
+});
+</script>
+
+</body>
+</html>
