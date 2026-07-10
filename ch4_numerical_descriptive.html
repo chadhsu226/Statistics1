@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 4　數值敘述法</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false }
+                ],
+                throwOnError: false,
+                strict: "ignore"
+            });
+        });
+    </script>
+    <style>
+        :root {
+            --navy: #1a3a6b;
+            --blue: #2e6cb8;
+            --blue-light: #4a90d9;
+            --accent: #c0392b;
+            --gold: #d4a017;
+            --green: #27ae60;
+            --bg: #f7f9fc;
+            --card: #ffffff;
+            --border: #d0dcea;
+            --text: #2c3e50;
+            --muted: #5a6a7a;
+            --math-bg: #eaf3ff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Noto Sans TC', 'Source Serif 4', Georgia, serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 36px 24px 80px;
+        }
+        h1 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 2rem; font-weight: 700;
+            color: var(--navy);
+            border-bottom: 4px solid var(--blue-light);
+            padding-bottom: 12px; margin-bottom: 20px;
+        }
+        h2 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 1.45rem; font-weight: 600;
+            color: var(--navy);
+            margin-top: 48px; margin-bottom: 14px;
+            border-left: 5px solid var(--blue-light);
+            padding-left: 12px;
+        }
+        h3 { font-size: 1.1rem; font-weight: 700; color: var(--blue); margin-top: 28px; margin-bottom: 10px; }
+        p { margin-bottom: 12px; }
+        ul, ol { margin-left: 24px; margin-bottom: 12px; }
+        li { margin-bottom: 6px; }
+        hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+        .chapter-intro {
+            font-size: 1.05rem; color: var(--muted);
+            border-left: 3px solid var(--blue-light);
+            padding: 10px 16px; background: #eef4fb;
+            border-radius: 0 6px 6px 0; margin-bottom: 24px;
+        }
+        .learning-goals {
+            background: #fffbea; border: 1.5px solid var(--gold);
+            border-radius: 8px; padding: 18px 22px; margin: 24px 0;
+        }
+        .learning-goals h3 { color: #8a6000; margin-top: 0; }
+        .toc {
+            background: var(--card); border: 1.5px solid var(--border);
+            border-radius: 8px; padding: 18px 24px; margin: 24px 0;
+            box-shadow: 0 2px 8px rgba(30,60,110,0.06);
+        }
+        .toc h3 { color: var(--navy); margin-top: 0; }
+        .toc a { color: var(--blue); text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+        .highlight {
+            background: #fffbe6; border-left: 4px solid var(--gold);
+            padding: 12px 16px; margin: 16px 0; border-radius: 0 6px 6px 0;
+        }
+        .math-block {
+            background: var(--math-bg); border-radius: 6px;
+            padding: 14px 18px; margin: 14px 0;
+            overflow-x: auto; font-size: 1.05em; text-align: center;
+        }
+        .formula-card {
+            background: var(--card); border: 2px solid var(--blue-light);
+            border-radius: 10px; padding: 18px 22px; margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(74,144,217,0.1);
+        }
+        .formula-card h3 { margin-top: 0; color: var(--navy); }
+        .formula-card .note {
+            font-size: 0.9em; color: var(--muted);
+            background: #f0f6ff; border-left: 3px solid #aac4ee;
+            padding: 8px 12px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .example-block {
+            background: #f0faff; border-left: 5px solid var(--blue-light);
+            border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 20px 0;
+        }
+        .example-block h3 { color: var(--navy); margin-top: 0; }
+        .example-block .note {
+            font-size: 0.92em; color: #333;
+            background: #e6f7e6; border-left: 3px solid var(--green);
+            padding: 10px 14px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .example-block .warn {
+            font-size: 0.92em; background: #fff3cd;
+            border-left: 3px solid var(--gold);
+            padding: 10px 14px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .scenario {
+            background: #f8f4ff; border: 1.5px dashed #9b7fd4;
+            border-radius: 8px; padding: 12px 18px; margin-bottom: 14px;
+            font-size: 0.97em; color: #3d2070;
+        }
+        .scenario strong { color: #6a3fbf; }
+        table {
+            width: 100%; border-collapse: collapse;
+            margin: 14px 0; font-size: 0.95em;
+        }
+        th, td { border: 1px solid #c8d8ec; padding: 8px 12px; text-align: center; }
+        th { background: #ddeeff; color: var(--navy); font-weight: 600; }
+        tr:nth-child(even) { background: #f5f8ff; }
+        .type-table th { background: var(--navy); color: white; }
+
+        canvas.chart {
+            display: block; margin: 14px auto;
+            border: 1px solid #ddd; border-radius: 6px; background: #fff;
+            max-width: 100%;
+        }
+
+        /* ── Quiz ── */
+        .quiz-box {
+            background: #f0f6ff; border: 1.5px solid var(--blue-light);
+            border-radius: 10px; padding: 22px 26px; margin: 28px 0;
+        }
+        .quiz-box h3 { color: var(--navy); margin-top: 0; }
+        .quiz-q { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin-bottom: 16px; }
+        .quiz-q p { font-weight: 600; margin-bottom: 10px; }
+        .quiz-q label { display: block; margin: 6px 0; cursor: pointer; font-size: 0.97em; font-weight: 400; }
+        .quiz-q button { margin-top: 10px; padding: 7px 18px; background: var(--blue); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9em; }
+        .quiz-q button:hover { background: var(--navy); }
+        .quiz-feedback { display: none; margin-top: 10px; padding: 10px 14px; border-radius: 6px; font-size: 0.95em; }
+        .quiz-feedback.correct { background: #d4edda; border-left: 4px solid var(--green); color: #155724; }
+        .quiz-feedback.wrong { background: #f8d7da; border-left: 4px solid var(--accent); color: #721c24; }
+
+        /* ── Exercises ── */
+        .exercises-list { counter-reset: ex-counter; list-style: none; padding: 0; margin-left: 0; }
+        .exercises-list > li {
+            counter-increment: ex-counter;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 8px; padding: 16px 20px; margin-bottom: 16px;
+        }
+        .exercises-list > li strong { color: var(--navy); }
+        details summary { cursor: pointer; color: var(--blue); font-weight: 700; margin-top: 12px; user-select: none; }
+        details summary:hover { color: var(--navy); }
+        details > div { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+
+        /* ── Summary ── */
+        .summary {
+            background: var(--navy); color: #e8f0fc;
+            border-radius: 10px; padding: 22px 26px; margin-top: 40px;
+        }
+        .summary h2 { color: #c8dcf8; border-left-color: #6aaae8; }
+        .summary ul { margin-bottom: 0; }
+        .summary li { margin-bottom: 10px; color: #d8e8f8; }
+        .summary strong { color: #a8d0f8; }
+
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+        .col-box { border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; background: #fafbff; }
+        .col-box h3 { font-size: 0.98em; margin-top: 0; text-align: center; }
+
+        /* ── 計算機 ── */
+        .calc-box {
+            background: var(--card); border: 1.5px solid var(--border);
+            border-radius: 10px; padding: 22px 26px; margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(30,60,110,0.06);
+        }
+        .calc-box h3 { margin-top: 0; color: var(--navy); }
+        .calc-box textarea {
+            width: 100%; min-height: 70px; padding: 10px;
+            border: 1px solid var(--border); border-radius: 6px;
+            font-family: monospace; font-size: 0.95em; resize: vertical;
+        }
+        .calc-box button { padding: 8px 22px; background: var(--blue); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.95em; margin: 8px 8px 0 0; }
+        .calc-box button:hover { background: var(--navy); }
+        .calc-result {
+            display: none; margin-top: 14px;
+            background: #f0f6ff; border-left: 4px solid var(--blue-light);
+            padding: 12px 16px; border-radius: 0 6px 6px 0;
+            font-family: monospace; font-size: 0.92em; white-space: pre-line;
+        }
+        @media (max-width: 640px) {
+            .two-col { grid-template-columns: 1fr; }
+            body { padding: 20px 14px 60px; }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Chapter 4　數值敘述法 (Numerical Descriptive Techniques)</h1>
+
+<p class="chapter-intro">
+圖形讓我們「看見」分布的樣貌，數值量數則把樣貌濃縮成幾個精確的數字。本章是全課程使用頻率最高的一章：中央位置（資料的「中心」在哪）、離散程度（資料「散」得多開）、相對位置（單一觀測值「站在哪裡」），以及兩變數的線性關係量數。後續每一章的推論方法，都建立在這些量數之上。
+</p>
+
+<div class="learning-goals">
+<h3>🎯 Learning Objectives</h3>
+<ul>
+    <li>能計算並正確選用<strong>算術平均數、中位數、眾數、幾何平均數</strong>。</li>
+    <li>能計算<strong>全距、變異數、標準差</strong>，並以<strong>經驗法則</strong>與<strong>柴比雪夫定理</strong>詮釋標準差。</li>
+    <li>能以<strong>變異係數</strong>比較不同單位或不同水準資料的相對離散程度。</li>
+    <li>能計算<strong>百分位數、四分位數與四分位距</strong>，繪製<strong>盒鬚圖</strong>並辨識離群值。</li>
+    <li>能計算並詮釋<strong>共變異數與相關係數</strong>。</li>
+</ul>
+</div>
+
+<div class="toc">
+<h3>📋 本章內容</h3>
+<ol>
+    <li><a href="#s41">§4.1　中央位置量數</a>
+        <ol style="margin-top:4px;">
+            <li><a href="#s41-1">算術平均數、中位數、眾數</a></li>
+            <li><a href="#s41-2">三者的選用時機</a></li>
+            <li><a href="#s41-3">幾何平均數</a></li>
+        </ol>
+    </li>
+    <li><a href="#s42">§4.2　離散程度量數</a>
+        <ol style="margin-top:4px;">
+            <li><a href="#s42-1">全距、變異數、標準差</a></li>
+            <li><a href="#s42-2">詮釋標準差：經驗法則與柴比雪夫定理</a></li>
+            <li><a href="#s42-3">變異係數</a></li>
+        </ol>
+    </li>
+    <li><a href="#s43">§4.3　相對位置量數與盒鬚圖</a></li>
+    <li><a href="#s44">§4.4　兩變數的線性關係量數</a></li>
+    <li><a href="#tool">🔢 互動工具：敘述統計計算機</a></li>
+    <li><a href="#quiz">🧠 Quick Quiz</a></li>
+    <li><a href="#exercises">📚 綜合練習</a></li>
+    <li><a href="#summary">📌 Chapter Summary</a></li>
+</ol>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 4.1
+══════════════════════════════════════════ -->
+<h2 id="s41">§4.1　中央位置量數 (Measures of Central Location)</h2>
+
+<h3 id="s41-1">一、算術平均數、中位數、眾數</h3>
+
+<div class="formula-card">
+<h3>📐 三個核心量數</h3>
+<ul>
+    <li><strong>算術平均數 (Mean)</strong>：所有觀測值的總和除以個數。
+        <div class="math-block">$$\text{母體：}\ \mu = \frac{\sum_{i=1}^{N} x_i}{N} \qquad \text{樣本：}\ \bar{x} = \frac{\sum_{i=1}^{n} x_i}{n}$$</div>
+    </li>
+    <li><strong>中位數 (Median)</strong>：資料由小到大排序後<strong>正中間</strong>的值。$n$ 為奇數時取第 $(n+1)/2$ 個；偶數時取中間兩個值的平均。</li>
+    <li><strong>眾數 (Mode)</strong>：出現次數最多的觀測值（或直方圖中最高峰所在的類組）。</li>
+</ul>
+<p class="note">符號提醒：$\mu$（母體參數）與 $\bar{x}$（樣本統計量）計算方式相同，但身分不同——這個區分將貫穿全書（見第 1 章）。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 4.1　文青咖啡店的日營業額</h3>
+<div class="scenario">
+<strong>情境：</strong>「日光咖啡」記錄了最近 11 天的日營業額（千元）：<br>
+<span style="font-family:monospace;">12, 13, 14, 14, 15, 15, 15, 16, 17, 18, 45</span><br>
+其中最後一天適逢隔壁體育館的演唱會散場，湧入大量人潮。店長想用一個數字代表「平常一天大概賣多少」。
+</div>
+<p><strong>計算：</strong></p>
+<ul>
+    <li><strong>平均數</strong>：$\bar{x} = \dfrac{12+13+14+14+15+15+15+16+17+18+45}{11} = \dfrac{194}{11} \approx 17.64$（千元）</li>
+    <li><strong>中位數</strong>：資料已排序，$n = 11$，取第 $(11+1)/2 = 6$ 個值 → <strong>15</strong>（千元）</li>
+    <li><strong>眾數</strong>：15 出現 3 次，最多 → <strong>15</strong>（千元）</li>
+</ul>
+<p><strong>判讀：</strong>平均數 17.64 千元<strong>高於其中 9 天的實際營業額</strong>——它被演唱會那天的 45 千元嚴重拉高了。中位數 15 千元不受極端值影響，更能代表「平常的一天」。</p>
+<div class="note">✅ 關鍵性質：<strong>平均數對極端值（離群值）敏感，中位數則具有抗性 (resistant)</strong>。這正是第 1、3 章租屋案例中「右偏分布下中位數較能代表行情」的數學原因。</div>
+</div>
+
+<h3 id="s41-2">二、三者的選用時機</h3>
+
+<table>
+    <thead>
+        <tr><th>情況</th><th>建議量數</th><th>理由</th></tr>
+    </thead>
+    <tbody>
+        <tr><td>區間資料、分布大致對稱</td><td><strong>平均數</strong></td><td style="text-align:left;">利用到每一筆資料的資訊，後續統計推論以它為主角</td></tr>
+        <tr><td>區間資料、明顯偏態或有離群值</td><td><strong>中位數</strong></td><td style="text-align:left;">不受極端值影響（所得、房價、等待時間等右偏資料的慣用量數）</td></tr>
+        <tr><td>順序資料</td><td><strong>中位數</strong></td><td style="text-align:left;">順序資料可排序但不可加總，平均數無意義</td></tr>
+        <tr><td>名目資料</td><td><strong>眾數</strong></td><td style="text-align:left;">唯一適用的中央量數（例：最多人選的支付工具）</td></tr>
+    </tbody>
+</table>
+
+<div class="highlight">
+<strong>💡 偏態與三量數的相對位置：</strong>右偏分布中，通常「眾數 &lt; 中位數 &lt; 平均數」（平均數被右尾拉走）；左偏則相反。對稱單峰分布中三者重合。看到「平均數遠大於中位數」，幾乎可以斷定資料右偏。
+</div>
+
+<h3 id="s41-3">三、幾何平均數 (Geometric Mean)</h3>
+<p>當資料是<strong>連續多期的成長率／報酬率</strong>時，算術平均數會給出誤導的答案，應改用幾何平均數：</p>
+
+<div class="formula-card">
+<h3>📐 幾何平均報酬率</h3>
+<div class="math-block">$$R_g = \left[(1+R_1)(1+R_2)\cdots(1+R_n)\right]^{1/n} - 1$$</div>
+<p class="note">$R_g$ 是「若每期都以同一個固定報酬率成長，$n$ 期後會達到相同結果」的那個報酬率——即<strong>年化報酬率</strong>的正確算法。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 4.2　帳面平均賺 5%，實際卻虧錢？</h3>
+<div class="scenario">
+<strong>情境：</strong>小徐兩年前投入 $100,000 買進某 ETF。第一年報酬率 <strong>+50%</strong>，第二年 <strong>−40%</strong>。理專告訴他：「兩年平均報酬 $(50\% - 40\%)/2 = +5\%$，表現不錯！」小徐打開帳戶卻發現資產縮水了。
+</div>
+<p><strong>實際資產變化：</strong>$100{,}000 \times 1.5 \times 0.6 = 90{,}000$——兩年下來<strong>虧損 10%</strong>。</p>
+<p><strong>幾何平均報酬率：</strong></p>
+<div class="math-block">$$R_g = \left[(1.5)(0.6)\right]^{1/2} - 1 = \sqrt{0.9} - 1 \approx -5.13\%$$</div>
+<p>檢驗：$100{,}000 \times (0.9487)^2 = 90{,}000$ ✓——每年以 −5.13% 的固定速度縮水，正好得到相同結果。</p>
+<div class="note">✅ 結論：多期報酬率的正確「平均」是幾何平均（−5.13%），不是算術平均（+5%）。算術平均永遠 ≥ 幾何平均，且波動越大兩者差距越大——這也是「大賺大賠的基金，長期績效常不如穩健型基金」的數學原因。</div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 4.2
+══════════════════════════════════════════ -->
+<h2 id="s42">§4.2　離散程度量數 (Measures of Variability)</h2>
+
+<p>兩組資料可以有相同的中心、卻有完全不同的「散開程度」。離散程度本身就是重要資訊——在財務上它叫<strong>風險</strong>，在品管上它叫<strong>不穩定</strong>。</p>
+
+<h3 id="s42-1">一、全距、變異數、標準差</h3>
+
+<div class="formula-card">
+<h3>📐 定義與公式</h3>
+<ul>
+    <li><strong>全距 (Range)</strong> ＝ 最大值 − 最小值。簡單但粗糙——只用到兩筆資料，且對離群值極敏感。</li>
+    <li><strong>變異數 (Variance)</strong>：觀測值與平均數之「離差平方」的平均。
+        <div class="math-block">$$\text{母體：}\ \sigma^2 = \frac{\sum (x_i - \mu)^2}{N} \qquad \text{樣本：}\ s^2 = \frac{\sum (x_i - \bar{x})^2}{n-1}$$</div>
+    </li>
+    <li><strong>標準差 (Standard Deviation)</strong>：變異數的正平方根。$\sigma = \sqrt{\sigma^2}$、$s = \sqrt{s^2}$。單位與原始資料相同，故實務上多以標準差溝通。</li>
+</ul>
+<p class="note"><strong>為什麼樣本變異數除以 $n-1$？</strong>樣本離差是相對「樣本自己的 $\bar{x}$」計算的，天生比相對真實 $\mu$ 的離差略小；除以 $n-1$（自由度）進行修正，才能使 $s^2$ 平均而言不低估 $\sigma^2$。第 10 章之後所有公式都沿用此慣例。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 4.3　同樣的平均，不同的世界：兩間分店的日營業額</h3>
+<div class="scenario">
+<strong>情境：</strong>「日光咖啡」有兩間分店，過去 5 天的日營業額（千元）如下。兩店平均相同，但總部主管直覺 B 店「比較難預測」。<br>
+<span style="font-family:monospace;">A 店：36, 38, 40, 42, 44　　B 店：30, 35, 40, 45, 50</span>
+</div>
+<p><strong>兩店平均皆為</strong> $\bar{x} = 40$。計算樣本變異數：</p>
+<div class="math-block">
+$$s_A^2 = \frac{(-4)^2 + (-2)^2 + 0^2 + 2^2 + 4^2}{5-1} = \frac{40}{4} = 10 \qquad s_A = 3.16$$
+</div>
+<div class="math-block">
+$$s_B^2 = \frac{(-10)^2 + (-5)^2 + 0^2 + 5^2 + 10^2}{5-1} = \frac{250}{4} = 62.5 \qquad s_B = 7.91$$
+</div>
+<p><strong>判讀：</strong>B 店的標準差是 A 店的 2.5 倍——營業額波動大得多。備料、排班、現金流管理都更困難；主管的直覺被量化了。</p>
+<div class="note">✅ 單位提醒：變異數的單位是「千元²」（難以直觀理解），標準差的單位是「千元」（與原資料相同）——這是實務上偏好標準差的原因。</div>
+</div>
+
+<h3 id="s42-2">二、詮釋標準差：經驗法則與柴比雪夫定理</h3>
+
+<div class="two-col">
+    <div class="col-box">
+        <h3>經驗法則 (Empirical Rule)</h3>
+        <p style="font-size:0.93em;">若直方圖<strong>近似鐘形</strong>，則約有：</p>
+        <ul style="font-size:0.93em; margin-bottom:0;">
+            <li><strong>68%</strong> 的資料落在 $\bar{x} \pm 1s$</li>
+            <li><strong>95%</strong> 的資料落在 $\bar{x} \pm 2s$</li>
+            <li><strong>99.7%</strong> 的資料落在 $\bar{x} \pm 3s$</li>
+        </ul>
+    </div>
+    <div class="col-box">
+        <h3>柴比雪夫定理 (Chebysheff's Theorem)</h3>
+        <p style="font-size:0.93em;">對<strong>任何形狀</strong>的分布，落在 $\bar{x} \pm ks$（$k>1$）內的資料比例<strong>至少</strong>為：</p>
+        <div class="math-block" style="margin-bottom:0;">$$1 - \frac{1}{k^2}$$</div>
+        <p style="font-size:0.88em; color:var(--muted); margin-bottom:0;">$k=2$：至少 75%；$k=3$：至少 88.9%</p>
+    </div>
+</div>
+
+<canvas id="empRule" class="chart" width="640" height="260"></canvas>
+
+<div class="example-block">
+<h3>📝 範例 4.4　義式咖啡機的萃取時間</h3>
+<div class="scenario">
+<strong>情境：</strong>日光咖啡的義式咖啡機每杯濃縮的萃取時間近似鐘形分布，平均 $\bar{x} = 27$ 秒、標準差 $s = 2$ 秒。行規認為 23–31 秒萃取的濃縮風味最佳。
+</div>
+<ul>
+    <li>a. 大約多少比例的濃縮落在風味最佳區間？</li>
+    <li>b. 萃取超過 31 秒（過萃偏苦）的比例約多少？</li>
+    <li>c. 若萃取時間的分布形狀未知，(a) 的答案會變成什麼？</li>
+</ul>
+<p><strong>解答：</strong></p>
+<ul>
+    <li><strong>a.</strong> $23 = 27 - 2(2)$、$31 = 27 + 2(2)$，即 $\bar{x} \pm 2s$ → 經驗法則約 <strong>95%</strong>。</li>
+    <li><strong>b.</strong> 落在 $\pm 2s$ 之外的約 5%，由對稱性，超過 31 秒的約 <strong>2.5%</strong>。</li>
+    <li><strong>c.</strong> 形狀未知只能用柴比雪夫定理：$1 - 1/2^2 = 75\%$ → <strong>至少 75%</strong>（保守下限，不再是「約 95%」）。</li>
+</ul>
+<div class="note">✅ 兩個工具的分工：分布近似鐘形時用經驗法則（給出約略值）；形狀未知或明顯偏態時用柴比雪夫（給出保證下限）。</div>
+</div>
+
+<h3 id="s42-3">三、變異係數 (Coefficient of Variation)</h3>
+
+<div class="formula-card">
+<h3>📐 相對離散程度</h3>
+<div class="math-block">$$CV = \frac{s}{\bar{x}} \qquad \left(\text{母體：} \frac{\sigma}{\mu}\right)$$</div>
+<p class="note">標準差除以平均數，把離散程度「相對化」——適合比較<strong>單位不同</strong>或<strong>平均水準差很多</strong>的兩組資料。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 4.5　哪支股票「相對」比較穩？</h3>
+<div class="scenario">
+<strong>情境：</strong>兩支股票過去五年的年報酬率：股票甲平均 8%、標準差 12%；股票乙平均 15%、標準差 20%。乙的標準差較大，代表乙「比較危險」嗎？
+</div>
+<div class="math-block">$$CV_甲 = \frac{12}{8} = 1.50 \qquad CV_乙 = \frac{20}{15} = 1.33$$</div>
+<p><strong>判讀：</strong>乙的絕對波動較大，但<strong>每一單位平均報酬所承擔的波動</strong>其實較低（1.33 &lt; 1.50）。以「風險報酬效率」來看，乙反而較佳。</p>
+<div class="note">✅ 這正是財務上「用波動除以報酬來比較投資標的」概念的雛形（夏普比率的精神）。單看標準差比大小，只有在平均水準相近時才公平。</div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 4.3
+══════════════════════════════════════════ -->
+<h2 id="s43">§4.3　相對位置量數與盒鬚圖 (Measures of Relative Standing & Box Plots)</h2>
+
+<h3>一、百分位數與四分位數</h3>
+
+<div class="formula-card">
+<h3>📐 定義與定位公式</h3>
+<ul>
+    <li><strong>第 $p$ 百分位數 ($P_p$)</strong>：使約 $p\%$ 的觀測值小於它、約 $(100-p)\%$ 大於它的值。</li>
+    <li><strong>四分位數</strong>：$Q_1 = P_{25}$（下四分位數）、$Q_2 = P_{50}$（即中位數）、$Q_3 = P_{75}$（上四分位數）。</li>
+    <li><strong>定位公式</strong>：排序後，$P_p$ 的位置為
+        <div class="math-block">$$L_p = (n+1)\,\frac{p}{100}$$</div>
+        位置非整數時，在相鄰兩值之間做線性內插。</li>
+    <li><strong>四分位距 (IQR)</strong> $= Q_3 - Q_1$：中間 50% 資料的寬度，不受極端值影響的離散量數。</li>
+</ul>
+</div>
+
+<h3>二、盒鬚圖與離群值判定</h3>
+
+<div class="formula-card">
+<h3>📐 盒鬚圖 (Box Plot) 的五個數字與圍籬</h3>
+<ul>
+    <li>盒子：$Q_1$ 到 $Q_3$，中間畫出中位數線；鬚：延伸到「圍籬內」最遠的觀測值。</li>
+    <li><strong>圍籬 (Fences)</strong>：
+        <div class="math-block">$$\text{下圍籬} = Q_1 - 1.5 \times IQR \qquad \text{上圍籬} = Q_3 + 1.5 \times IQR$$</div>
+    </li>
+    <li>落在圍籬之外的觀測值視為<strong>離群值 (Outlier)</strong>，以獨立的點標示。</li>
+</ul>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 4.6　日光咖啡 11 天營業額的盒鬚圖</h3>
+<div class="scenario">
+<strong>情境：</strong>沿用範例 4.1 的資料（已排序，千元）：<span style="font-family:monospace;">12, 13, 14, 14, 15, 15, 15, 16, 17, 18, 45</span>。用盒鬚圖檢視分布並判定演唱會那天是否為統計上的離群值。
+</div>
+<p><strong>Step 1　四分位數</strong>（$n = 11$）：</p>
+<ul>
+    <li>$Q_1$ 位置 $= 12 \times 0.25 = 3$ → 第 3 個值 = <strong>14</strong></li>
+    <li>$Q_2$ 位置 $= 12 \times 0.50 = 6$ → 第 6 個值 = <strong>15</strong></li>
+    <li>$Q_3$ 位置 $= 12 \times 0.75 = 9$ → 第 9 個值 = <strong>17</strong></li>
+</ul>
+<p><strong>Step 2　IQR 與圍籬</strong>：$IQR = 17 - 14 = 3$</p>
+<div class="math-block">$$\text{下圍籬} = 14 - 1.5(3) = 9.5 \qquad \text{上圍籬} = 17 + 1.5(3) = 21.5$$</div>
+<p><strong>Step 3　判定</strong>：45 &gt; 21.5 → 演唱會日是<strong>離群值</strong>；其餘觀測值皆在圍籬內。</p>
+<canvas id="boxDemo" class="chart" width="640" height="180"></canvas>
+<div class="note">✅ 離群值的處置不是「刪掉」，而是「調查」——它可能是輸入錯誤（該修正）、罕見事件（該註記），或重要的商業訊號（演唱會日 = 潛在商機，也許該和體育館談合作）。</div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 4.4
+══════════════════════════════════════════ -->
+<h2 id="s44">§4.4　兩變數的線性關係量數 (Measures of Linear Relationship)</h2>
+
+<p>第 3 章用散佈圖「看」兩個區間變數的關係；本節把「方向」與「強弱」變成數字。</p>
+
+<div class="formula-card">
+<h3>📐 共變異數與相關係數</h3>
+<ul>
+    <li><strong>樣本共變異數 (Covariance)</strong>：
+        <div class="math-block">$$s_{xy} = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{n-1}$$</div>
+        正值＝同向變動；負值＝反向變動。<strong>缺點：大小受單位影響</strong>，數值本身難以判讀強弱。</li>
+    <li><strong>樣本相關係數 (Correlation Coefficient)</strong>：把共變異數標準化。
+        <div class="math-block">$$r = \frac{s_{xy}}{s_x\, s_y}, \qquad -1 \leq r \leq +1$$</div>
+        $r = \pm 1$：完美線性關係；$r = 0$：無線性關係。$|r|$ 越接近 1，線性關係越強。</li>
+</ul>
+<p class="note">慣用的粗略分級：$|r| \geq 0.8$ 強、$0.5 \leq |r| < 0.8$ 中等、$|r| < 0.5$ 弱。相關係數只衡量<strong>線性</strong>關係——完美的曲線關係（如拋物線）也可能算出 $r \approx 0$。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 4.7　氣溫與熱飲銷量的相關係數（延續第 3 章範例 3.4）</h3>
+<div class="scenario">
+<strong>情境：</strong>店長從第 3 章的資料中取 8 天，想把散佈圖上「強烈負向」的目測印象量化。<br>
+氣溫 $x$（°C）：<span style="font-family:monospace;">16, 18, 22, 24, 28, 30, 34, 36</span><br>
+熱飲 $y$（杯）：<span style="font-family:monospace;">330, 310, 290, 260, 240, 220, 180, 170</span>
+</div>
+<p><strong>Step 1　平均數</strong>：$\bar{x} = 208/8 = 26$、$\bar{y} = 2000/8 = 250$</p>
+<p><strong>Step 2　離差與乘積和</strong>：</p>
+<table>
+    <thead><tr><th>$x_i - \bar{x}$</th><th>$y_i - \bar{y}$</th><th>乘積</th><th>$(x_i-\bar{x})^2$</th><th>$(y_i-\bar{y})^2$</th></tr></thead>
+    <tbody>
+        <tr><td>−10</td><td>80</td><td>−800</td><td>100</td><td>6400</td></tr>
+        <tr><td>−8</td><td>60</td><td>−480</td><td>64</td><td>3600</td></tr>
+        <tr><td>−4</td><td>40</td><td>−160</td><td>16</td><td>1600</td></tr>
+        <tr><td>−2</td><td>10</td><td>−20</td><td>4</td><td>100</td></tr>
+        <tr><td>2</td><td>−10</td><td>−20</td><td>4</td><td>100</td></tr>
+        <tr><td>4</td><td>−30</td><td>−120</td><td>16</td><td>900</td></tr>
+        <tr><td>8</td><td>−70</td><td>−560</td><td>64</td><td>4900</td></tr>
+        <tr><td>10</td><td>−80</td><td>−800</td><td>100</td><td>6400</td></tr>
+        <tr style="font-weight:700;"><td colspan="2">合計</td><td>−2960</td><td>368</td><td>24000</td></tr>
+    </tbody>
+</table>
+<p><strong>Step 3　計算</strong>：</p>
+<div class="math-block">$$s_{xy} = \frac{-2960}{7} \approx -422.86 \qquad s_x = \sqrt{\frac{368}{7}} \approx 7.25 \qquad s_y = \sqrt{\frac{24000}{7}} \approx 58.55$$</div>
+<div class="math-block">$$r = \frac{-422.86}{(7.25)(58.55)} \approx -0.996$$</div>
+<p><strong>判讀：</strong>$r \approx -1.0$——氣溫與熱飲銷量存在<strong>幾乎完美的負向線性關係</strong>，印證了散佈圖的目測。</p>
+<div class="note">✅ 共變異數 −422.86 這個數字本身無法判讀強弱（換個單位就變了）；標準化成 $r$ 之後才有「接近 −1 ＝ 極強」的絕對意義。第 16 章將利用同一組計算，把這條關係配適成可以做預測的迴歸直線。</div>
+<div class="warn">⚠️ 再次提醒：$r \approx -1$ 也不能證明「氣溫下降<em>導致</em>熱飲大賣」——但在這個例子中因果方向有合理的常識支持（天冷想喝熱的）。相關係數＋領域知識，才能做出負責任的判斷。</div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     互動工具
+══════════════════════════════════════════ -->
+<h2 id="tool">🔢 互動工具：敘述統計計算機</h2>
+
+<div class="calc-box">
+<h3>🧮 貼上資料，一鍵計算本章所有統計量</h3>
+<p style="font-size:0.93em; color:var(--muted);">輸入一組數字（以逗號、空格或換行分隔）。預設為範例 4.1 的 11 天營業額。</p>
+<textarea id="dataInput">12, 13, 14, 14, 15, 15, 15, 16, 17, 18, 45</textarea>
+<br>
+<button onclick="calcStats()">📊 計算統計量</button>
+<button onclick="loadSample(1)" style="background:#7a8aa0;">載入範例 4.1</button>
+<button onclick="loadSample(2)" style="background:#7a8aa0;">載入範例 4.3 B 店</button>
+<div class="calc-result" id="statsResult"></div>
+<canvas id="toolBox" class="chart" width="640" height="150" style="display:none;"></canvas>
+</div>
+
+<hr>
+
+<!-- ══ Quiz ══ -->
+<div class="quiz-box" id="quiz">
+<h3>🧠 Quick Quiz</h3>
+
+<div class="quiz-q">
+    <p>Q1. 某縣市公布「平均月薪 58,000 元、中位數月薪 43,000 元」。這組數字透露薪資分布？</p>
+    <label><input type="radio" name="q1" value="a"> A. 左偏——低薪者拉低了平均</label>
+    <label><input type="radio" name="q1" value="b"> B. 右偏——少數高薪者拉高了平均</label>
+    <label><input type="radio" name="q1" value="c"> C. 對稱——兩個數字都是中央量數</label>
+    <label><input type="radio" name="q1" value="d"> D. 資料一定有誤，兩者應該相等</label>
+    <button onclick="checkQ('q1','b','✅ 正確！平均數遠大於中位數是右偏的典型特徵——少數極高薪資把平均數拉向右尾，中位數則不受影響。半數以上的人領不到「平均薪資」。')">Submit</button>
+    <div class="quiz-feedback" id="q1-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q2. 樣本變異數的分母為什麼是 $n-1$ 而不是 $n$？</p>
+    <label><input type="radio" name="q2" value="a"> A. 為了讓數字大一點比較好看</label>
+    <label><input type="radio" name="q2" value="b"> B. 因為有一筆資料要保留做檢驗</label>
+    <label><input type="radio" name="q2" value="c"> C. 離差以樣本平均數為基準天生偏小，除以 n−1 修正低估</label>
+    <label><input type="radio" name="q2" value="d"> D. 歷史習慣，沒有理由</label>
+    <button onclick="checkQ('q2','c','✅ 正確！離差是相對樣本自己的 x̄（而非真實 μ）計算的，平方和天生偏小；除以自由度 n−1 修正後，s² 平均而言才不會低估 σ²。')">Submit</button>
+    <div class="quiz-feedback" id="q2-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q3. 某右偏分布的資料，平均 50、標準差 10。「至少有多少比例的資料落在 30 到 70 之間」？</p>
+    <label><input type="radio" name="q3" value="a"> A. 約 95%（經驗法則）</label>
+    <label><input type="radio" name="q3" value="b"> B. 至少 75%（柴比雪夫定理）</label>
+    <label><input type="radio" name="q3" value="c"> C. 恰好 68%</label>
+    <label><input type="radio" name="q3" value="d"> D. 無法給出任何保證</label>
+    <button onclick="checkQ('q3','b','✅ 正確！30–70 是 x̄±2s。分布「右偏」不是鐘形，經驗法則不適用；柴比雪夫定理對任何形狀都成立：至少 1−1/4 = 75%。')">Submit</button>
+    <div class="quiz-feedback" id="q3-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q4. 兩組資料：甲（平均 200、標準差 40）、乙（平均 20、標準差 8）。哪組的「相對」離散程度較大？</p>
+    <label><input type="radio" name="q4" value="a"> A. 甲，因為標準差 40 &gt; 8</label>
+    <label><input type="radio" name="q4" value="b"> B. 乙，因為 CV：乙 0.4 &gt; 甲 0.2</label>
+    <label><input type="radio" name="q4" value="c"> C. 一樣大</label>
+    <label><input type="radio" name="q4" value="d"> D. 無法比較</label>
+    <button onclick="checkQ('q4','b','✅ 正確！平均水準差很多時要用變異係數：CV甲 = 40/200 = 0.2；CV乙 = 8/20 = 0.4。乙每單位平均值的波動是甲的兩倍。')">Submit</button>
+    <div class="quiz-feedback" id="q4-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q5. 兩變數的相關係數 $r = 0.03$。下列敘述何者最正確？</p>
+    <label><input type="radio" name="q5" value="a"> A. 兩變數之間完全沒有任何關係</label>
+    <label><input type="radio" name="q5" value="b"> B. 兩變數幾乎沒有「線性」關係，但可能存在曲線關係</label>
+    <label><input type="radio" name="q5" value="c"> C. 兩變數有弱的正向因果關係</label>
+    <label><input type="radio" name="q5" value="d"> D. 計算一定有誤</label>
+    <button onclick="checkQ('q5','b','✅ 正確！r 只偵測線性關係。完美的 U 型（拋物線）關係也可能算出 r≈0。所以看到低相關，仍應畫散佈圖確認是否有非線性型態。')">Submit</button>
+    <div class="quiz-feedback" id="q5-fb"></div>
+</div>
+
+</div>
+
+<hr>
+
+<!-- ══ Exercises ══ -->
+<h2 id="exercises">📚 綜合練習 (Comprehensive Practice)</h2>
+<p>以下習題涵蓋中央位置、離散程度、相對位置與相關係數的計算與判讀，請先獨立作答，再展開解答確認。</p>
+
+<h3>I. 概念複習</h3>
+<ol class="exercises-list">
+
+    <li>
+        <p>房價、所得、保險理賠金額等右偏資料，新聞報導慣用中位數而非平均數。請說明理由，並舉出一種「平均數比中位數合適」的情況。</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>右偏資料的平均數被右尾少數極大值拉高，可能高於大多數觀測值，代表性差；中位數不受極端值影響，更能代表「典型」情況。</p>
+            <p>平均數較合適的情況：分布大致對稱時（如標準化測驗成績、身高）；或關心「總量」時——例如估計整棟大樓的總用電，用平均數 × 戶數才正確，中位數無法還原總量。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <p>經驗法則與柴比雪夫定理各適用於什麼情況？兩者對「$\bar{x} \pm 2s$ 內的資料比例」的敘述有何不同？</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <ul>
+                <li><strong>經驗法則</strong>：僅適用於近似鐘形的分布，給出「約 95%」的<strong>約略值</strong>。</li>
+                <li><strong>柴比雪夫定理</strong>：適用於任何形狀，給出「至少 75%」的<strong>保證下限</strong>。</li>
+                <li>差異：一個是條件較嚴、資訊較多的約略估計；一個是條件寬鬆、結論保守的下限保證。</li>
+            </ul>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <p>共變異數與相關係數都能表達兩變數的線性關係，為什麼實務上幾乎都用相關係數溝通？</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>共變異數的大小受<strong>單位</strong>影響：氣溫用 °C 或 °F、銷量用杯或打，算出來的數字完全不同，因此「−422.86」本身無法判讀強弱，只能看正負號。</p>
+            <p>相關係數把共變異數除以兩個標準差，消除單位影響，落在 $[-1, 1]$ 的絕對尺度上——$-0.996$ 在任何單位下都是「極強的負向線性關係」。</p>
+        </div>
+        </details>
+    </li>
+
+</ol>
+
+<h3>II. 計算與應用</h3>
+<ol class="exercises-list">
+
+    <li>
+        <strong>4.1　打工時薪知多少</strong>
+        <p>9 位大學生的打工時薪（元）：<span style="font-family:monospace;">183, 190, 190, 195, 200, 205, 210, 215, 240</span></p>
+        <ul>
+            <li>a. 計算平均數、中位數、眾數。</li>
+            <li>b. 三者何者最適合代表「典型時薪」？說明理由。</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> 平均數 $= 1828/9 \approx 203.1$ 元；中位數 = 第 5 個值 = <strong>200</strong> 元；眾數 = <strong>190</strong> 元（出現 2 次）。</p>
+            <p><strong>b.</strong> 資料略右偏（240 拉高平均）。中位數 200 最能代表典型時薪；平均數 203.1 略受極端值影響；眾數 190 只反映最常見值、用到的資訊最少。此例三者接近，差異不大，但概念判斷以中位數為佳。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>4.2　兩家量販店的結帳等待</strong>
+        <p>各抽 5 位顧客的結帳等待時間（分鐘）：<br>
+        甲店：<span style="font-family:monospace;">4, 6, 8, 10, 12</span>　乙店：<span style="font-family:monospace;">7, 8, 8, 8, 9</span></p>
+        <ul>
+            <li>a. 計算兩店的平均數與樣本標準差。</li>
+            <li>b. 計算變異係數。哪家店的等待經驗「比較可預期」？</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> 兩店平均皆為 8 分鐘。<br>
+            甲：$s^2 = \frac{16+4+0+4+16}{4} = 10$，$s = 3.16$；乙：$s^2 = \frac{1+0+0+0+1}{4} = 0.5$，$s = 0.71$。</p>
+            <p><strong>b.</strong> $CV_甲 = 3.16/8 = 0.395$；$CV_乙 = 0.71/8 = 0.088$。乙店的波動遠小——每次去等的時間都差不多（可預期）；甲店有時 4 分鐘有時 12 分鐘，體驗不穩定。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>4.3　外送時間的經驗法則</strong>
+        <p>某外送平台的送達時間近似鐘形分布，平均 30 分鐘、標準差 4 分鐘。</p>
+        <ul>
+            <li>a. 約多少比例的訂單在 26–34 分鐘送達？</li>
+            <li>b. 約多少比例在 22–38 分鐘送達？</li>
+            <li>c. 送達時間超過 38 分鐘的比例約多少？</li>
+            <li>d. 若分布形狀其實未知，(b) 的答案應修正為何？</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <ul>
+                <li><strong>a.</strong> $\bar{x} \pm 1s$ → 約 <strong>68%</strong>。</li>
+                <li><strong>b.</strong> $\bar{x} \pm 2s$ → 約 <strong>95%</strong>。</li>
+                <li><strong>c.</strong> 兩尾合計約 5%，右尾約 <strong>2.5%</strong>。</li>
+                <li><strong>d.</strong> 改用柴比雪夫：<strong>至少 75%</strong>（不能再宣稱約 95%）。</li>
+            </ul>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>4.4　通勤時間的盒鬚圖</strong>
+        <p>11 位同學的單程通勤時間（分鐘，已排序）：<span style="font-family:monospace;">15, 18, 20, 22, 25, 26, 28, 30, 34, 40, 62</span></p>
+        <ul>
+            <li>a. 求 $Q_1$、中位數、$Q_3$ 與 IQR。</li>
+            <li>b. 計算圍籬，判斷是否有離群值。</li>
+            <li>c. 描述此分布的形狀。</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> $n = 11$：$Q_1$ 位置 $= 12 \times 0.25 = 3$ → <strong>20</strong>；中位數位置 6 → <strong>26</strong>；$Q_3$ 位置 9 → <strong>34</strong>；$IQR = 14$。</p>
+            <p><strong>b.</strong> 下圍籬 $= 20 - 21 = -1$；上圍籬 $= 34 + 21 = 55$。62 &gt; 55 → <strong>62 是離群值</strong>（住得特別遠的同學）。</p>
+            <p><strong>c.</strong> 右偏——中位數 26 離 $Q_1$（差 6）比離 $Q_3$（差 8）近，且右側有離群值拖尾。通勤時間有下限、無上限，右偏符合預期。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>4.5　廣告費與新客數的相關係數</strong>
+        <p>某餐廳記錄 5 個月的網路廣告費 $x$（萬元）與當月新客數 $y$（百人）：</p>
+        <table>
+            <thead><tr><th>$x$</th><td>2</td><td>4</td><td>6</td><td>8</td><td>10</td></tr></thead>
+            <tbody><tr><th>$y$</th><td>5</td><td>9</td><td>10</td><td>13</td><td>18</td></tr></tbody>
+        </table>
+        <ul>
+            <li>a. 計算 $s_{xy}$、$s_x$、$s_y$ 與相關係數 $r$。</li>
+            <li>b. 詮釋 $r$ 的意義。老闆據此宣稱「廣告費加倍，新客就會加倍」，這樣的推論妥當嗎？</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> $\bar{x} = 6$、$\bar{y} = 11$。離差乘積：$(-4)(-6) + (-2)(-2) + 0(-1) + 2(2) + 4(7) = 24+4+0+4+28 = 60$</p>
+            <div class="math-block">$$s_{xy} = \frac{60}{4} = 15 \qquad s_x = \sqrt{\frac{40}{4}} = 3.162 \qquad s_y = \sqrt{\frac{94}{4}} = 4.848$$</div>
+            <div class="math-block">$$r = \frac{15}{(3.162)(4.848)} \approx 0.98$$</div>
+            <p><strong>b.</strong> $r \approx 0.98$：廣告費與新客數有極強的正向線性關係。但老闆的推論有兩個問題：① 相關不證明因果（可能促銷月同時投廣告又降價）；② 觀察範圍只有 2–10 萬元，外推到「加倍」超出資料範圍——線性關係在更高支出下可能飽和（報酬遞減）。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>4.6　網紅頻道的年化成長率</strong>
+        <p>某 YouTube 頻道訂閱數連續三年的年成長率為 +100%、+50%、−20%。</p>
+        <ul>
+            <li>a. 頻道經紀公司宣稱「平均年成長 $(100+50-20)/3 \approx 43.3\%$」。請用幾何平均數檢驗這個說法。</li>
+            <li>b. 若三年前訂閱數為 10 萬，現在是多少？兩種「平均」哪個能正確還原這個結果？</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> $R_g = [(2.0)(1.5)(0.8)]^{1/3} - 1 = (2.4)^{1/3} - 1 \approx 1.339 - 1 = 33.9\%$。正確的年化成長率是 <strong>33.9%</strong>，比宣稱的 43.3% 低了近 10 個百分點。</p>
+            <p><strong>b.</strong> $10 \times 2.0 \times 1.5 \times 0.8 = 24$ 萬。檢驗：$10 \times (1.339)^3 \approx 24$ 萬 ✓；若用 43.3%：$10 \times (1.433)^3 \approx 29.4$ 萬 ✗（高估 5 萬）。多期成長率只能用幾何平均。</p>
+        </div>
+        </details>
+    </li>
+
+</ol>
+
+<hr>
+
+<!-- ══ Summary ══ -->
+<div class="summary" id="summary">
+<h2>📌 Chapter Summary</h2>
+<ul>
+    <li><strong>中央位置</strong>：平均數（用到全部資訊，但怕離群值）、中位數（抗極端值，偏態資料與順序資料首選）、眾數（名目資料唯一選擇）。右偏時通常「眾數 &lt; 中位數 &lt; 平均數」。多期成長率用<strong>幾何平均</strong>。</li>
+    <li><strong>離散程度</strong>：樣本變異數 $s^2 = \sum(x_i-\bar{x})^2/(n-1)$（分母 $n-1$ 修正低估）；標準差與原資料同單位。近似鐘形用<strong>經驗法則</strong>（68–95–99.7）；任意形狀用<strong>柴比雪夫</strong>（至少 $1 - 1/k^2$）。</li>
+    <li><strong>變異係數</strong> $CV = s/\bar{x}$：比較不同單位或不同水準資料的相對離散度。</li>
+    <li><strong>相對位置</strong>：$P_p$ 位置 $= (n+1)p/100$；$IQR = Q_3 - Q_1$；圍籬 $= Q_1 - 1.5\,IQR$ 與 $Q_3 + 1.5\,IQR$，圍籬外為離群值——先調查，不要直接刪除。</li>
+    <li><strong>兩變數</strong>：共變異數看方向、相關係數 $r = s_{xy}/(s_x s_y) \in [-1,1]$ 看方向與強弱；$r$ 只偵測線性關係，且相關不等於因果。</li>
+</ul>
+</div>
+
+<!-- ══ Scripts ══ -->
+<script>
+// ── Quiz ──
+function checkQ(qid, correct, msg) {
+    const selected = document.querySelector(`input[name="${qid}"]:checked`);
+    const fb = document.getElementById(`${qid}-fb`);
+    if (!selected) { fb.style.display='block'; fb.className='quiz-feedback wrong'; fb.textContent='請先選擇一個答案。'; return; }
+    fb.style.display = 'block';
+    if (selected.value === correct) {
+        fb.className = 'quiz-feedback correct';
+        fb.innerHTML = msg;
+    } else {
+        fb.className = 'quiz-feedback wrong';
+        fb.innerHTML = '❌ 不正確，請再想想。提示：' + msg;
+    }
+}
+
+// ── 經驗法則示意圖 ──
+function drawEmpRule() {
+    const cv = document.getElementById('empRule');
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    const pL = 40, pR = 40, pT = 30, pB = 56;
+    const pW = W - pL - pR, pH = H - pT - pB;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 13px "Noto Sans TC", sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('經驗法則：鐘形分布下的 68 – 95 – 99.7', W/2, 18);
+    function pdf(z){ return Math.exp(-0.5*z*z); }
+    function px(z){ return pL + (z + 3.5) / 7 * pW; }
+    function py(v){ return pT + pH - v * pH * 0.92; }
+    const axisY = pT + pH;
+    // 區域填色
+    function fill(z1, z2, col){
+        ctx.fillStyle = col; ctx.beginPath(); ctx.moveTo(px(z1), axisY);
+        for (let i = 0; i <= 100; i++){ const z = z1 + (z2 - z1) * i / 100; ctx.lineTo(px(z), py(pdf(z))); }
+        ctx.lineTo(px(z2), axisY); ctx.closePath(); ctx.fill();
+    }
+    fill(-3, 3, 'rgba(74,144,217,0.12)');
+    fill(-2, 2, 'rgba(74,144,217,0.22)');
+    fill(-1, 1, 'rgba(74,144,217,0.40)');
+    // 曲線
+    ctx.beginPath(); ctx.strokeStyle = '#1a3a6b'; ctx.lineWidth = 2;
+    for (let i = 0; i <= 200; i++){ const z = -3.5 + 7 * i / 200; const x = px(z), y = py(pdf(z)); i===0?ctx.moveTo(x,y):ctx.lineTo(x,y); }
+    ctx.stroke();
+    // 軸與刻度
+    ctx.strokeStyle = '#999'; ctx.beginPath(); ctx.moveTo(pL, axisY); ctx.lineTo(W - pR, axisY); ctx.stroke();
+    ctx.fillStyle = '#555'; ctx.font = '11px sans-serif';
+    const labs = ['x̄−3s','x̄−2s','x̄−1s','x̄','x̄+1s','x̄+2s','x̄+3s'];
+    for (let z = -3; z <= 3; z++){
+        ctx.beginPath(); ctx.strokeStyle='#bbb'; ctx.moveTo(px(z), axisY); ctx.lineTo(px(z), axisY+4); ctx.stroke();
+        ctx.fillText(labs[z+3], px(z), axisY + 17);
+    }
+    // 標註
+    ctx.font = 'bold 12px sans-serif';
+    ctx.fillStyle = '#1a3a6b'; ctx.fillText('68%', px(0), py(pdf(0.5)) + 30);
+    ctx.fillStyle = '#2e6cb8'; ctx.fillText('95%', px(0), axisY + 34);
+    ctx.fillStyle = '#7a8aa0'; ctx.fillText('99.7%', px(0), axisY + 50);
+    ctx.strokeStyle = '#2e6cb8'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(px(-2), axisY+30); ctx.lineTo(px(2), axisY+30); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(px(-3), axisY+46); ctx.lineTo(px(3), axisY+46); ctx.stroke();
+}
+
+// ── 盒鬚圖繪製 ──
+function drawBoxPlot(canvasId, stats, opts) {
+    // stats: {min排除離群, q1, med, q3, maxWhisker, outliers[], lo, hi}  lo/hi: 座標範圍
+    const cv = document.getElementById(canvasId);
+    if (!cv) return;
+    cv.style.display = 'block';
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    const pL = 40, pR = 30;
+    const cy = H / 2 + 10, bh = 44;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    if (opts && opts.title) {
+        ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 13px "Noto Sans TC", sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText(opts.title, W/2, 18);
+    }
+    const lo = stats.lo, hi = stats.hi;
+    function px(v){ return pL + (v - lo) / (hi - lo) * (W - pL - pR); }
+    // 軸
+    const axisY = H - 26;
+    ctx.strokeStyle = '#999'; ctx.beginPath(); ctx.moveTo(pL, axisY); ctx.lineTo(W - pR, axisY); ctx.stroke();
+    ctx.fillStyle = '#666'; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
+    const step = (hi - lo) / 8;
+    for (let i = 0; i <= 8; i++){
+        const v = lo + step * i;
+        ctx.beginPath(); ctx.strokeStyle='#ccc'; ctx.moveTo(px(v), axisY); ctx.lineTo(px(v), axisY+4); ctx.stroke();
+        ctx.fillText(v.toFixed(step < 1 ? 1 : 0), px(v), axisY + 15);
+    }
+    // 鬚
+    ctx.strokeStyle = '#2e6cb8'; ctx.lineWidth = 1.6;
+    ctx.beginPath(); ctx.moveTo(px(stats.wLo), cy); ctx.lineTo(px(stats.q1), cy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(px(stats.q3), cy); ctx.lineTo(px(stats.wHi), cy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(px(stats.wLo), cy - 12); ctx.lineTo(px(stats.wLo), cy + 12); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(px(stats.wHi), cy - 12); ctx.lineTo(px(stats.wHi), cy + 12); ctx.stroke();
+    // 盒
+    ctx.fillStyle = 'rgba(74,144,217,0.25)';
+    ctx.fillRect(px(stats.q1), cy - bh/2, px(stats.q3) - px(stats.q1), bh);
+    ctx.strokeStyle = '#2e6cb8'; ctx.strokeRect(px(stats.q1), cy - bh/2, px(stats.q3) - px(stats.q1), bh);
+    // 中位數
+    ctx.strokeStyle = '#1a3a6b'; ctx.lineWidth = 2.4;
+    ctx.beginPath(); ctx.moveTo(px(stats.med), cy - bh/2); ctx.lineTo(px(stats.med), cy + bh/2); ctx.stroke();
+    // 離群值
+    (stats.outliers || []).forEach(v => {
+        ctx.beginPath(); ctx.fillStyle = '#c0392b';
+        ctx.arc(px(v), cy, 5, 0, 7); ctx.fill();
+        ctx.fillStyle = '#c0392b'; ctx.font = 'bold 10px sans-serif';
+        ctx.fillText(v, px(v), cy - 12);
+    });
+    // 標籤
+    ctx.fillStyle = '#1a3a6b'; ctx.font = '10px sans-serif';
+    ctx.fillText('Q1=' + stats.q1, px(stats.q1), cy + bh/2 + 14);
+    ctx.fillText('中位數=' + stats.med, px(stats.med), cy - bh/2 - 8);
+    ctx.fillText('Q3=' + stats.q3, px(stats.q3), cy + bh/2 + 14);
+}
+
+// ── 敘述統計計算 ──
+function quantile(sorted, p) {
+    const n = sorted.length;
+    const L = (n + 1) * p;
+    const k = Math.floor(L), f = L - k;
+    if (k <= 0) return sorted[0];
+    if (k >= n) return sorted[n - 1];
+    return sorted[k - 1] + f * (sorted[k] - sorted[k - 1]);
+}
+function loadSample(k) {
+    document.getElementById('dataInput').value =
+        k === 1 ? '12, 13, 14, 14, 15, 15, 15, 16, 17, 18, 45' : '30, 35, 40, 45, 50';
+    calcStats();
+}
+function calcStats() {
+    const raw = document.getElementById('dataInput').value;
+    const data = raw.split(/[\s,;，、]+/).map(Number).filter(v => !isNaN(v));
+    const out = document.getElementById('statsResult');
+    if (data.length < 2) { out.style.display='block'; out.textContent = '請至少輸入 2 個有效數字。'; return; }
+    const n = data.length;
+    const sorted = [...data].sort((a, b) => a - b);
+    const sum = data.reduce((a, b) => a + b, 0);
+    const mean = sum / n;
+    const med = quantile(sorted, 0.5);
+    // 眾數
+    const freq = {};
+    data.forEach(v => freq[v] = (freq[v] || 0) + 1);
+    const maxF = Math.max(...Object.values(freq));
+    const modes = Object.keys(freq).filter(k2 => freq[k2] === maxF);
+    const modeStr = maxF === 1 ? '無（所有值僅出現一次）' : modes.join(', ') + '（出現 ' + maxF + ' 次）';
+    const ss = data.reduce((a, b) => a + (b - mean) ** 2, 0);
+    const varS = ss / (n - 1);
+    const sd = Math.sqrt(varS);
+    const cvv = sd / mean;
+    const q1 = quantile(sorted, 0.25), q3 = quantile(sorted, 0.75);
+    const iqr = q3 - q1;
+    const fLo = q1 - 1.5 * iqr, fHi = q3 + 1.5 * iqr;
+    const outliers = sorted.filter(v => v < fLo || v > fHi);
+    const inliers = sorted.filter(v => v >= fLo && v <= fHi);
+    out.style.display = 'block';
+    out.textContent =
+`n = ${n}
+平均數 x̄ = ${mean.toFixed(4)}
+中位數 = ${med.toFixed(4)}
+眾數 = ${modeStr}
+最小值 / 最大值 = ${sorted[0]} / ${sorted[n-1]}　全距 = ${(sorted[n-1]-sorted[0]).toFixed(4)}
+樣本變異數 s² = ${varS.toFixed(4)}
+樣本標準差 s = ${sd.toFixed(4)}
+變異係數 CV = ${cvv.toFixed(4)}
+Q1 = ${q1.toFixed(4)}　Q3 = ${q3.toFixed(4)}　IQR = ${iqr.toFixed(4)}
+圍籬 = [${fLo.toFixed(2)}, ${fHi.toFixed(2)}]
+離群值：${outliers.length ? outliers.join(', ') : '無'}`;
+    const r0 = Math.min(sorted[0], fLo), r1 = Math.max(sorted[n-1], fHi);
+    const pad = (r1 - r0) * 0.08 || 1;
+    drawBoxPlot('toolBox', {
+        q1: +q1.toFixed(2), med: +med.toFixed(2), q3: +q3.toFixed(2),
+        wLo: inliers[0], wHi: inliers[inliers.length - 1],
+        outliers: outliers, lo: r0 - pad, hi: r1 + pad
+    }, { title: '你的資料的盒鬚圖' });
+}
+
+// ── 初始化 ──
+document.addEventListener('DOMContentLoaded', function () {
+    drawEmpRule();
+    drawBoxPlot('boxDemo', {
+        q1: 14, med: 15, q3: 17, wLo: 12, wHi: 18,
+        outliers: [45], lo: 10, hi: 47
+    }, { title: '圖 4.1　日光咖啡 11 天營業額盒鬚圖（千元）：45 為離群值' });
+    calcStats();
+});
+</script>
+
+</body>
+</html>
