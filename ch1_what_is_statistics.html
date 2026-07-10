@@ -855,4 +855,31 @@ function checkQ(qid, correct, msg) {
             const x = px(Math.max(xMin, Math.min(xMax, key)));
             const y = axisY - 10 - (stack - 1) * 13;
             ctx.beginPath();
-            ctx.fillStyle = 'rgba(46,108,184,0.75)
+            ctx.fillStyle = 'rgba(46,108,184,0.75)';
+            ctx.arc(x, y, 5.5, 0, 2 * Math.PI); ctx.fill();
+            ctx.beginPath(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.2;
+            ctx.arc(x, y, 5.5, 0, 2 * Math.PI); ctx.stroke();
+        });
+
+        // 真實 mu
+        if (revealed) {
+            const x = px(TRUE_MU);
+            ctx.beginPath(); ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
+            ctx.moveTo(x, 16); ctx.lineTo(x, axisY); ctx.stroke(); ctx.setLineDash([]);
+            ctx.fillStyle = '#c0392b'; ctx.font = 'bold 13px sans-serif';
+            ctx.fillText('真實 μ = ' + TRUE_MU, x, 12);
+        }
+
+        // 圖例
+        ctx.textAlign = 'left'; ctx.font = '12px sans-serif';
+        ctx.beginPath(); ctx.fillStyle = 'rgba(46,108,184,0.75)';
+        ctx.arc(pL + 8, 14, 5.5, 0, 2 * Math.PI); ctx.fill();
+        ctx.fillStyle = '#333';
+        ctx.fillText('每個點 = 一次抽樣調查（n = 45 個班次）得到的 X̄', pL + 20, 18);
+    }
+    document.addEventListener('DOMContentLoaded', render);
+})();
+</script>
+
+</body>
+</html>
