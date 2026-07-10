@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 7　隨機變數與離散機率分配</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false }
+                ],
+                throwOnError: false,
+                strict: "ignore"
+            });
+        });
+    </script>
+    <style>
+        :root {
+            --navy: #1a3a6b;
+            --blue: #2e6cb8;
+            --blue-light: #4a90d9;
+            --accent: #c0392b;
+            --gold: #d4a017;
+            --green: #27ae60;
+            --bg: #f7f9fc;
+            --card: #ffffff;
+            --border: #d0dcea;
+            --text: #2c3e50;
+            --muted: #5a6a7a;
+            --math-bg: #eaf3ff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Noto Sans TC', 'Source Serif 4', Georgia, serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 36px 24px 80px;
+        }
+        h1 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 2rem; font-weight: 700;
+            color: var(--navy);
+            border-bottom: 4px solid var(--blue-light);
+            padding-bottom: 12px; margin-bottom: 20px;
+        }
+        h2 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 1.45rem; font-weight: 600;
+            color: var(--navy);
+            margin-top: 48px; margin-bottom: 14px;
+            border-left: 5px solid var(--blue-light);
+            padding-left: 12px;
+        }
+        h3 { font-size: 1.1rem; font-weight: 700; color: var(--blue); margin-top: 28px; margin-bottom: 10px; }
+        p { margin-bottom: 12px; }
+        ul, ol { margin-left: 24px; margin-bottom: 12px; }
+        li { margin-bottom: 6px; }
+        hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+        .chapter-intro {
+            font-size: 1.05rem; color: var(--muted);
+            border-left: 3px solid var(--blue-light);
+            padding: 10px 16px; background: #eef4fb;
+            border-radius: 0 6px 6px 0; margin-bottom: 24px;
+        }
+        .learning-goals {
+            background: #fffbea; border: 1.5px solid var(--gold);
+            border-radius: 8px; padding: 18px 22px; margin: 24px 0;
+        }
+        .learning-goals h3 { color: #8a6000; margin-top: 0; }
+        .toc {
+            background: var(--card); border: 1.5px solid var(--border);
+            border-radius: 8px; padding: 18px 24px; margin: 24px 0;
+            box-shadow: 0 2px 8px rgba(30,60,110,0.06);
+        }
+        .toc h3 { color: var(--navy); margin-top: 0; }
+        .toc a { color: var(--blue); text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+        .highlight {
+            background: #fffbe6; border-left: 4px solid var(--gold);
+            padding: 12px 16px; margin: 16px 0; border-radius: 0 6px 6px 0;
+        }
+        .math-block {
+            background: var(--math-bg); border-radius: 6px;
+            padding: 14px 18px; margin: 14px 0;
+            overflow-x: auto; font-size: 1.05em; text-align: center;
+        }
+        .formula-card {
+            background: var(--card); border: 2px solid var(--blue-light);
+            border-radius: 10px; padding: 18px 22px; margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(74,144,217,0.1);
+        }
+        .formula-card h3 { margin-top: 0; color: var(--navy); }
+        .formula-card .note {
+            font-size: 0.9em; color: var(--muted);
+            background: #f0f6ff; border-left: 3px solid #aac4ee;
+            padding: 8px 12px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .example-block {
+            background: #f0faff; border-left: 5px solid var(--blue-light);
+            border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 20px 0;
+        }
+        .example-block h3 { color: var(--navy); margin-top: 0; }
+        .example-block .note {
+            font-size: 0.92em; color: #333;
+            background: #e6f7e6; border-left: 3px solid var(--green);
+            padding: 10px 14px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .example-block .warn {
+            font-size: 0.92em; background: #fff3cd;
+            border-left: 3px solid var(--gold);
+            padding: 10px 14px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .scenario {
+            background: #f8f4ff; border: 1.5px dashed #9b7fd4;
+            border-radius: 8px; padding: 12px 18px; margin-bottom: 14px;
+            font-size: 0.97em; color: #3d2070;
+        }
+        .scenario strong { color: #6a3fbf; }
+        table {
+            width: 100%; border-collapse: collapse;
+            margin: 14px 0; font-size: 0.95em;
+        }
+        th, td { border: 1px solid #c8d8ec; padding: 8px 12px; text-align: center; }
+        th { background: #ddeeff; color: var(--navy); font-weight: 600; }
+        tr:nth-child(even) { background: #f5f8ff; }
+
+        canvas.chart {
+            display: block; margin: 14px auto;
+            border: 1px solid #ddd; border-radius: 6px; background: #fff;
+            max-width: 100%;
+        }
+
+        .quiz-box {
+            background: #f0f6ff; border: 1.5px solid var(--blue-light);
+            border-radius: 10px; padding: 22px 26px; margin: 28px 0;
+        }
+        .quiz-box h3 { color: var(--navy); margin-top: 0; }
+        .quiz-q { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin-bottom: 16px; }
+        .quiz-q p { font-weight: 600; margin-bottom: 10px; }
+        .quiz-q label { display: block; margin: 6px 0; cursor: pointer; font-size: 0.97em; font-weight: 400; }
+        .quiz-q button { margin-top: 10px; padding: 7px 18px; background: var(--blue); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9em; }
+        .quiz-q button:hover { background: var(--navy); }
+        .quiz-feedback { display: none; margin-top: 10px; padding: 10px 14px; border-radius: 6px; font-size: 0.95em; }
+        .quiz-feedback.correct { background: #d4edda; border-left: 4px solid var(--green); color: #155724; }
+        .quiz-feedback.wrong { background: #f8d7da; border-left: 4px solid var(--accent); color: #721c24; }
+
+        .exercises-list { counter-reset: ex-counter; list-style: none; padding: 0; margin-left: 0; }
+        .exercises-list > li {
+            counter-increment: ex-counter;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 8px; padding: 16px 20px; margin-bottom: 16px;
+        }
+        .exercises-list > li strong { color: var(--navy); }
+        details summary { cursor: pointer; color: var(--blue); font-weight: 700; margin-top: 12px; user-select: none; }
+        details summary:hover { color: var(--navy); }
+        details > div { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+
+        .summary {
+            background: var(--navy); color: #e8f0fc;
+            border-radius: 10px; padding: 22px 26px; margin-top: 40px;
+        }
+        .summary h2 { color: #c8dcf8; border-left-color: #6aaae8; }
+        .summary ul { margin-bottom: 0; }
+        .summary li { margin-bottom: 10px; color: #d8e8f8; }
+        .summary strong { color: #a8d0f8; }
+
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+        .col-box { border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; background: #fafbff; }
+        .col-box h3 { font-size: 0.98em; margin-top: 0; text-align: center; }
+
+        .calc-box {
+            background: var(--card); border: 1.5px solid var(--border);
+            border-radius: 10px; padding: 22px 26px; margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(30,60,110,0.06);
+        }
+        .calc-box h3 { margin-top: 0; color: var(--navy); }
+        .inputs-row { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 12px; }
+        .inputs-row label { display: flex; flex-direction: column; font-size: 0.88em; color: var(--muted); min-width: 110px; flex: 1; }
+        .inputs-row input {
+            margin-top: 4px; padding: 6px 8px;
+            border: 1px solid var(--border); border-radius: 5px; font-size: 1em;
+        }
+        .calc-box button { padding: 8px 22px; background: var(--blue); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.95em; }
+        .calc-box button:hover { background: var(--navy); }
+        .calc-result {
+            display: none; margin-top: 14px;
+            background: #f0f6ff; border-left: 4px solid var(--blue-light);
+            padding: 12px 16px; border-radius: 0 6px 6px 0;
+            font-family: monospace; font-size: 0.93em; white-space: pre-line;
+        }
+        .optional-tag {
+            display: inline-block; background: #e8e0f8; color: #6a3fbf;
+            font-size: 0.72em; padding: 2px 10px; border-radius: 10px;
+            vertical-align: middle; margin-left: 8px; font-weight: 500;
+        }
+        @media (max-width: 640px) {
+            .two-col { grid-template-columns: 1fr; }
+            body { padding: 20px 14px 60px; }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Chapter 7　隨機變數與離散機率分配 (Random Variables and Discrete Probability Distributions)</h1>
+
+<p class="chapter-intro">
+第 6 章的機率處理「事件」；本章把事件變成「數字」——隨機變數。一旦結果數值化，我們就能問更有力的問題：平均會是多少（期望值）？波動有多大（變異數）？本章並介紹最重要的離散分配——二項分配：它是民調、品管、A/B 測試背後的共同數學結構，也是第 9 章抽樣分配的直接前身。
+</p>
+
+<div class="learning-goals">
+<h3>🎯 Learning Objectives</h3>
+<ul>
+    <li>理解<strong>隨機變數</strong>的定義，能區分離散與連續隨機變數。</li>
+    <li>能驗證並使用<strong>離散機率分配（PMF）</strong>計算事件機率。</li>
+    <li>能計算隨機變數的<strong>期望值、變異數與標準差</strong>。</li>
+    <li>能運用<strong>期望值與變異數的運算法則</strong>處理線性轉換 $Y = aX + b$。</li>
+    <li>能辨識<strong>二項試驗</strong>的四個條件，使用二項公式計算單點與累積機率，並使用 $\mu = np$、$\sigma^2 = np(1-p)$。</li>
+</ul>
+</div>
+
+<div class="toc">
+<h3>📋 本章內容</h3>
+<ol>
+    <li><a href="#s71">§7.1　隨機變數與離散機率分配</a></li>
+    <li><a href="#s72">§7.2　期望值與變異數的運算法則</a></li>
+    <li><a href="#s73">§7.3　二項分配</a></li>
+    <li><a href="#s74">§7.4　卜瓦松分配（選讀補充）</a></li>
+    <li><a href="#tool">🔢 互動工具：二項分配計算機</a></li>
+    <li><a href="#quiz">🧠 Quick Quiz</a></li>
+    <li><a href="#exercises">📚 綜合練習</a></li>
+    <li><a href="#summary">📌 Chapter Summary</a></li>
+</ol>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 7.1
+══════════════════════════════════════════ -->
+<h2 id="s71">§7.1　隨機變數與離散機率分配 (Random Variables and Probability Distributions)</h2>
+
+<h3>一、隨機變數</h3>
+
+<div class="formula-card">
+<h3>📐 定義</h3>
+<p><strong>隨機變數 (Random Variable, $X$)</strong>：把隨機試驗的<strong>每一個結果對應到一個數值</strong>的函數。</p>
+<ul>
+    <li><strong>離散 (Discrete)</strong>：可能值是有限個或可數無限個。例：每小時的訂單數、10 次罰球的命中數。</li>
+    <li><strong>連續 (Continuous)</strong>：可能值布滿一段區間、不可數。例：等待時間、重量、報酬率（→ 第 8 章）。</li>
+</ul>
+<p class="note">判斷心法：可以「一個一個數」的是離散；只能「量出來」的是連續。</p>
+</div>
+
+<h3>二、離散機率分配（PMF）</h3>
+
+<div class="formula-card">
+<h3>📐 機率分配的兩個必要條件</h3>
+<p><strong>機率分配</strong>：列出 $X$ 的每個可能值 $x$ 及其機率 $P(x)$。合法的 PMF 必須滿足：</p>
+<div class="math-block">$$0 \leq P(x) \leq 1 \ \text{對所有 } x \qquad \text{且} \qquad \sum_{x} P(x) = 1$$</div>
+</div>
+
+<h3>三、期望值、變異數與標準差</h3>
+
+<div class="formula-card">
+<h3>📐 母體參數</h3>
+<div class="math-block">$$\mu = E(X) = \sum x\,P(x)$$</div>
+<div class="math-block">$$\sigma^2 = V(X) = \sum (x - \mu)^2 P(x) \;=\; \sum x^2 P(x) - \mu^2 \qquad \sigma = \sqrt{\sigma^2}$$</div>
+<p class="note">期望值是「長期平均」——重複這個隨機試驗無限多次，結果的平均值。它<strong>不必是</strong> $X$ 可能出現的值（平均每戶 1.3 個小孩，沒有任何一戶真的有 1.3 個）。捷徑公式 $\sum x^2P(x) - \mu^2$ 通常比定義式好算。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 主範例 7.1　手搖飲店的每小時線上訂單</h3>
+<div class="scenario">
+<strong>情境：</strong>「沐茶」以歷史資料整理出尖峰時段<strong>每小時線上訂單數 $X$</strong> 的機率分配：
+</div>
+<table>
+    <thead><tr><th>$x$（單）</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th></tr></thead>
+    <tbody><tr><th>$P(x)$</th><td>0.10</td><td>0.20</td><td>0.40</td><td>0.20</td><td>0.10</td></tr></tbody>
+</table>
+<canvas id="pmfChart" class="chart" width="560" height="240"></canvas>
+<p><strong>a. 驗證這是合法的機率分配</strong>：每個 $P(x) \in [0,1]$ ✓；總和 $= 0.10+0.20+0.40+0.20+0.10 = 1$ ✓</p>
+<p><strong>b. 求 $P(X \geq 3)$ 與 $P(1 \leq X \leq 3)$</strong>：</p>
+<div class="math-block">$$P(X \geq 3) = 0.20 + 0.10 = 0.30 \qquad P(1 \leq X \leq 3) = 0.20 + 0.40 + 0.20 = 0.80$$</div>
+<p><strong>c. 期望值</strong>：</p>
+<div class="math-block">$$\mu = 0(0.1) + 1(0.2) + 2(0.4) + 3(0.2) + 4(0.1) = 2.0 \text{ 單／小時}$$</div>
+<p><strong>d. 變異數與標準差</strong>（捷徑公式）：</p>
+<div class="math-block">$$\sum x^2 P(x) = 0 + 0.2 + 1.6 + 1.8 + 1.6 = 5.2 \qquad \sigma^2 = 5.2 - 2^2 = 1.2 \qquad \sigma = 1.095$$</div>
+<div class="note">✅ 判讀：長期而言平均每小時 2 單、標準差約 1.1 單。店長可據此配置外送人力——例如以「$\mu + 2\sigma \approx 4.2$ 單」作為尖峰備援的規劃上限。</div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 7.2
+══════════════════════════════════════════ -->
+<h2 id="s72">§7.2　期望值與變異數的運算法則 (Laws of Expected Value and Variance)</h2>
+
+<div class="formula-card">
+<h3>📐 線性轉換 $Y = aX + b$ 的法則</h3>
+<div class="math-block">
+$$E(aX + b) = a\,E(X) + b \qquad\qquad V(aX + b) = a^2\,V(X) \qquad\qquad \sigma_{aX+b} = |a|\,\sigma_X$$
+</div>
+<p class="note">兩個直覺：① 常數 $b$ 把整個分布「平移」，會改變平均、<strong>不改變離散程度</strong>（所以 $V$ 不含 $b$）；② 尺度 $a$ 同時放大平均與離散，變異數是「平方尺度」所以乘 $a^2$。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 7.2　從訂單數到時薪利潤（延續主範例 7.1）</h3>
+<div class="scenario">
+<strong>情境：</strong>沐茶每筆線上訂單平均賺 $40，該時段的固定成本（人力＋系統）為每小時 $50。設每小時利潤 $Y = 40X - 50$。求 $Y$ 的期望值與標準差。
+</div>
+<div class="math-block">$$E(Y) = 40\,E(X) - 50 = 40(2.0) - 50 = 30 \text{ 元／小時}$$</div>
+<div class="math-block">$$\sigma_Y = |40| \times \sigma_X = 40 \times 1.095 = 43.8 \text{ 元}\qquad V(Y) = 40^2 \times 1.2 = 1920$$</div>
+<div class="note">✅ 平均每小時賺 $30，但標準差高達 $43.8——虧錢的小時並不罕見（$X \leq 1$ 時 $Y \leq -10$，機率 0.30）。期望值為正不代表「每小時都賺」，離散程度提醒了風險。</div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 7.3
+══════════════════════════════════════════ -->
+<h2 id="s73">§7.3　二項分配 (Binomial Distribution)</h2>
+
+<h3>一、二項試驗的四個條件</h3>
+
+<div class="formula-card">
+<h3>📐 二項試驗 (Binomial Experiment)</h3>
+<ol>
+    <li><strong>固定次數</strong>：試驗重複 $n$ 次。</li>
+    <li><strong>兩種結果</strong>：每次試驗只分「成功／失敗」。</li>
+    <li><strong>機率恆定</strong>：每次成功機率都是 $p$。</li>
+    <li><strong>相互獨立</strong>：各次試驗互不影響。</li>
+</ol>
+<p class="note">$X$ ＝ $n$ 次試驗中的<strong>成功次數</strong>，記作 $X \sim B(n, p)$。<br>
+常見的「不獨立」陷阱：從<strong>小母體不放回</strong>抽樣（抽到的會改變剩下的比例）。母體遠大於樣本（$N \gg n$，例如民調）時，違反程度可忽略，仍可用二項分配近似。</p>
+</div>
+
+<h3>二、二項機率公式與參數</h3>
+
+<div class="formula-card">
+<h3>📐 PMF、平均數與變異數</h3>
+<div class="math-block">
+$$P(X = x) = \binom{n}{x} p^x (1-p)^{n-x}, \qquad x = 0, 1, \ldots, n \qquad \left(\binom{n}{x} = \frac{n!}{x!\,(n-x)!}\right)$$
+</div>
+<div class="math-block">$$\mu = np \qquad \sigma^2 = np(1-p) \qquad \sigma = \sqrt{np(1-p)}$$</div>
+<p class="note">公式三部件的直覺：$p^x$（指定的 $x$ 次成功）× $(1-p)^{n-x}$（其餘全失敗）× $\binom{n}{x}$（成功可以出現在哪幾次的排列數）。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 主範例 7.3　準時到貨保證</h3>
+<div class="scenario">
+<strong>情境：</strong>某披薩店推出「30 分鐘到貨」保證，歷史準時率為 90%，且各訂單相互獨立。今晚接到 <strong>5 筆</strong>外送訂單，令 $X$ ＝ 準時送達的訂單數。
+</div>
+<p><strong>a. 確認二項條件</strong>：$n = 5$ 固定 ✓；準時／遲到兩種結果 ✓；$p = 0.9$ 恆定 ✓；訂單獨立 ✓ → $X \sim B(5, 0.9)$。</p>
+<p><strong>b. 全部準時的機率</strong>：</p>
+<div class="math-block">$$P(X = 5) = \binom{5}{5}(0.9)^5(0.1)^0 = 0.5905$$</div>
+<p><strong>c. 至少 4 筆準時</strong>：</p>
+<div class="math-block">$$P(X \geq 4) = P(4) + P(5) = \binom{5}{4}(0.9)^4(0.1)^1 + 0.5905 = 0.3281 + 0.5905 = 0.9185$$</div>
+<p><strong>d. 「至少一筆遲到」的機率</strong>（補集技巧）：</p>
+<div class="math-block">$$P(\text{至少一筆遲到}) = 1 - P(X = 5) = 1 - 0.5905 = 0.4095$$</div>
+<p><strong>e. 平均數與標準差</strong>：</p>
+<div class="math-block">$$\mu = np = 5(0.9) = 4.5 \qquad \sigma = \sqrt{5(0.9)(0.1)} = \sqrt{0.45} = 0.671$$</div>
+<div class="note">✅ 單筆準時率高達九成，但只要接 5 單，「至少一單開天窗」的機率就有四成——這是「壞事至少發生一次」隨規模放大的必然結果，也是為什麼服務水準協議（SLA）的成本會隨訂單量暴增。</div>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 7.4　罰球十投</h3>
+<div class="scenario">
+<strong>情境：</strong>校隊球員罰球命中率 70%，各投獨立。罰 10 球，令 $X$ ＝ 命中數 $\sim B(10, 0.7)$。
+</div>
+<p><strong>a.</strong> 恰好命中 7 球：</p>
+<div class="math-block">$$P(X = 7) = \binom{10}{7}(0.7)^7(0.3)^3 = 120 \times 0.08235 \times 0.027 = 0.2668$$</div>
+<p><strong>b.</strong> 命中 8 球以上：</p>
+<div class="math-block">$$P(X \geq 8) = P(8) + P(9) + P(10) = 0.2335 + 0.1211 + 0.0282 = 0.3828$$</div>
+<p><strong>c.</strong> 平均命中 $\mu = 10(0.7) = 7$ 球，$\sigma = \sqrt{10(0.7)(0.3)} = \sqrt{2.1} = 1.449$ 球。</p>
+<div class="note">✅ 注意「平均 7 球」但「恰好 7 球」的機率只有 0.27——期望值是分布的重心，不是最可能發生就一定發生的保證。完整的分布形狀請用文末的互動計算機觀察。</div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 7.4
+══════════════════════════════════════════ -->
+<h2 id="s74">§7.4　卜瓦松分配 <span class="optional-tag">選讀補充</span></h2>
+
+<div class="formula-card">
+<h3>📐 卜瓦松分配 (Poisson Distribution)</h3>
+<p>描述「一段<strong>固定時間或空間</strong>內，某事件<strong>發生次數</strong>」的分配（沒有固定的試驗次數 $n$，事件在連續的時間軸上隨機出現）。設單位期間的平均發生次數為 $\mu$：</p>
+<div class="math-block">$$P(X = x) = \frac{e^{-\mu}\,\mu^x}{x!}, \qquad x = 0, 1, 2, \ldots \qquad E(X) = V(X) = \mu$$</div>
+<p class="note">典型場景：每小時的客服來電數、每頁書稿的錯字數、每天的機台故障數。與二項的分野：二項問「$n$ 次中成功幾次」，卜瓦松問「這段期間內發生幾次」。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 7.5　客服中心的深夜來電</h3>
+<div class="scenario">
+<strong>情境：</strong>某銀行客服深夜時段平均每小時接到 $\mu = 3$ 通來電，來電次數服從卜瓦松分配。
+</div>
+<p><strong>a.</strong> 一小時內完全沒有來電：$P(X = 0) = e^{-3} = 0.0498$</p>
+<p><strong>b.</strong> 一小時內來電 4 通以上：</p>
+<div class="math-block">$$P(X \geq 4) = 1 - \left[P(0)+P(1)+P(2)+P(3)\right] = 1 - e^{-3}\left(1 + 3 + 4.5 + 4.5\right) = 1 - 0.6472 = 0.3528$$</div>
+<div class="note">✅ 深夜只排一位客服（假設每小時最多能處理 3 通），約有 35% 的小時會爆線——排班決策立刻有了量化依據。</div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     互動工具
+══════════════════════════════════════════ -->
+<h2 id="tool">🔢 互動工具：二項分配計算機</h2>
+
+<div class="calc-box">
+<h3>🧮 輸入 n、p、x，看見整個分布</h3>
+<p style="font-size:0.93em; color:var(--muted);">預設為範例 7.4（罰球十投）。試試：固定 $p$ 增大 $n$，觀察分布形狀如何越來越對稱——這正是第 9 章中央極限定理的預告。</p>
+<div class="inputs-row">
+    <label>試驗次數 n（1–40）<input type="number" id="binN" value="10" min="1" max="40"></label>
+    <label>成功機率 p<input type="number" id="binP" value="0.7" step="0.05" min="0.01" max="0.99"></label>
+    <label>目標值 x<input type="number" id="binX" value="7" min="0"></label>
+</div>
+<button onclick="calcBinom()">計算並繪圖</button>
+<div class="calc-result" id="binResult"></div>
+<canvas id="binChart" class="chart" width="660" height="280" style="display:none;"></canvas>
+</div>
+
+<hr>
+
+<!-- ══ Quiz ══ -->
+<div class="quiz-box" id="quiz">
+<h3>🧠 Quick Quiz</h3>
+
+<div class="quiz-q">
+    <p>Q1. 下列何者是合法的離散機率分配？</p>
+    <label><input type="radio" name="q1" value="a"> A. P(0)=0.3, P(1)=0.5, P(2)=0.3</label>
+    <label><input type="radio" name="q1" value="b"> B. P(0)=0.4, P(1)=0.7, P(2)=−0.1</label>
+    <label><input type="radio" name="q1" value="c"> C. P(0)=0.25, P(1)=0.50, P(2)=0.25</label>
+    <label><input type="radio" name="q1" value="d"> D. P(0)=0.6, P(1)=0.6</label>
+    <button onclick="checkQ('q1','c','✅ 正確！C 的每個機率都在 [0,1] 且總和 = 1。A 總和 1.1；B 出現負機率；D 總和 1.2——都違反機率分配的兩個必要條件。')">Submit</button>
+    <div class="quiz-feedback" id="q1-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q2. 某手遊抽卡的期望稀有卡數為每十連抽 0.5 張。「期望值 0.5 張」的正確解讀是？</p>
+    <label><input type="radio" name="q2" value="a"> A. 每次十連抽一定會得到半張稀有卡</label>
+    <label><input type="radio" name="q2" value="b"> B. 大量重複十連抽後，平均每次獲得約 0.5 張</label>
+    <label><input type="radio" name="q2" value="c"> C. 抽兩次十連抽一定會得到 1 張</label>
+    <label><input type="radio" name="q2" value="d"> D. 有 50% 的機率抽中</label>
+    <button onclick="checkQ('q2','b','✅ 正確！期望值是長期平均，不是單次保證，也不必是可能出現的值。D 是陷阱：期望 0.5 張不等於機率 0.5（一次可能抽中 2 張以上，機率結構不同）。')">Submit</button>
+    <div class="quiz-feedback" id="q2-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q3. 從一副 52 張撲克牌<strong>不放回</strong>連抽 5 張，令 X = 抽到的紅心數。X 是二項隨機變數嗎？</p>
+    <label><input type="radio" name="q3" value="a"> A. 是，因為只有紅心／非紅心兩種結果</label>
+    <label><input type="radio" name="q3" value="b"> B. 不是，因為不放回使各次抽取不獨立、機率不恆定</label>
+    <label><input type="radio" name="q3" value="c"> C. 不是，因為 n 不固定</label>
+    <label><input type="radio" name="q3" value="d"> D. 是，任何計次的變數都是二項</label>
+    <button onclick="checkQ('q3','b','✅ 正確！不放回抽樣違反「機率恆定」與「獨立性」（第一張抽到紅心後，第二張的紅心機率從 13/52 變 12/51）。只有當母體遠大於樣本時，才能用二項近似。')">Submit</button>
+    <div class="quiz-feedback" id="q3-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q4. 已知 $E(X) = 8$、$\sigma_X = 2$。若 $Y = 3X + 10$，則 $E(Y)$ 與 $\sigma_Y$ 為？</p>
+    <label><input type="radio" name="q4" value="a"> A. E(Y) = 34，σᵧ = 6</label>
+    <label><input type="radio" name="q4" value="b"> B. E(Y) = 34，σᵧ = 16</label>
+    <label><input type="radio" name="q4" value="c"> C. E(Y) = 24，σᵧ = 6</label>
+    <label><input type="radio" name="q4" value="d"> D. E(Y) = 34，σᵧ = 12</label>
+    <button onclick="checkQ('q4','a','✅ 正確！E(Y) = 3(8)+10 = 34；σᵧ = |3|×2 = 6——常數 +10 平移分布但不影響離散程度。選 B 的同學把 b 也加進了標準差。')">Submit</button>
+    <div class="quiz-feedback" id="q4-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q5. $X \sim B(400, 0.25)$（如：400 位訪客、每位轉換機率 0.25）。$\mu$ 與 $\sigma$ 為？</p>
+    <label><input type="radio" name="q5" value="a"> A. μ = 100，σ = 75</label>
+    <label><input type="radio" name="q5" value="b"> B. μ = 100，σ = √75 ≈ 8.66</label>
+    <label><input type="radio" name="q5" value="c"> C. μ = 25，σ = 5</label>
+    <label><input type="radio" name="q5" value="d"> D. μ = 100，σ = 10</label>
+    <button onclick="checkQ('q5','b','✅ 正確！μ = np = 400×0.25 = 100；σ² = np(1−p) = 400×0.25×0.75 = 75，σ = √75 ≈ 8.66。記得開根號——選 A 給的是變異數。')">Submit</button>
+    <div class="quiz-feedback" id="q5-fb"></div>
+</div>
+
+</div>
+
+<hr>
+
+<!-- ══ Exercises ══ -->
+<h2 id="exercises">📚 綜合練習 (Comprehensive Practice)</h2>
+<p>以下習題涵蓋 PMF 機率計算、期望值與變異數、線性轉換與二項分配，請先獨立作答，再展開解答確認。</p>
+
+<h3>I. 概念複習</h3>
+<ol class="exercises-list">
+
+    <li>
+        <p>離散機率分配必須滿足哪兩個條件？隨機變數「離散」與「連續」如何區分？</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>兩條件：① $0 \leq P(x) \leq 1$；② $\sum P(x) = 1$。</p>
+            <p>離散：可能值可一一列舉（計數型）；連續：可能值布滿區間、不可數（度量型）。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <p>二項試驗的四個條件是什麼？各舉一個「違反該條件」的例子。</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <ol>
+                <li><strong>固定次數</strong>——違例：投籃「直到進 3 球為止」（次數不固定）。</li>
+                <li><strong>兩種結果</strong>——違例：骰子點數（六種結果；除非重新定義為「是否為 6 點」）。</li>
+                <li><strong>機率恆定</strong>——違例：射飛鏢越玩越熟練（p 隨試驗改變）。</li>
+                <li><strong>獨立性</strong>——違例：小母體不放回抽樣（前次結果改變後次機率）。</li>
+            </ol>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <p>為什麼 $V(X + b) = V(X)$（加常數不改變變異數），而 $V(aX) = a^2 V(X)$？請用直覺說明。</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>加常數 $b$ 是把整個分布原封不動地平移——每個值與平均數的<strong>距離</strong>完全不變，所以離散程度不變。</p>
+            <p>乘上 $a$ 則把每個「離差」也放大 $a$ 倍；變異數是離差的<strong>平方</strong>平均，故放大 $a^2$ 倍（標準差放大 $|a|$ 倍）。</p>
+        </div>
+        </details>
+    </li>
+
+</ol>
+
+<h3>II. 計算與應用</h3>
+<ol class="exercises-list">
+
+    <li>
+        <strong>7.1　自助洗衣店的機台使用</strong>
+        <p>某自助洗衣店整理出尖峰時段「使用中洗衣機台數 $X$」的機率分配：</p>
+        <table>
+            <thead><tr><th>$x$</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+            <tbody><tr><th>$P(x)$</th><td>0.05</td><td>0.15</td><td>0.25</td><td>0.30</td><td>0.15</td><td>0.10</td></tr></tbody>
+        </table>
+        <ul>
+            <li>a. 求 $P(2 \leq X \leq 4)$、$P(X > 4)$、$P(X < 2)$。</li>
+            <li>b. 計算 $\mu$。</li>
+            <li>c. 計算 $\sigma$。</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> $P(2 \leq X \leq 4) = 0.25+0.30+0.15 = 0.70$；$P(X > 4) = 0.10$；$P(X < 2) = 0.05+0.15 = 0.20$。</p>
+            <p><strong>b.</strong> $\mu = 0(0.05)+1(0.15)+2(0.25)+3(0.30)+4(0.15)+5(0.10) = 0.15+0.50+0.90+0.60+0.50 = 2.65$ 台。</p>
+            <p><strong>c.</strong> $\sum x^2P(x) = 0.15+1.00+2.70+2.40+2.50 = 8.75$；$\sigma^2 = 8.75 - 2.65^2 = 8.75 - 7.0225 = 1.7275$；$\sigma = 1.314$ 台。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>7.2　用電量的線性轉換（承 7.1）</strong>
+        <p>每台使用中的洗衣機每小時耗電 1.2 度，店內基礎照明另固定耗電 0.8 度。設每小時總用電 $Y = 1.2X + 0.8$。</p>
+        <ul>
+            <li>a. 求 $E(Y)$。</li>
+            <li>b. 求 $\sigma_Y$。</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> $E(Y) = 1.2(2.65) + 0.8 = 3.18 + 0.8 = 3.98$ 度。</p>
+            <p><strong>b.</strong> $\sigma_Y = 1.2 \times 1.314 = 1.577$ 度。（常數 0.8 不影響標準差。）</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>7.3　亂猜兩題是非題</strong>
+        <p>小考最後兩題是非題完全不會，決定亂猜（每題答對機率 0.5，互相獨立）。令 $X$ ＝ 答對題數。</p>
+        <ul>
+            <li>a. 用樹狀圖列出四種結果與機率，寫出 $X$ 的機率分配。</li>
+            <li>b. 求 $P(X \geq 1)$。</li>
+            <li>c. 驗證 $\mu = np$、$\sigma^2 = np(1-p)$ 與定義式計算的結果一致。</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> 四條路徑（對對、對錯、錯對、錯錯）各 0.25。分配：$P(0)=0.25$、$P(1)=0.50$、$P(2)=0.25$。</p>
+            <p><strong>b.</strong> $P(X \geq 1) = 1 - P(0) = 0.75$。</p>
+            <p><strong>c.</strong> 定義式：$\mu = 0(0.25)+1(0.5)+2(0.25) = 1$；$\sum x^2P = 0+0.5+1.0 = 1.5$，$\sigma^2 = 1.5 - 1 = 0.5$。<br>
+            公式：$\mu = np = 2(0.5) = 1$ ✓；$\sigma^2 = 2(0.5)(0.5) = 0.5$ ✓——兩者一致（是非題亂猜正是 $B(2, 0.5)$）。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>7.4　二項公式練習</strong>
+        <p>$X \sim B(12,\ 0.2)$。用公式計算：</p>
+        <ul>
+            <li>a. $P(X = 3)$</li>
+            <li>b. $P(X = 0)$</li>
+            <li>c. $P(X \geq 1)$</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> $P(3) = \binom{12}{3}(0.2)^3(0.8)^9 = 220 \times 0.008 \times 0.13422 = 0.2362$</p>
+            <p><strong>b.</strong> $P(0) = (0.8)^{12} = 0.0687$</p>
+            <p><strong>c.</strong> $P(X \geq 1) = 1 - 0.0687 = 0.9313$</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>7.5　快篩試劑的當日銷售分配</strong>
+        <p>藥局每天上架 4 盒某快篩組合包，依歷史資料每盒當日售出的機率為 0.6，各盒獨立。令 $X$ ＝ 當日售出盒數，寫出 $X$ 的完整機率分配，並求 $\mu$ 與 $\sigma^2$。</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>$X \sim B(4, 0.6)$：</p>
+            <table>
+                <thead><tr><th>$x$</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th></tr></thead>
+                <tbody><tr><th>$P(x)$</th><td>0.0256</td><td>0.1536</td><td>0.3456</td><td>0.3456</td><td>0.1296</td></tr></tbody>
+            </table>
+            <p>計算例：$P(2) = \binom{4}{2}(0.6)^2(0.4)^2 = 6 \times 0.36 \times 0.16 = 0.3456$。總和 $= 1$ ✓</p>
+            <p>$\mu = np = 2.4$ 盒；$\sigma^2 = np(1-p) = 4(0.6)(0.4) = 0.96$。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>7.6　電話行銷的期望成果</strong>
+        <p>客服中心每通外撥電話成功推銷加值方案的機率為 0.15，一位客服每天撥 30 通（各通獨立）。</p>
+        <ul>
+            <li>a. 每天成功數的平均與標準差？</li>
+            <li>b. 「一整天掛零」的機率？</li>
+            <li>c. 主管要求每天至少成功 1 件，這個要求合理嗎？</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> $\mu = 30(0.15) = 4.5$ 件；$\sigma = \sqrt{30(0.15)(0.85)} = \sqrt{3.825} = 1.956$ 件。</p>
+            <p><strong>b.</strong> $P(X = 0) = (0.85)^{30} = 0.0076$。</p>
+            <p><strong>c.</strong> $P(X \geq 1) = 1 - 0.0076 = 0.9924$——正常發揮下 99% 以上的天數都能達標，要求合理；連續多天掛零反而是「$p$ 已改變」的警訊（名單品質、話術問題），值得管理者調查。</p>
+        </div>
+        </details>
+    </li>
+
+</ol>
+
+<hr>
+
+<!-- ══ Summary ══ -->
+<div class="summary" id="summary">
+<h2>📌 Chapter Summary</h2>
+<ul>
+    <li><strong>隨機變數</strong>把試驗結果數值化：離散（可數）vs 連續（不可數）。合法 PMF：各機率 $\in [0,1]$ 且總和 $= 1$。</li>
+    <li><strong>期望值</strong> $\mu = \sum xP(x)$ 是長期平均；<strong>變異數</strong>用捷徑 $\sigma^2 = \sum x^2P(x) - \mu^2$。</li>
+    <li><strong>線性轉換</strong>：$E(aX+b) = aE(X)+b$；$V(aX+b) = a^2V(X)$——平移不改變離散，尺度以平方放大變異數。</li>
+    <li><strong>二項分配</strong> $B(n,p)$：固定次數、兩種結果、機率恆定、獨立。$P(x) = \binom{n}{x}p^x(1-p)^{n-x}$；$\mu = np$、$\sigma^2 = np(1-p)$。「至少一次」用補集。</li>
+    <li><strong>卜瓦松分配</strong>（選讀）：固定期間內事件發生次數，$P(x) = e^{-\mu}\mu^x/x!$，期望值 = 變異數 = $\mu$。</li>
+</ul>
+</div>
+
+<!-- ══ Scripts ══ -->
+<script>
+// ── Quiz ──
+function checkQ(qid, correct, msg) {
+    const selected = document.querySelector(`input[name="${qid}"]:checked`);
+    const fb = document.getElementById(`${qid}-fb`);
+    if (!selected) { fb.style.display='block'; fb.className='quiz-feedback wrong'; fb.textContent='請先選擇一個答案。'; return; }
+    fb.style.display = 'block';
+    if (selected.value === correct) {
+        fb.className = 'quiz-feedback correct';
+        fb.innerHTML = msg;
+    } else {
+        fb.className = 'quiz-feedback wrong';
+        fb.innerHTML = '❌ 不正確，請再想想。提示：' + msg;
+    }
+}
+
+// ── 通用長條 PMF 圖 ──
+function drawPMF(canvasId, xs, ps, opts) {
+    const cv = document.getElementById(canvasId);
+    if (!cv) return;
+    cv.style.display = 'block';
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    const pL = 50, pR = 16, pT = 34, pB = 44;
+    const pW = W - pL - pR, pH = H - pT - pB;
+    const maxP = Math.max(...ps) * 1.15;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    if (opts && opts.title) {
+        ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 13px "Noto Sans TC", sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText(opts.title, W/2, 18);
+    }
+    ctx.font = '10px sans-serif'; ctx.textAlign = 'right';
+    for (let i = 0; i <= 4; i++) {
+        const v = maxP / 4 * i;
+        const y = pT + pH - v / maxP * pH;
+        ctx.strokeStyle = i === 0 ? '#999' : '#eef2f8';
+        ctx.beginPath(); ctx.moveTo(pL, y); ctx.lineTo(W - pR, y); ctx.stroke();
+        ctx.fillStyle = '#777'; ctx.fillText(v.toFixed(2), pL - 5, y + 3);
+    }
+    const n = xs.length;
+    const bw = pW / n * 0.7, gap = pW / n * 0.3;
+    ctx.textAlign = 'center';
+    for (let i = 0; i < n; i++) {
+        const x = pL + i * (bw + gap) + gap / 2;
+        const h = ps[i] / maxP * pH;
+        const hl = opts && opts.highlight !== undefined && xs[i] === opts.highlight;
+        ctx.fillStyle = hl ? '#c0392b' : 'rgba(46,108,184,0.82)';
+        ctx.fillRect(x, pT + pH - h, bw, h);
+        if (ps[i] > maxP * 0.04 || hl) {
+            ctx.fillStyle = '#333'; ctx.font = 'bold 10px sans-serif';
+            ctx.fillText(ps[i].toFixed(ps[i] < 0.005 ? 4 : 3), x + bw/2, pT + pH - h - 5);
+        }
+        ctx.fillStyle = '#444'; ctx.font = '11px sans-serif';
+        if (n <= 20 || i % 2 === 0) ctx.fillText(xs[i], x + bw/2, pT + pH + 15);
+    }
+    if (opts && opts.xlabel) {
+        ctx.fillStyle = '#555'; ctx.font = '11px "Noto Sans TC", sans-serif';
+        ctx.fillText(opts.xlabel, pL + pW/2, H - 6);
+    }
+}
+
+// ── 二項計算 ──
+function binomPMF(n, p) {
+    // 以遞迴關係避免大數：P(0) = (1-p)^n; P(x+1) = P(x) * (n-x)/(x+1) * p/(1-p)
+    const ps = [Math.pow(1 - p, n)];
+    for (let x = 0; x < n; x++) {
+        ps.push(ps[x] * (n - x) / (x + 1) * p / (1 - p));
+    }
+    return ps;
+}
+function calcBinom() {
+    const n = parseInt(document.getElementById('binN').value);
+    const p = parseFloat(document.getElementById('binP').value);
+    let x = parseInt(document.getElementById('binX').value);
+    const out = document.getElementById('binResult');
+    if (isNaN(n) || n < 1 || n > 40 || isNaN(p) || p <= 0 || p >= 1) {
+        out.style.display = 'block'; out.textContent = '請輸入 1 ≤ n ≤ 40、0 < p < 1。'; return;
+    }
+    if (isNaN(x) || x < 0) x = 0;
+    if (x > n) x = n;
+    document.getElementById('binX').value = x;
+    const ps = binomPMF(n, p);
+    let cumLe = 0;
+    for (let i = 0; i <= x; i++) cumLe += ps[i];
+    const pEq = ps[x];
+    const pGe = 1 - cumLe + pEq;
+    const mu = n * p, sig = Math.sqrt(n * p * (1 - p));
+    out.style.display = 'block';
+    out.textContent =
+`X ~ B(${n}, ${p})
+P(X = ${x})  = ${pEq.toFixed(4)}
+P(X ≤ ${x})  = ${cumLe.toFixed(4)}
+P(X ≥ ${x})  = ${pGe.toFixed(4)}
+μ = np = ${mu.toFixed(2)}　　σ = √(np(1−p)) = ${sig.toFixed(3)}`;
+    const xs = [];
+    for (let i = 0; i <= n; i++) xs.push(i);
+    drawPMF('binChart', xs, ps, { title: `B(${n}, ${p}) 的機率分配`, highlight: x, xlabel: '成功次數 x' });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    drawPMF('pmfChart', [0,1,2,3,4], [0.10,0.20,0.40,0.20,0.10],
+        { title: '圖 7.1　每小時線上訂單數的機率分配', xlabel: '訂單數 x' });
+    calcBinom();
+});
+</script>
+
+</body>
+</html>
