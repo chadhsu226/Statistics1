@@ -287,18 +287,18 @@ $$\text{資料 (Data)} \;\xrightarrow{\;\text{統計方法 (Statistics)}\;}\; \t
 </div>
 
 <div class="example-block">
-<h3>📝 範例 1.1　選課前的情報蒐集</h3>
+<h3>📝 範例 1.1　租屋前的行情調查</h3>
 <div class="scenario">
-<strong>情境：</strong>小林是剛入學的大一新生，正在猶豫要不要選修某位教授的「統計學」。他聽學長姐說這門課「很硬」，心裡有些不安。此時教授公布了去年修課學生的期末總成績清單（共 120 筆分數）。
+<strong>情境：</strong>小葉考上大學後要在學校附近租屋。她在租屋平台上查到學區商圈近一年的 <strong>180 筆</strong>套房成交租金原始清單，數字從 $5,500 到 $23,000 都有，密密麻麻看得眼花撩亂。
 </div>
-<p><strong>問題：</strong>這 120 筆原始分數對小林而言是「資料」還是「資訊」？他能如何利用統計方法幫助自己做決策？</p>
+<p><strong>問題：</strong>這 180 筆原始租金對小葉而言是「資料」還是「資訊」？統計方法能如何幫她判斷合理行情？</p>
 <p><strong>解析：</strong></p>
 <ul>
-    <li>120 筆未整理的分數是<strong>資料</strong>——直接盯著清單看，很難得到有用的結論。</li>
-    <li>若將分數整理成：平均數 74 分、中位數 76 分、不及格比例 8%、分數直方圖⋯⋯這些彙整後的結果就是<strong>資訊</strong>。</li>
-    <li>小林便可根據「平均成績不低、當人比例不高」的資訊，判斷這門課的實際風險，做出選課決策。</li>
+    <li>180 筆未整理的租金是<strong>資料</strong>——逐筆瀏覽很難形成「行情」的概念。</li>
+    <li>整理之後得到：平均租金 $9,400、中位數 $8,300、有 75% 的物件低於 $10,500，直方圖呈<strong>右偏分布</strong>（少數高價豪華套房把平均數拉高了）。這些彙整結果就是<strong>資訊</strong>。</li>
+    <li>小葉因此得到一個重要洞察：這個商圈的「典型」租金應該看<strong>中位數 $8,300</strong> 而非平均數——若有房東開價 $9,500 並宣稱「低於區域平均、很划算」，她就知道這個說法有誤導性。</li>
 </ul>
-<div class="note">✅ 這個「整理原始分數、產生有用資訊」的過程，正是下一段要介紹的<strong>敘述統計</strong>。</div>
+<div class="note">✅ 這個「整理原始數字、產生決策依據」的過程，正是下一段要介紹的<strong>敘述統計</strong>。同一批資料，選用不同的彙整方式（平均數 vs 中位數），得到的結論品質可能天差地遠——這是第 4 章的重要主題。</div>
 </div>
 
 <h3 id="s11-2">二、敘述統計 (Descriptive Statistics)</h3>
@@ -318,39 +318,39 @@ $$\text{資料 (Data)} \;\xrightarrow{\;\text{統計方法 (Statistics)}\;}\; \t
 </div>
 
 <div class="highlight">
-<strong>💡 關鍵限制：</strong>敘述統計只描述「<em>手上這批資料</em>」本身。如果我們想根據這批資料，對「更大的群體」下結論——例如用 400 位受訪學生的平均，去推測全校 32,000 位學生的平均——那就超出敘述統計的範圍，必須使用<strong>推論統計</strong>。
+<strong>💡 關鍵限制：</strong>敘述統計只描述「<em>手上這批資料</em>」本身。如果我們想根據這批資料，對「更大的群體」下結論——例如用範例 1.1 那 180 筆成交租金的平均，去推測「整個城市所有套房」的租金水準——那就超出敘述統計的範圍，必須使用<strong>推論統計</strong>。
 </div>
 
 <h3 id="s11-3">三、推論統計 (Inferential Statistics)</h3>
 <p><strong>推論統計</strong>是一系列<strong>根據樣本資料，對母體特性做出結論或推論</strong>的統計方法。它回答的問題是：「<em>從這一小批資料，我能對整個群體說什麼？</em>」</p>
 
 <div class="example-block">
-<h3>📝 本章案例　「山嵐咖啡」的校園設櫃決策</h3>
+<h3>📝 本章案例　「星夜客運」的深夜班次決策</h3>
 <div class="scenario">
-<strong>情境：</strong>連鎖品牌「山嵐咖啡」正在評估是否進駐一所擁有 <strong>32,000 名學生</strong>的大學，取得校內唯一咖啡設櫃的三年合約。校方開出的條件是：山嵐咖啡每年須支付權利金 <strong>$1,500,000</strong>，並將營收的 <strong>10%</strong> 回饋校方。每杯咖啡平均售價 $75、原物料與人工成本約 $45。管理部門估算後發現：<strong>只要全校學生平均每人每週購買 0.9 杯以上</strong>，這份合約就有利可圖。
+<strong>情境：</strong>「星夜客運」經營臺北—臺中路線。近來屢有乘客反映末班車太早，公司考慮將凌晨 00:30 的深夜班次<strong>常態化</strong>：一年 365 天、來回共約 <strong>1,460 個班次</strong>。財務部門估算：每個班次的油料、人事與過路成本約 $9,600，平均票價 $480，因此<strong>平均每班次載客達 20 人以上</strong>，常態化才有利可圖。
 </div>
-<p><strong>問題來了：</strong>山嵐咖啡要如何知道「全校學生平均每人每週喝幾杯咖啡」？</p>
+<p><strong>問題來了：</strong>「未來一年 1,460 個深夜班次的平均載客數」要如何得知？</p>
 <ul>
-    <li><strong>方法一：普查（訪問全部 32,000 人）</strong>——最準確，但成本極高、曠日廢時，實務上幾乎不可行。</li>
-    <li><strong>方法二：抽樣調查</strong>——隨機抽出 <strong>400 位</strong>學生，請他們記錄未來一週購買咖啡的杯數，再<strong>用這 400 人的樣本平均，去推論全校 32,000 人的母體平均</strong>。</li>
+    <li>這個母體有個特別之處——它是<strong>還沒發生的未來班次</strong>，想普查也無從查起。這種「概念性母體」在商業決策中非常常見（未來的顧客、尚未生產的產品⋯⋯）。</li>
+    <li>可行的做法是<strong>試營運抽樣</strong>：先試開三個月，從中隨機抽出 <strong>45 個班次</strong>記錄載客數，<strong>用這 45 班的樣本平均，去推論未來一年全部班次的母體平均</strong>。</li>
 </ul>
-<p>假設調查結果出爐：400 位學生的樣本平均為每週 <strong>1.05 杯</strong>。山嵐咖啡可以直接下結論說「全校平均就是 1.05 杯，簽約！」嗎？</p>
-<div class="note">✅ 不行——樣本平均 1.05 杯只是母體平均的<strong>估計值</strong>。換一批 400 人來調查，數字就會不同。推論統計的價值，就在於它不只給出估計值，還能告訴我們這個估計<strong>有多可信</strong>（例如：「有 95% 的信心，全校平均落在 0.95 到 1.15 杯之間」），讓決策者在「知道不確定性有多大」的情況下做決策。這正是第 10 章〈估計〉要處理的問題。</div>
+<p>假設試營運結果出爐：45 個班次的樣本平均載客 <strong>22.6 人</strong>。營運長可以直接拍板「平均載客 22.6 人 &gt; 20 人，常態化！」嗎？</p>
+<div class="note">✅ 不行——22.6 人只是母體平均的<strong>估計值</strong>。換一批 45 個班次來觀察，數字就會不同；而且試營運期間有新鮮感加持，真實的長期平均可能更低。推論統計的價值，在於它不只給出估計值，還能量化這個估計<strong>有多可信</strong>（例如：「有 95% 的信心，長期平均載客落在 20.4 到 24.8 人之間」），讓決策者在「知道不確定性有多大」的情況下做決策。這正是第 10 章〈估計〉要處理的問題。</div>
 </div>
 
 <div class="example-block">
-<h3>📝 範例 1.2　學生會會長選舉的出口民調</h3>
+<h3>📝 範例 1.2　閱讀 App 改版的 A/B 測試</h3>
 <div class="scenario">
-<strong>情境：</strong>某大學學生會會長選舉，由候選人 A 與候選人 B 角逐，全校共有 <strong>18,500 名</strong>具投票資格的學生。校園媒體「新聞社」想在開票前搶先預測誰會當選，於是在各投票所出口隨機訪問了 <strong>520 位</strong>剛投完票的學生，其中 296 位（56.9%）表示投給候選人 A。
+<strong>情境：</strong>某電子書閱讀 App 擁有 <strong>240 萬名</strong>活躍使用者。產品團隊設計了一款新版首頁介面，但全面改版有風險——如果使用者不買單，可能引發退訂潮。管理層訂下決策門檻：<strong>必須有充分證據顯示超過 60% 的使用者偏好新介面</strong>，才全面推送。團隊隨機挑選 <strong>1,800 位</strong>使用者試用新介面兩週，其中 1,152 位（<strong>64%</strong>）回報偏好新介面。
 </div>
-<p><strong>問題：</strong>新聞社能否根據這 520 人的調查結果，推論候選人 A 將勝選？</p>
-<p><strong>解析：</strong>這是典型的推論統計問題：</p>
+<p><strong>問題：</strong>產品團隊能否根據這 1,800 人的試用結果，推論全體使用者的偏好比例超過 60%？</p>
+<p><strong>解析：</strong>這是典型的推論統計問題，而且推論的對象是<strong>比例</strong>而非平均數：</p>
 <ul>
-    <li>新聞社<strong>真正想知道</strong>的是：全體實際投票學生中，投給 A 的比例是否超過 50%。</li>
-    <li>但它<strong>手上只有</strong>：520 位受訪者中投給 A 的比例（56.9%）。</li>
-    <li>統計方法可以評估：「如果真實比例其實只有 50%，抽 520 人卻抽到 56.9% 的機會有多低？」若這個機會非常低，就有充分證據推論 A 會勝選。</li>
+    <li>團隊<strong>真正想知道</strong>的是：240 萬名使用者中偏好新介面的真實比例 $p$ 是否大於 0.60。</li>
+    <li>但它<strong>手上只有</strong>：1,800 位試用者中的樣本比例 $\hat{p} = 0.64$。</li>
+    <li>統計方法可以評估：「如果真實比例其實只有 60%，隨機抽 1,800 人卻抽到 64% 的機會有多低？」若這個機會非常低，就有充分證據支持全面改版。</li>
 </ul>
-<div class="note">✅ 由於只訪問了一部分投票者，預測有出錯的可能。統計學的做法不是假裝沒有風險，而是<strong>把出錯的機率量化並控制在可接受的水準</strong>（例如 5% 以下）——這是推論統計最重要的精神。</div>
+<div class="note">✅ 樣本比例 64% 高於門檻 60%，但這可能只是「恰好抽到一批喜歡新介面的人」。統計學的做法不是假裝沒有風險，而是<strong>把出錯的機率量化並控制在可接受的水準</strong>（例如 5% 以下）——這是推論統計最重要的精神。這類「A/B 測試」是現代網路產業使用頻率最高的統計應用之一。</div>
 </div>
 
 <hr>
@@ -399,17 +399,17 @@ $$\text{資料 (Data)} \;\xrightarrow{\;\text{統計方法 (Statistics)}\;}\; \t
 <div class="example-block">
 <h3>📝 範例 1.3　辨識四個核心概念</h3>
 <div class="scenario">
-<strong>情境：</strong>延續本章案例——山嵐咖啡抽出 400 位學生調查每週咖啡購買量，得到樣本平均 1.05 杯；它真正想知道的是全校 32,000 名學生的平均購買量。
+<strong>情境：</strong>延續本章案例——星夜客運從試營運中隨機抽出 45 個深夜班次記錄載客數，得到樣本平均 22.6 人；它真正想知道的是未來一年 1,460 個班次的平均載客數。
 </div>
 <table>
     <thead>
         <tr><th>概念</th><th>本案例中對應的內容</th><th>已知或未知？</th></tr>
     </thead>
     <tbody>
-        <tr><td><strong>母體</strong></td><td>全校 32,000 名學生（每人每週的咖啡購買量）</td><td>存在，但無法全部觀察</td></tr>
-        <tr><td><strong>參數</strong></td><td>全校學生每週平均購買量 $\mu$</td><td><strong>未知</strong>（想知道的目標）</td></tr>
-        <tr><td><strong>樣本</strong></td><td>被抽中的 400 位學生（的購買量紀錄）</td><td>已蒐集</td></tr>
-        <tr><td><strong>統計量</strong></td><td>樣本平均 $\bar{X} = 1.05$ 杯</td><td><strong>已知</strong>（算得出來）</td></tr>
+        <tr><td><strong>母體</strong></td><td>未來一年全部 1,460 個深夜班次（的載客數）</td><td>存在（概念上），但無法全部觀察</td></tr>
+        <tr><td><strong>參數</strong></td><td>全部班次的平均載客數 $\mu$</td><td><strong>未知</strong>（想知道的目標）</td></tr>
+        <tr><td><strong>樣本</strong></td><td>試營運期間被抽中記錄的 45 個班次</td><td>已蒐集</td></tr>
+        <tr><td><strong>統計量</strong></td><td>樣本平均 $\bar{X} = 22.6$ 人</td><td><strong>已知</strong>（算得出來）</td></tr>
     </tbody>
 </table>
 <div class="note">✅ 統計推論的本質：<strong>參數是未知的目標，統計量是已知的線索</strong>。我們永遠是「用算得出來的 $\bar{X}$，去推論看不到的 $\mu$」。</div>
@@ -419,9 +419,9 @@ $$\text{資料 (Data)} \;\xrightarrow{\;\text{統計方法 (Statistics)}\;}\; \t
 <p><strong>統計推論 (Statistical Inference)</strong> 是根據樣本資料，對母體進行<strong>估計、預測或決策</strong>的過程。</p>
 <p>為什麼不直接調查母體就好？</p>
 <ul>
-    <li><strong>成本</strong>：訪問 32,000 人的成本是訪問 400 人的 80 倍，但獲得的資訊價值遠不到 80 倍。</li>
-    <li><strong>時間</strong>：普查耗時數月，市場機會稍縱即逝（山嵐咖啡只有兩週時間回覆校方）。</li>
-    <li><strong>可行性</strong>：有些母體根本無法普查——例如檢驗燈泡壽命必須把燈泡用到燒壞（破壞性檢驗），若普查就沒有產品可賣了。</li>
+    <li><strong>成本</strong>：調查對象增加 80 倍，成本大約也增加 80 倍，但獲得的資訊價值遠不到 80 倍（第 10 章會看到：估計精確度的提升與樣本大小的<strong>平方根</strong>成正比）。</li>
+    <li><strong>時間</strong>：商業決策往往有時限——星夜客運不可能真的「先開一整年再決定要不要開」。</li>
+    <li><strong>可行性</strong>：有些母體根本無法普查——概念性母體（未來的班次、未來的顧客）尚未發生；破壞性檢驗（測試燈泡壽命必須把燈泡用到燒壞）做了普查就沒有產品可賣了。</li>
 </ul>
 
 <div class="highlight">
@@ -435,12 +435,12 @@ $$\text{資料 (Data)} \;\xrightarrow{\;\text{統計方法 (Statistics)}\;}\; \t
     <div class="col-box">
         <h3>信賴水準 (Confidence Level)</h3>
         <p style="font-size:0.93em;">當推論的目的是<strong>估計</strong>時使用。信賴水準是指「這個估計程序<strong>正確的</strong>比例」。</p>
-        <p style="font-size:0.9em; color:var(--muted);">例：以 95% 信賴水準估計全校學生平均咖啡購買量——代表若重複執行此估計程序 100 次，約有 95 次所得的區間會涵蓋真實的 $\mu$。</p>
+        <p style="font-size:0.9em; color:var(--muted);">例：以 95% 信賴水準估計深夜班次的平均載客數——代表若重複執行此估計程序 100 次，約有 95 次所得的區間會涵蓋真實的 $\mu$。</p>
     </div>
     <div class="col-box">
         <h3>顯著水準 (Significance Level)</h3>
         <p style="font-size:0.93em;">當推論的目的是<strong>下結論（做決策）</strong>時使用。顯著水準是指「這個結論<strong>錯誤的</strong>機率上限」。</p>
-        <p style="font-size:0.9em; color:var(--muted);">例：新聞社以 5% 顯著水準推論「候選人 A 將勝選」——代表這種推論方式出錯（A 其實沒過半卻被判定勝選）的機率被控制在 5%。</p>
+        <p style="font-size:0.9em; color:var(--muted);">例：產品團隊以 5% 顯著水準推論「超過 60% 的使用者偏好新介面」——代表這種推論方式出錯（真實偏好比例不到 60% 卻被判定通過門檻）的機率被控制在 5%。</p>
     </div>
 </div>
 
@@ -505,10 +505,10 @@ $$\text{資料 (Data)} \;\xrightarrow{\;\text{統計方法 (Statistics)}\;}\; \t
 <h2 id="sim">🔢 互動模擬：體驗「用樣本猜母體」</h2>
 
 <div class="calc-box">
-<h3>☕ 山嵐咖啡抽樣模擬器</h3>
-<p style="font-size:0.95em;">下方藏著一個「全校 32,000 名學生每週咖啡購買量」的母體，其真實平均數 $\mu$ <strong>對你保密</strong>。請按「抽出一個樣本」，模擬隨機抽出 400 位學生並計算樣本平均 $\bar{X}$。多抽幾次，觀察每次的 $\bar{X}$ 是否相同，再揭曉真相。</p>
+<h3>🚌 星夜客運抽樣模擬器</h3>
+<p style="font-size:0.95em;">下方藏著一個「全年 1,460 個深夜班次載客數」的母體，其真實平均數 $\mu$ <strong>對你保密</strong>。請按「抽出一個樣本」，模擬隨機抽出 45 個班次並計算樣本平均 $\bar{X}$。多抽幾次，觀察每次的 $\bar{X}$ 是否相同，再揭曉真相。</p>
 <canvas id="simCanvas" width="820" height="200" style="max-width:100%; border:1px solid #ddd; border-radius:6px; background:#fff; display:block; margin:12px auto;"></canvas>
-<button onclick="drawSample()">🎲 抽出一個樣本（n = 400）</button>
+<button onclick="drawSample()">🎲 抽出一個樣本（n = 45）</button>
 <button onclick="revealTruth()" class="secondary">🔍 揭曉母體真相</button>
 <button onclick="resetSim()" class="secondary">↻ 重設</button>
 <div class="sim-result" id="simResult">尚未抽樣。每按一次「抽出一個樣本」，就模擬一次完整的抽樣調查。</div>
@@ -779,38 +779,40 @@ function checkQ(qid, correct, msg) {
 
 // ── 抽樣模擬器 ──
 (function(){
-    // 母體：全校每週咖啡購買量（混合分配，真實平均約 1.02 杯，對使用者保密）
-    const TRUE_MU = 1.02;
+    // 母體：全年深夜班次載客數（真實平均約 21.4 人，對使用者保密）
+    const TRUE_MU = 21.4;
     let sampleMeans = [];
     let revealed = false;
 
-    // 產生一筆「學生每週購買杯數」：40% 不喝(0)，其餘為右偏分布
+    // 產生一筆「單一班次載客數」：以 21 為中心的右偏分布，座位上限 43
     function drawOne(){
-        if (Math.random() < 0.38) return 0;
-        // 指數+截斷，製造右偏
-        let v = -Math.log(1 - Math.random()) * 1.35 + 0.3;
-        return Math.min(Math.round(v * 2) / 2, 10);  // 以 0.5 杯為單位，上限 10
+        // 常態近似 + 偶發熱門班次，製造輕微右偏
+        let u1 = Math.random(), u2 = Math.random();
+        let z = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+        let v = 20.5 + z * 7;
+        if (Math.random() < 0.08) v += 10 + Math.random() * 8;  // 連假／演唱會散場的爆滿班次
+        return Math.max(0, Math.min(Math.round(v), 43));
     }
 
     window.drawSample = function(){
-        const n = 400;
+        const n = 45;
         let sum = 0;
         for (let i = 0; i < n; i++) sum += drawOne();
         const mean = sum / n;
         sampleMeans.push(mean);
         render();
-        const last = sampleMeans.map((m,i)=>`第 ${i+1} 次抽樣：X̄ = ${m.toFixed(3)} 杯`).slice(-6).join('\n');
+        const last = sampleMeans.map((m,i)=>`第 ${i+1} 次抽樣：X̄ = ${m.toFixed(2)} 人`).slice(-6).join('\n');
         document.getElementById('simResult').textContent =
             last + (sampleMeans.length > 6 ? `\n（僅顯示最近 6 次，共抽了 ${sampleMeans.length} 次）` : '') +
-            (revealed ? `\n\n母體真實平均 μ = ${TRUE_MU} 杯` : '\n\n母體真實平均 μ = ？？？（按「揭曉」查看）');
+            (revealed ? `\n\n母體真實平均 μ = ${TRUE_MU} 人` : '\n\n母體真實平均 μ = ？？？（按「揭曉」查看）');
     };
 
     window.revealTruth = function(){
         revealed = true;
         render();
         const msg = sampleMeans.length === 0
-            ? `母體真實平均 μ = ${TRUE_MU} 杯。\n先抽幾個樣本，再看看 X̄ 離 μ 有多近！`
-            : `母體真實平均 μ = ${TRUE_MU} 杯。\n你抽出的 ${sampleMeans.length} 個樣本平均分別落在 μ 附近——這就是「用樣本推論母體」可行的原因，\n而 X̄ 擺盪的規律，就是第 9 章抽樣分配要探討的主題。`;
+            ? `母體真實平均 μ = ${TRUE_MU} 人。\n先抽幾個樣本，再看看 X̄ 離 μ 有多近！`
+            : `母體真實平均 μ = ${TRUE_MU} 人。\n你抽出的 ${sampleMeans.length} 個樣本平均分別落在 μ 附近——這就是「用樣本推論母體」可行的原因，\n而 X̄ 擺盪的規律，就是第 9 章抽樣分配要探討的主題。`;
         document.getElementById('simResult').textContent = msg;
     };
 
@@ -827,7 +829,7 @@ function checkQ(qid, correct, msg) {
         const ctx = cv.getContext('2d');
         const W = cv.width, H = cv.height;
         const pL = 50, pR = 30, axisY = H - 42;
-        const xMin = 0.85, xMax = 1.20;
+        const xMin = 17, xMax = 26;
         function px(x){ return pL + (x - xMin) / (xMax - xMin) * (W - pL - pR); }
 
         ctx.clearRect(0, 0, W, H);
@@ -837,48 +839,20 @@ function checkQ(qid, correct, msg) {
         ctx.strokeStyle = '#999'; ctx.lineWidth = 1;
         ctx.beginPath(); ctx.moveTo(pL, axisY); ctx.lineTo(W - pR, axisY); ctx.stroke();
         ctx.fillStyle = '#555'; ctx.font = '12px sans-serif'; ctx.textAlign = 'center';
-        for (let x = 0.85; x <= 1.201; x += 0.05) {
-            const xx = Math.round(x * 100) / 100;
+        for (let x = 17; x <= 26; x += 1) {
             ctx.beginPath(); ctx.strokeStyle = '#ccc';
-            ctx.moveTo(px(xx), axisY); ctx.lineTo(px(xx), axisY + 5); ctx.stroke();
-            ctx.fillText(xx.toFixed(2), px(xx), axisY + 20);
+            ctx.moveTo(px(x), axisY); ctx.lineTo(px(x), axisY + 5); ctx.stroke();
+            ctx.fillText(x, px(x), axisY + 20);
         }
-        ctx.fillText('樣本平均數 X̄（杯 / 週）', (pL + W - pR) / 2, axisY + 36);
+        ctx.fillText('樣本平均數 X̄（人 / 班次）', (pL + W - pR) / 2, axisY + 36);
 
         // 樣本平均點（堆疊）
         const counts = {};
         sampleMeans.forEach(m => {
-            const key = Math.round(m * 200) / 200; // 0.005 精度分桶
+            const key = Math.round(m * 8) / 8; // 0.125 精度分桶
             counts[key] = (counts[key] || 0) + 1;
             const stack = counts[key];
             const x = px(Math.max(xMin, Math.min(xMax, key)));
             const y = axisY - 10 - (stack - 1) * 13;
             ctx.beginPath();
-            ctx.fillStyle = 'rgba(46,108,184,0.75)';
-            ctx.arc(x, y, 5.5, 0, 2 * Math.PI); ctx.fill();
-            ctx.beginPath(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.2;
-            ctx.arc(x, y, 5.5, 0, 2 * Math.PI); ctx.stroke();
-        });
-
-        // 真實 mu
-        if (revealed) {
-            const x = px(TRUE_MU);
-            ctx.beginPath(); ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
-            ctx.moveTo(x, 16); ctx.lineTo(x, axisY); ctx.stroke(); ctx.setLineDash([]);
-            ctx.fillStyle = '#c0392b'; ctx.font = 'bold 13px sans-serif';
-            ctx.fillText('真實 μ = ' + TRUE_MU, x, 12);
-        }
-
-        // 圖例
-        ctx.textAlign = 'left'; ctx.font = '12px sans-serif';
-        ctx.beginPath(); ctx.fillStyle = 'rgba(46,108,184,0.75)';
-        ctx.arc(pL + 8, 14, 5.5, 0, 2 * Math.PI); ctx.fill();
-        ctx.fillStyle = '#333';
-        ctx.fillText('每個點 = 一次抽樣調查（n = 400）得到的 X̄', pL + 20, 18);
-    }
-    document.addEventListener('DOMContentLoaded', render);
-})();
-</script>
-
-</body>
-</html>
+            ctx.fillStyle = 'rgba(46,108,184,0.75)
