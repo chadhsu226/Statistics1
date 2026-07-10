@@ -970,4 +970,12 @@ Q1 = ${q1.toFixed(4)}　Q3 = ${q3.toFixed(4)}　IQR = ${iqr.toFixed(4)}
 document.addEventListener('DOMContentLoaded', function () {
     drawEmpRule();
     drawBoxPlot('boxDemo', {
-        q
+        q1: 14, med: 15, q3: 17, wLo: 12, wHi: 18,
+        outliers: [45], lo: 10, hi: 47
+    }, { title: '圖 4.1　日光咖啡 11 天營業額盒鬚圖（千元）：45 為離群值' });
+    calcStats();
+});
+</script>
+
+</body>
+</html>
