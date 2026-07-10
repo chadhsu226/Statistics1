@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>統計分配查表參考手冊</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f6f6f4;
+    --bg-tertiary: #eeede9;
+    --text-primary: #1a1a18;
+    --text-secondary: #5f5e5a;
+    --text-tertiary: #888780;
+    --border-light: rgba(0,0,0,0.10);
+    --border-mid: rgba(0,0,0,0.18);
+    --blue: #378ADD; --blue-light: #E6F1FB; --blue-dark: #0C447C; --blue-mid: #185FA5;
+    --purple: #7F77DD; --purple-light: #EEEDFE; --purple-dark: #26215C; --purple-mid: #534AB7;
+    --green: #639922; --green-light: #EAF3DE; --green-dark: #27500A; --green-mid: #3B6D11;
+    --amber: #BA7517; --amber-light: #FAEEDA; --amber-dark: #412402;
+    --red: #E24B4A; --red-light: #FCEBEB;
+    --info-bg: #E6F1FB; --info-text: #0C447C; --info-border: #B5D4F4;
+    --radius-md: 8px; --radius-lg: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg-primary:#1e1e1c; --bg-secondary:#272725; --bg-tertiary:#2e2e2c;
+      --text-primary:#e8e6de; --text-secondary:#b4b2a9; --text-tertiary:#888780;
+      --border-light:rgba(255,255,255,0.08); --border-mid:rgba(255,255,255,0.15);
+      --blue-light:#042C53; --blue-dark:#85B7EB; --blue-mid:#378ADD;
+      --purple-light:#26215C; --purple-dark:#CECBF6; --purple-mid:#7F77DD;
+      --green-light:#173404; --green-dark:#C0DD97; --green-mid:#639922;
+      --amber-light:#412402; --amber-dark:#FAC775;
+      --red-light:#501313;
+      --info-bg:#042C53; --info-text:#85B7EB; --info-border:#0C447C;
+    }
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    margin:0; background:var(--bg-tertiary); color:var(--text-primary);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC",sans-serif;
+    font-size:15px; line-height:1.75;
+  }
+  .page-header {
+    background:var(--bg-primary); border-bottom:0.5px solid var(--border-light);
+    padding:2rem 2rem 1.5rem; position:sticky; top:0; z-index:100;
+  }
+  .page-header-inner { max-width:960px; margin:0 auto; }
+  .page-title { font-size:22px; font-weight:500; margin:0 0 4px; }
+  .page-subtitle { font-size:13px; color:var(--text-secondary); margin:0; }
+  .toc-bar {
+    background:var(--bg-secondary); border-bottom:0.5px solid var(--border-light);
+    padding:0.6rem 2rem;
+  }
+  .toc-bar-inner { max-width:960px; margin:0 auto; display:flex; gap:8px 28px; flex-wrap:wrap; align-items:center; }
+  .toc-link { font-size:13px; color:var(--blue-mid); text-decoration:none; display:flex; align-items:center; gap:6px; }
+  .toc-link:hover { text-decoration:underline; }
+  .toc-badge {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:20px; height:20px; border-radius:50%; font-size:10px; font-weight:600; flex-shrink:0;
+  }
+  .main { max-width:960px; margin:0 auto; padding:2rem 2rem 4rem; }
+  .section-header {
+    display:flex; align-items:center; gap:12px;
+    margin:3rem 0 1.25rem; padding-bottom:0.6rem;
+    border-bottom:2px solid var(--border-mid);
+  }
+  .section-header:first-of-type { margin-top:0; }
+  .section-badge {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:36px; height:36px; border-radius:50%;
+    font-weight:600; font-size:14px; flex-shrink:0;
+  }
+  .badge-z    { background:var(--blue-light);   color:var(--blue-dark); }
+  .badge-t    { background:var(--purple-light);  color:var(--purple-dark); font-size:15px; }
+  .badge-chi  { background:var(--blue-light);    color:var(--blue-dark); font-size:12px; }
+  .badge-f    { background:var(--green-light);   color:var(--green-dark); }
+  .badge-tbl  { background:var(--bg-tertiary);   color:var(--text-secondary); font-size:11px; }
+  .section-title { font-size:21px; font-weight:500; }
+  .card {
+    background:var(--bg-secondary); border:0.5px solid var(--border-light);
+    border-radius:var(--radius-lg); padding:1rem 1.25rem; margin:1rem 0;
+  }
+  .card-blue   { border-left:3px solid var(--blue); }
+  .card-purple { border-left:3px solid var(--purple); }
+  .card-green  { border-left:3px solid var(--green); }
+  .card-amber  { border-left:3px solid var(--amber); }
+  .card p { margin:0.4rem 0 0; } .card p:first-child { margin-top:0; }
+  .formula-box {
+    background:var(--bg-primary); border:0.5px solid var(--border-mid);
+    border-radius:var(--radius-md); padding:0.6rem 1rem; margin:0.5rem 0;
+    font-family:"Courier New","Consolas",monospace; font-size:14px; text-align:center;
+    color:var(--text-primary);
+  }
+  .prop-grid {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(185px,1fr));
+    gap:10px; margin:0.75rem 0 1rem;
+  }
+  .prop-card {
+    background:var(--bg-primary); border:0.5px solid var(--border-light);
+    border-radius:var(--radius-md); padding:0.6rem 0.9rem;
+  }
+  .prop-label { font-size:12px; color:var(--text-secondary); margin-bottom:2px; }
+  .prop-val   { font-weight:500; font-size:14px; }
+  .chart-wrap { position:relative; width:100%; height:270px; margin:0.75rem 0; }
+  .controls {
+    display:flex; flex-wrap:wrap; align-items:center; gap:10px;
+    margin:0.5rem 0 0.25rem; font-size:13px; color:var(--text-secondary);
+  }
+  .controls input[type=range] { flex:1; min-width:100px; max-width:200px; accent-color:var(--blue); }
+  .controls .val-badge { font-weight:500; color:var(--text-primary); min-width:26px; }
+  .controls .hint { font-size:12px; color:var(--text-tertiary); }
+  .note { font-size:12px; color:var(--text-secondary); margin:0.2rem 0 0.75rem; }
+  .sub-label { font-weight:500; font-size:15px; margin:1.5rem 0 0.5rem; }
+  .divider { border:none; border-top:0.5px solid var(--border-light); margin:2.5rem 0; }
+  .lookup-row {
+    display:flex; flex-wrap:wrap; align-items:flex-end; gap:14px;
+    margin:0.75rem 0 1rem; font-size:13px;
+  }
+  .lookup-row label { display:flex; flex-direction:column; gap:4px; color:var(--text-secondary); }
+  .lookup-row input[type=number], .lookup-row select {
+    padding:6px 9px; font-size:13px;
+    border:0.5px solid var(--border-mid); border-radius:var(--radius-md);
+    background:var(--bg-primary); color:var(--text-primary); width:100px; outline:none;
+  }
+  .lookup-row input[type=number]:focus, .lookup-row select:focus { border-color:var(--blue); }
+  .lookup-result {
+    background:var(--info-bg); color:var(--info-text);
+    border:0.5px solid var(--info-border);
+    border-radius:var(--radius-md); padding:6px 16px;
+    font-size:14px; font-weight:500;
+  }
+  .tab-row { display:flex; gap:4px; flex-wrap:wrap; }
+  .tab-btn {
+    padding:6px 16px; font-size:13px;
+    border:0.5px solid var(--border-mid); border-bottom:none;
+    border-radius:var(--radius-md) var(--radius-md) 0 0;
+    background:var(--bg-secondary); color:var(--text-secondary);
+    cursor:pointer; transition:background .15s; font-family:inherit;
+  }
+  .tab-btn.active { background:var(--bg-primary); color:var(--text-primary); font-weight:500; }
+  .tab-panel {
+    display:none; overflow-x:auto;
+    border:0.5px solid var(--border-mid);
+    border-radius:0 var(--radius-md) var(--radius-md) var(--radius-md);
+    background:var(--bg-primary);
+  }
+  .tab-panel.active { display:block; }
+  .stat-table { width:100%; border-collapse:collapse; font-size:12px; }
+  .stat-table th {
+    padding:7px 11px; background:var(--bg-secondary); color:var(--text-secondary);
+    font-weight:500; text-align:center; border-bottom:0.5px solid var(--border-mid);
+    white-space:nowrap; position:sticky; top:0; z-index:1;
+  }
+  .stat-table td {
+    padding:5px 11px; text-align:center;
+    border-bottom:0.5px solid var(--border-light); white-space:nowrap;
+  }
+  .stat-table tr:last-child td { border-bottom:none; }
+  .stat-table tr:hover td { background:var(--bg-secondary); }
+  .stat-table .row-head {
+    font-weight:500; color:var(--text-secondary);
+    background:var(--bg-secondary) !important;
+    position:sticky; left:0; z-index:1;
+    border-right:0.5px solid var(--border-light);
+  }
+  .highlight-cell {
+    background:var(--amber-light) !important;
+    color:var(--amber-dark); font-weight:600;
+  }
+  /* comparison table */
+  .compare-table { width:100%; border-collapse:collapse; font-size:13px; margin:1rem 0; }
+  .compare-table th {
+    padding:9px 14px; text-align:center; font-weight:500;
+    background:var(--bg-secondary); border-bottom:0.5px solid var(--border-mid);
+    color:var(--text-secondary);
+  }
+  .compare-table td { padding:8px 14px; border-bottom:0.5px solid var(--border-light); vertical-align:top; }
+  .compare-table .c-z    { color:var(--blue-mid);   font-weight:500; }
+  .compare-table .c-t    { color:var(--purple-mid); font-weight:500; }
+  .compare-table .c-chi  { color:var(--blue-mid);   font-weight:500; }
+  .compare-table .c-f    { color:var(--green-mid);  font-weight:500; }
+  .compare-table tr:last-child td { border-bottom:none; }
+  .compare-table tr:hover td { background:var(--bg-secondary); }
+  /* color accents for controls */
+  .ctrl-purple input[type=range] { accent-color:var(--purple); }
+  .ctrl-green  input[type=range] { accent-color:var(--green); }
+  .ctrl-amber  input[type=range] { accent-color:var(--amber); }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="page-header-inner">
+    <p class="page-title">統計分配查表參考手冊</p>
+    <p class="page-subtitle">統計學｜Z 分配 · t 分配 · 卡方分配 · F 分配　互動查表與圖形說明</p>
+  </div>
+</header>
+
+<nav class="toc-bar">
+  <div class="toc-bar-inner">
+    <a class="toc-link" href="#sec-compare"><span class="toc-badge badge-z" style="background:var(--bg-tertiary);color:var(--text-secondary);font-size:9px;">比較</span>四分配總覽</a>
+    <a class="toc-link" href="#sec-z"><span class="toc-badge badge-z">Z</span>Z 分配</a>
+    <a class="toc-link" href="#sec-z-table"><span class="toc-badge badge-tbl">表</span>Z 分配表</a>
+    <a class="toc-link" href="#sec-t"><span class="toc-badge badge-t">t</span>t 分配</a>
+    <a class="toc-link" href="#sec-t-table"><span class="toc-badge badge-tbl">表</span>t 分配表</a>
+    <a class="toc-link" href="#sec-chi"><span class="toc-badge badge-chi" style="font-size:10px;">χ²</span>卡方分配</a>
+    <a class="toc-link" href="#sec-chi-table"><span class="toc-badge badge-tbl">表</span>卡方分配表</a>
+    <a class="toc-link" href="#sec-f"><span class="toc-badge badge-f">F</span>F 分配</a>
+    <a class="toc-link" href="#sec-f-table"><span class="toc-badge badge-tbl">表</span>F 分配表</a>
+  </div>
+</nav>
+
+<main class="main">
+
+<!-- ═══ 四分配總覽 ═══ -->
+<div class="section-header" id="sec-compare">
+  <span class="section-badge" style="background:var(--bg-secondary);color:var(--text-secondary);font-size:12px;border:0.5px solid var(--border-mid);">比較</span>
+  <span class="section-title">四大抽樣分配總覽</span>
+</div>
+
+<div class="card" style="padding:0; overflow:hidden;">
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th style="text-align:left;">項目</th>
+        <th class="c-z">Z 分配</th>
+        <th class="c-t">t 分配</th>
+        <th class="c-chi">χ² 分配</th>
+        <th class="c-f">F 分配</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>使用時機</strong></td>
+        <td>σ 已知，推論 μ；<br>比例推論；大樣本</td>
+        <td>σ 未知，推論 μ；<br>小樣本均值比較</td>
+        <td>推論母體變異數 σ²；<br>獨立性／適合度檢定</td>
+        <td>比較兩母體變異數；<br>ANOVA；迴歸顯著性</td>
+      </tr>
+      <tr>
+        <td><strong>統計量</strong></td>
+        <td class="c-z">Z = (X̄−μ₀)/(σ/√n)</td>
+        <td class="c-t">t = (X̄−μ₀)/(s/√n)</td>
+        <td class="c-chi">χ² = (n−1)s²/σ₀²</td>
+        <td class="c-f">F = s₁²/s₂²</td>
+      </tr>
+      <tr>
+        <td><strong>自由度</strong></td>
+        <td>無（固定為標準常態）</td>
+        <td>ν = n − 1</td>
+        <td>ν = n − 1</td>
+        <td>ν₁ = n₁−1，ν₂ = n₂−1</td>
+      </tr>
+      <tr>
+        <td><strong>形狀</strong></td>
+        <td>左右對稱，鐘形</td>
+        <td>左右對稱，比 Z 尾部更厚</td>
+        <td>右偏，值域 [0, +∞)</td>
+        <td>右偏，值域 [0, +∞)</td>
+      </tr>
+      <tr>
+        <td><strong>參數</strong></td>
+        <td>無參數（固定分配）</td>
+        <td>自由度 ν</td>
+        <td>自由度 ν</td>
+        <td>兩個自由度 (ν₁, ν₂)</td>
+      </tr>
+      <tr>
+        <td><strong>與常態的關係</strong></td>
+        <td>Z² ~ χ²(1)</td>
+        <td>ν→∞ 時趨近 Z</td>
+        <td>由 Z² 累加構成</td>
+        <td>= χ²(ν₁)/ν₁ ÷ χ²(ν₂)/ν₂</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     §1  Z 分配
+═══════════════════════════════════════════════════ -->
+<hr class="divider">
+<div class="section-header" id="sec-z">
+  <span class="section-badge badge-z">Z</span>
+  <span class="section-title">Z 分配（Standard Normal Distribution）</span>
+</div>
+
+<div class="card card-blue">
+  <strong>定義</strong>：標準常態分配是均值為 0、標準差為 1 的常態分配，記作 Z ~ N(0, 1)。
+  <div class="formula-box">f(z) = (1/√(2π)) · e^(−z²/2)，　−∞ &lt; z &lt; +∞</div>
+  任何常態隨機變數 X ~ N(μ, σ²) 經標準化後得到 Z = (X − μ) / σ ~ N(0, 1)。
+</div>
+
+<p class="sub-label">基本性質</p>
+<div class="prop-grid">
+  <div class="prop-card"><div class="prop-label">定義域</div><div class="prop-val">−∞ 到 +∞</div></div>
+  <div class="prop-card"><div class="prop-label">均值 E(Z)</div><div class="prop-val">= 0</div></div>
+  <div class="prop-card"><div class="prop-label">變異數 Var(Z)</div><div class="prop-val">= 1</div></div>
+  <div class="prop-card"><div class="prop-label">對稱性</div><div class="prop-val">完全對稱於 0</div></div>
+  <div class="prop-card"><div class="prop-label">P(−1.96 ≤ Z ≤ 1.96)</div><div class="prop-val">≈ 0.95</div></div>
+  <div class="prop-card"><div class="prop-label">P(−2.576 ≤ Z ≤ 2.576)</div><div class="prop-val">≈ 0.99</div></div>
+  <div class="prop-card"><div class="prop-label">關係</div><div class="prop-val">Z² ~ χ²(1)</div></div>
+  <div class="prop-card"><div class="prop-label">查表方向</div><div class="prop-val">查左尾累積機率</div></div>
+</div>
+
+<p class="sub-label">互動圖形：P(Z ≤ z) 累積機率視覺化</p>
+<div class="controls">
+  <span>臨界值 z =</span>
+  <input type="range" min="-4" max="4" step="0.05" value="1.96" id="zVal" oninput="drawZ()">
+  <span class="val-badge" id="zValDisplay">1.96</span>
+  <span class="hint">｜尾別：</span>
+  <select id="zTail" onchange="drawZ()" style="padding:3px 8px;font-size:12px;border:0.5px solid var(--border-mid);border-radius:6px;background:var(--bg-primary);color:var(--text-primary);outline:none;">
+    <option value="left">左尾 P(Z ≤ z)</option>
+    <option value="right">右尾 P(Z ≥ z)</option>
+    <option value="two" selected>雙尾 P(|Z| ≥ z)</option>
+  </select>
+</div>
+<div class="chart-wrap"><canvas id="zChart"></canvas></div>
+<p class="note" id="zNote">▲ 陰影面積 = 機率值。常用臨界值：z = ±1.645（α=0.10）、±1.960（α=0.05）、±2.326（α=0.01）、±2.576（α=0.005）。</p>
+
+<div class="card card-blue">
+  <strong>常用臨界值速查</strong>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:10px;">
+    <div class="prop-card"><div class="prop-label">雙尾 α = 0.10</div><div class="prop-val">z = ±1.645</div></div>
+    <div class="prop-card"><div class="prop-label">雙尾 α = 0.05</div><div class="prop-val">z = ±1.960</div></div>
+    <div class="prop-card"><div class="prop-label">雙尾 α = 0.01</div><div class="prop-val">z = ±2.576</div></div>
+    <div class="prop-card"><div class="prop-label">單尾 α = 0.05</div><div class="prop-val">z = 1.645</div></div>
+    <div class="prop-card"><div class="prop-label">單尾 α = 0.025</div><div class="prop-val">z = 1.960</div></div>
+    <div class="prop-card"><div class="prop-label">單尾 α = 0.01</div><div class="prop-val">z = 2.326</div></div>
+  </div>
+</div>
+
+<!-- ═══ Z 分配表 ═══ -->
+<hr class="divider">
+<div class="section-header" id="sec-z-table">
+  <span class="section-badge badge-tbl">表</span>
+  <span class="section-title">Z 分配表（左尾累積機率）</span>
+</div>
+
+<div class="card card-blue">
+  查表方法：P(Z ≤ z) = 左尾面積。<strong>列</strong>為 z 的整數位與小數第一位（如 1.9），<strong>欄</strong>為小數第二位（如 .06），交叉格即 P(Z ≤ 1.96) ≈ 0.9750。
+</div>
+
+<div class="lookup-row">
+  <label>查 z 值
+    <input type="number" id="zLookupVal" min="-3.99" max="3.99" step="0.01" value="1.96" oninput="highlightZ()">
+  </label>
+  <label>方向
+    <select id="zLookupDir" onchange="highlightZ()">
+      <option value="left">左尾 P(Z ≤ z)</option>
+      <option value="right">右尾 P(Z ≥ z)</option>
+    </select>
+  </label>
+  <span class="lookup-result" id="zLookupResult">P(Z ≤ 1.96) = 0.9750</span>
+</div>
+
+<div class="tab-row" id="z-tab-row">
+  <button class="tab-btn active" onclick="switchTab('z','t1',this)">z = -3.4 → 0.0</button>
+  <button class="tab-btn" onclick="switchTab('z','t2',this)">z = 0.0 → 3.4</button>
+</div>
+<div class="tab-panel active" id="z-t1" style="max-height:420px;overflow-y:auto;">
+  <table class="stat-table" id="zTable1"></table>
+</div>
+<div class="tab-panel" id="z-t2" style="max-height:420px;overflow-y:auto;">
+  <table class="stat-table" id="zTable2"></table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     §2  t 分配
+═══════════════════════════════════════════════════ -->
+<hr class="divider">
+<div class="section-header" id="sec-t">
+  <span class="section-badge badge-t">t</span>
+  <span class="section-title">t 分配（Student's t-Distribution）</span>
+</div>
+
+<div class="card card-purple">
+  <strong>定義</strong>：若 Z ~ N(0,1)，V ~ χ²(ν) 且兩者獨立，則
+  <div class="formula-box">t = Z / √(V/ν) ~ t(ν)</div>
+  實務上，t 統計量由 <strong>t = (X̄ − μ₀) / (s/√n)</strong> 計算，自由度 ν = n − 1。
+</div>
+
+<p class="sub-label">基本性質</p>
+<div class="prop-grid">
+  <div class="prop-card"><div class="prop-label">定義域</div><div class="prop-val">−∞ 到 +∞</div></div>
+  <div class="prop-card"><div class="prop-label">均值 E(t)</div><div class="prop-val">= 0（ν > 1）</div></div>
+  <div class="prop-card"><div class="prop-label">變異數 Var(t)</div><div class="prop-val">= ν/(ν−2)（ν > 2）</div></div>
+  <div class="prop-card"><div class="prop-label">對稱性</div><div class="prop-val">左右對稱於 0</div></div>
+  <div class="prop-card"><div class="prop-label">尾部</div><div class="prop-val">比 Z 分配更厚（重尾）</div></div>
+  <div class="prop-card"><div class="prop-label">ν → ∞</div><div class="prop-val">趨近 Z 分配</div></div>
+  <div class="prop-card"><div class="prop-label">與卡方關係</div><div class="prop-val">t² ~ F(1, ν)</div></div>
+  <div class="prop-card"><div class="prop-label">查表方向</div><div class="prop-val">查右尾面積 α</div></div>
+</div>
+
+<p class="sub-label">互動圖形：t 分配 vs Z 分配，調整自由度觀察尾部差異</p>
+<div class="controls ctrl-purple">
+  <span>自由度 ν =</span>
+  <input type="range" min="1" max="40" value="5" id="tDf" oninput="drawT()">
+  <span class="val-badge" id="tDfVal">5</span>
+  <span class="hint">（紅色陰影 = α=0.05 雙尾拒絕域）</span>
+</div>
+<div class="chart-wrap"><canvas id="tChart"></canvas></div>
+<p class="note">▲ 紫色粗線：當前 t 分配；藍色虛線：Z 分配（ν=∞ 對照）。自由度越大，t 分配尾部越薄，越接近 Z 分配。</p>
+
+<div class="card card-purple">
+  <strong>為什麼要用 t 分配而非 Z 分配？</strong>
+  <p>使用樣本標準差 <em>s</em> 估計未知的母體標準差 σ 時，引入了額外的估計誤差。t 統計量的分母包含兩個隨機變數（X̄ 和 s），造成尾部比 Z 分配更厚。自由度 ν = n−1 越大，s 越穩定，t 分配越接近 Z 分配。當 ν ≥ 120 時，t 分配已非常接近 Z 分配，實務上可直接用 Z 臨界值。</p>
+</div>
+
+<!-- ═══ t 分配表 ═══ -->
+<hr class="divider">
+<div class="section-header" id="sec-t-table">
+  <span class="section-badge badge-tbl">表</span>
+  <span class="section-title">t 分配表（右尾臨界值）</span>
+</div>
+
+<div class="card card-purple">
+  右尾機率 P(T > t<sub>α,ν</sub>) = α，表格中的數值為臨界值 <strong>t<sub>α,ν</sub></strong>。<br>
+  查表步驟：① 確認自由度 ν（列）→ ② 選定顯著水準 α（欄）→ ③ 交叉格即為臨界值。<br>
+  <strong>雙尾檢定</strong>：使用 t<sub>α/2, ν</sub>（例如雙尾 α=0.05 查欄 α=0.025）。
+</div>
+
+<div class="lookup-row">
+  <label>自由度 ν（1–120）
+    <input type="number" id="tLookupDf" min="1" max="120" value="10" oninput="highlightT()">
+  </label>
+  <label>右尾面積 α
+    <select id="tLookupAlpha" onchange="highlightT()">
+      <option value="0">0.100</option>
+      <option value="1">0.050</option>
+      <option value="2" selected>0.025</option>
+      <option value="3">0.010</option>
+      <option value="4">0.005</option>
+    </select>
+  </label>
+  <span class="lookup-result" id="tLookupResult">t₀.₀₂₅, ν=10 = 2.228</span>
+</div>
+
+<div class="tab-row" id="t-tab-row">
+  <button class="tab-btn active" onclick="switchTab('t','t1',this)">ν = 1–30</button>
+  <button class="tab-btn" onclick="switchTab('t','t2',this)">ν = 31–120 ＋ Z</button>
+</div>
+<div class="tab-panel active" id="t-t1" style="max-height:420px;overflow-y:auto;">
+  <table class="stat-table" id="tTable1"></table>
+</div>
+<div class="tab-panel" id="t-t2" style="max-height:420px;overflow-y:auto;">
+  <table class="stat-table" id="tTable2"></table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     §3  卡方分配
+═══════════════════════════════════════════════════ -->
+<hr class="divider">
+<div class="section-header" id="sec-chi">
+  <span class="section-badge badge-chi" style="font-size:12px;">χ²</span>
+  <span class="section-title">卡方分配（Chi-Square Distribution）</span>
+</div>
+
+<div class="card card-blue">
+  <strong>定義</strong>：若 Z₁, Z₂, …, Zᵥ 為 ν 個<strong>獨立的標準常態隨機變數</strong>，則其平方和
+  <div class="formula-box">χ²(ν) = Z₁² + Z₂² + … + Zᵥ²</div>
+  服從<strong>自由度 ν 的卡方分配</strong>。
+</div>
+
+<p class="sub-label">基本性質</p>
+<div class="prop-grid">
+  <div class="prop-card"><div class="prop-label">定義域</div><div class="prop-val">χ² ≥ 0（僅非負值）</div></div>
+  <div class="prop-card"><div class="prop-label">均值 E(χ²)</div><div class="prop-val">= ν</div></div>
+  <div class="prop-card"><div class="prop-label">變異數 Var(χ²)</div><div class="prop-val">= 2ν</div></div>
+  <div class="prop-card"><div class="prop-label">眾數（Mode）</div><div class="prop-val">= max(ν−2, 0)</div></div>
+  <div class="prop-card"><div class="prop-label">形狀</div><div class="prop-val">右偏；ν 小時偏斜大</div></div>
+  <div class="prop-card"><div class="prop-label">累加性</div><div class="prop-val">χ²(m)+χ²(n)～χ²(m+n)</div></div>
+  <div class="prop-card"><div class="prop-label">ν→∞ 時</div><div class="prop-val">趨近常態分配</div></div>
+  <div class="prop-card"><div class="prop-label">查表方向</div><div class="prop-val">查右尾面積 α</div></div>
+</div>
+
+<p class="sub-label">互動圖形：調整自由度觀察曲線變化</p>
+<div class="controls">
+  <span>自由度 ν =</span>
+  <input type="range" min="1" max="25" value="5" id="chiDf" oninput="drawChi()">
+  <span class="val-badge" id="chiDfVal">5</span>
+  <span class="hint">（紅色陰影 = α=0.05 右尾拒絕域）</span>
+</div>
+<div class="chart-wrap"><canvas id="chiChart"></canvas></div>
+<p class="note">▲ 藍色粗線：當前自由度；灰色細線：ν=1、3、10 參照線。自由度越大，曲線越趨近常態（鐘形）。</p>
+
+<div class="card card-blue">
+  <strong>常見應用場景</strong>
+  <p>① <strong>推論母體變異數</strong>：(n−1)S²/σ₀² ~ χ²(n−1)，用於假設檢定與信賴區間。</p>
+  <p>② <strong>適合度檢定</strong>（Goodness-of-fit）：觀測次數是否符合理論分配。</p>
+  <p>③ <strong>獨立性檢定</strong>（列聯表）：判斷兩個類別變數是否獨立。</p>
+  <p>④ <strong>同質性檢定</strong>：比較多個母體的比例是否相同。</p>
+</div>
+
+<!-- ═══ 卡方分配表 ═══ -->
+<hr class="divider">
+<div class="section-header" id="sec-chi-table">
+  <span class="section-badge badge-tbl">表</span>
+  <span class="section-title">卡方分配表（右尾臨界值）</span>
+</div>
+
+<div class="card card-blue">
+  右尾機率 P(χ² > χ²<sub>α,ν</sub>) = α，表格中的數值為臨界值 <strong>χ²<sub>α,ν</sub></strong>。<br>
+  查表步驟：① 確認自由度 ν（列）→ ② 選定顯著水準 α（欄）→ ③ 交叉格即為臨界值。
+</div>
+
+<div class="lookup-row">
+  <label>自由度 ν（1–30）
+    <input type="number" id="chiLookupDf" min="1" max="30" value="5" oninput="highlightChi()">
+  </label>
+  <label>顯著水準 α
+    <select id="chiLookupAlpha" onchange="highlightChi()">
+      <option value="0">0.995</option>
+      <option value="1">0.990</option>
+      <option value="2">0.975</option>
+      <option value="3">0.950</option>
+      <option value="4" selected>0.050</option>
+      <option value="5">0.025</option>
+      <option value="6">0.010</option>
+      <option value="7">0.005</option>
+    </select>
+  </label>
+  <span class="lookup-result" id="chiLookupResult">χ²₀.₀₅, ν=5 = 11.070</span>
+</div>
+
+<div class="tab-row" id="chi-tab-row">
+  <button class="tab-btn active" onclick="switchTab('chi','t1',this)">ν = 1–15</button>
+  <button class="tab-btn" onclick="switchTab('chi','t2',this)">ν = 16–30</button>
+</div>
+<div class="tab-panel active" id="chi-t1" style="max-height:420px;overflow-y:auto;">
+  <table class="stat-table" id="chiTable1"></table>
+</div>
+<div class="tab-panel" id="chi-t2" style="max-height:420px;overflow-y:auto;">
+  <table class="stat-table" id="chiTable2"></table>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     §4  F 分配
+═══════════════════════════════════════════════════ -->
+<hr class="divider">
+<div class="section-header" id="sec-f">
+  <span class="section-badge badge-f">F</span>
+  <span class="section-title">F 分配（F Distribution）</span>
+</div>
+
+<div class="card card-green">
+  <strong>定義</strong>：若 χ²(d₁) 與 χ²(d₂) 為兩個<strong>獨立的卡方隨機變數</strong>，則
+  <div class="formula-box">F = [χ²(d₁)/d₁] / [χ²(d₂)/d₂] ~ F(d₁, d₂)</div>
+  實務上由 <strong>F = s₁²/s₂²</strong> 計算，其中 d₁ = n₁−1，d₂ = n₂−1。
+</div>
+
+<p class="sub-label">基本性質</p>
+<div class="prop-grid">
+  <div class="prop-card"><div class="prop-label">定義域</div><div class="prop-val">F ≥ 0</div></div>
+  <div class="prop-card"><div class="prop-label">均值 E(F)</div><div class="prop-val">= d₂/(d₂−2)（d₂ > 2）</div></div>
+  <div class="prop-card"><div class="prop-label">形狀</div><div class="prop-val">右偏；類似 χ² 分配</div></div>
+  <div class="prop-card"><div class="prop-label">對稱關係</div><div class="prop-val">F(d₁,d₂) = 1/F(d₂,d₁)</div></div>
+  <div class="prop-card"><div class="prop-label">與 t 分配</div><div class="prop-val">t²(ν) ~ F(1,ν)</div></div>
+  <div class="prop-card"><div class="prop-label">查表慣例</div><div class="prop-val">令較大 s² 為分子（F≥1）</div></div>
+  <div class="prop-card"><div class="prop-label">雙尾檢定</div><div class="prop-val">查 α/2 右尾臨界值</div></div>
+  <div class="prop-card"><div class="prop-label">查表方向</div><div class="prop-val">查右尾面積 α</div></div>
+</div>
+
+<p class="sub-label">互動圖形：調整兩個自由度</p>
+<div class="controls ctrl-green">
+  <span>d₁ =</span>
+  <input type="range" min="1" max="30" value="5" id="fDf1" oninput="drawF()">
+  <span class="val-badge" id="fDf1Val">5</span>
+  <span>　d₂ =</span>
+  <input type="range" min="1" max="50" value="20" id="fDf2" oninput="drawF()">
+  <span class="val-badge" id="fDf2Val">20</span>
+  <span class="hint">（紅色陰影 = α=0.05 右尾拒絕域）</span>
+</div>
+<div class="chart-wrap"><canvas id="fChart"></canvas></div>
+<p class="note">▲ 綠色粗線：當前 F 分配；灰色細線：F(2,10)、F(5,20) 參照線。d₁、d₂ 越大，分配越集中、越趨近對稱。</p>
+
+<div class="card card-green">
+  <strong>常見應用場景</strong>
+  <p>① <strong>比較兩母體變異數</strong>（§13.4）：判斷兩組資料的波動是否有顯著差異；亦是進行 Pooled t 檢定前的前置 F 檢定。</p>
+  <p>② <strong>ANOVA（變異數分析）</strong>（§14）：F = 組間均方 / 組內均方，檢定多組均值是否相等。</p>
+  <p>③ <strong>迴歸分析顯著性</strong>（§16）：F 統計量用於檢定整體迴歸模型的顯著性。</p>
+</div>
+
+<!-- ═══ F 分配表 ═══ -->
+<hr class="divider">
+<div class="section-header" id="sec-f-table">
+  <span class="section-badge badge-tbl">表</span>
+  <span class="section-title">F 分配表（右尾臨界值）</span>
+</div>
+
+<div class="card card-green">
+  右尾機率 P(F > F<sub>α, d₁, d₂</sub>) = α，表格數值為臨界值。<br>
+  查表步驟：① 選定 α → ② 確認分子自由度 d₁（欄）→ ③ 確認分母自由度 d₂（列）→ ④ 交叉格即為臨界值。
+</div>
+
+<div class="lookup-row">
+  <label>顯著水準 α
+    <select id="fLookupAlpha" onchange="buildFTable();highlightF()">
+      <option value="0.10">0.10</option>
+      <option value="0.05" selected>0.05</option>
+      <option value="0.025">0.025</option>
+      <option value="0.01">0.01</option>
+    </select>
+  </label>
+  <label>分子自由度 d₁
+    <select id="fLookupD1" onchange="highlightF()">
+      <option value="0">1</option><option value="1">2</option><option value="2">3</option>
+      <option value="3">4</option><option value="4" selected>5</option><option value="5">6</option>
+      <option value="6">7</option><option value="7">8</option><option value="8">9</option>
+      <option value="9">10</option><option value="10">12</option><option value="11">15</option>
+      <option value="12">20</option>
+    </select>
+  </label>
+  <label>分母自由度 d₂
+    <input type="number" id="fLookupD2" min="1" max="120" value="10" oninput="highlightF()">
+  </label>
+  <span class="lookup-result" id="fLookupResult">F₀.₀₅, d₁=5, d₂=10 = 3.33</span>
+</div>
+
+<div class="tab-row" id="f-tab-row">
+  <button class="tab-btn active" onclick="switchTab('f','t1',this)">d₂ = 1–20</button>
+  <button class="tab-btn" onclick="switchTab('f','t2',this)">d₂ = 21–40</button>
+  <button class="tab-btn" onclick="switchTab('f','t3',this)">d₂ = 40–120</button>
+</div>
+<div class="tab-panel active" id="f-t1" style="max-height:420px;overflow-y:auto;">
+  <table class="stat-table" id="fTable1"></table>
+</div>
+<div class="tab-panel" id="f-t2" style="max-height:420px;overflow-y:auto;">
+  <table class="stat-table" id="fTable2"></table>
+</div>
+<div class="tab-panel" id="f-t3" style="max-height:420px;overflow-y:auto;">
+  <table class="stat-table" id="fTable3"></table>
+</div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+// ──────────────────────────────────────────────
+//  數學函數 (所有邏輯完整在此)
+// ──────────────────────────────────────────────
+function lgamma(x) {
+  const c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,0.1208650973866179e-2,-0.5395239384953e-5];
+  let y=x,tmp=x+5.5; tmp-=(x+0.5)*Math.log(tmp);
+  let ser=1.000000000190015;
+  for(let j=0;j<6;j++) ser+=c[j]/++y;
+  return -tmp+Math.log(2.5066282746310005*ser/x);
+}
+function gammaIncLower(a,x,iter=300){
+  if(x<=0)return 0;
+  let sum=1/a,term=1/a;
+  for(let n=1;n<iter;n++){term*=x/(a+n);sum+=term;if(Math.abs(term)<1e-13)break;}
+  return Math.exp(-x+a*Math.log(x)-lgamma(a))*sum;
+}
+function chi2cdf(x,k){return gammaIncLower(k/2,x/2);}
+function chi2pdf(x,k){
+  if(x<=0)return 0;
+  return Math.exp((k/2-1)*Math.log(x)-x/2-(k/2)*Math.log(2)-lgamma(k/2));
+}
+function chi2inv(p,k,tol=1e-7){
+  let lo=0,hi=Math.max(k*5,150);
+  for(let i=0;i<100;i++){const mid=(lo+hi)/2;chi2cdf(mid,k)<p?(lo=mid):(hi=mid);if(hi-lo<tol)break;}
+  return(lo+hi)/2;
+}
+function ibeta(x,a,b){
+  if(x<=0)return 0;if(x>=1)return 1;
+  const lbeta=lgamma(a)+lgamma(b)-lgamma(a+b);
+  const front=Math.exp(a*Math.log(x)+b*Math.log(1-x)-lbeta)/a;
+  const TINY=1e-30;let C=1,D=1-(a+b)*x/(a+1);
+  if(Math.abs(D)<TINY)D=TINY;D=1/D;let h=D;
+  for(let m=1;m<=200;m++){
+    let aa=m*(b-m)*x/((a+2*m-1)*(a+2*m));
+    D=1+aa*D;if(Math.abs(D)<TINY)D=TINY;C=1+aa/C;if(Math.abs(C)<TINY)C=TINY;D=1/D;h*=D*C;
+    aa=-(a+m)*(a+b+m)*x/((a+2*m)*(a+2*m+1));
+    D=1+aa*D;if(Math.abs(D)<TINY)D=TINY;C=1+aa/C;if(Math.abs(C)<TINY)C=TINY;D=1/D;const delta=D*C;h*=delta;
+    if(Math.abs(delta-1)<1e-13)break;
+  }
+  return front*h;
+}
+function betacdf(x,a,b){return x<(a+1)/(a+b+2)?ibeta(x,a,b):1-ibeta(1-x,b,a);}
+function fpdf(x,d1,d2){
+  if(x<=0)return 0;
+  return Math.exp((d1/2)*Math.log(d1/d2)+(d1/2-1)*Math.log(x)-lgamma(d1/2)-lgamma(d2/2)+lgamma((d1+d2)/2)-((d1+d2)/2)*Math.log(1+d1*x/d2));
+}
+function fcdf(f,d1,d2){return betacdf((d1*f)/(d1*f+d2),d1/2,d2/2);}
+function finv(p,d1,d2,tol=1e-6){
+  let lo=0,hi=100;
+  for(let i=0;i<120;i++){const mid=(lo+hi)/2;fcdf(mid,d1,d2)<p?(lo=mid):(hi=mid);if(hi-lo<tol)break;}
+  return(lo+hi)/2;
+}
+function normPDF(z){return Math.exp(-0.5*z*z)/Math.sqrt(2*Math.PI);}
+function normCDF(z){
+  const t=1/(1+0.2316419*Math.abs(z));
+  const p=t*(0.319381530+t*(-0.356563782+t*(1.781477937+t*(-1.821255978+t*1.330274429))));
+  const c=1-normPDF(z)*p; return z>=0?c:1-c;
+}
+function normInv(p,tol=1e-7){
+  let lo=-8,hi=8;
+  for(let i=0;i<100;i++){const m=(lo+hi)/2;normCDF(m)<p?(lo=m):(hi=m);if(hi-lo<tol)break;}
+  return(lo+hi)/2;
+}
+function tpdf(x,df){
+  if(df>=500)return normPDF(x);
+  return Math.exp(lgamma((df+1)/2)-lgamma(df/2)-0.5*Math.log(df*Math.PI)-((df+1)/2)*Math.log(1+x*x/df));
+}
+function tcdf(t,df){
+  if(df>=500)return normCDF(t);
+  const x=df/(df+t*t);
+  const ib=betacdf(x,df/2,0.5);
+  return t>=0?1-ib/2:ib/2;
+}
+function tinv(p,df,tol=1e-7){
+  let lo=-20,hi=20;
+  for(let i=0;i<120;i++){const m=(lo+hi)/2;tcdf(m,df)<p?(lo=m):(hi=m);if(hi-lo<tol)break;}
+  return(lo+hi)/2;
+}
+
+// ──────────────────────────────────────────────
+//  Chart setup
+// ──────────────────────────────────────────────
+const isDark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
+const gridColor=isDark?'rgba(255,255,255,0.07)':'rgba(0,0,0,0.07)';
+const tickColor=isDark?'#b4b2a9':'#5F5E5A';
+function makeRange(lo,hi,n){const r=[];for(let i=0;i<=n;i++)r.push(lo+(hi-lo)*i/n);return r;}
+
+// ──────────────────────────────────────────────
+//  Z Chart & Table
+// ──────────────────────────────────────────────
+let zChartInst=null;
+function drawZ(){
+  const zv=parseFloat(document.getElementById('zVal').value);
+  const tail=document.getElementById('zTail').value;
+  document.getElementById('zValDisplay').textContent=zv.toFixed(2);
+  const xs=makeRange(-4,4,600);
+  const mainData=xs.map(x=>({x,y:normPDF(x)}));
+  let shadedData,prob,probStr;
+  if(tail==='left'){
+    shadedData=xs.map(x=>({x,y: x<=zv ? normPDF(x) : null}));
+    prob=normCDF(zv);
+    probStr=`P(Z ≤ ${zv.toFixed(2)}) = ${prob.toFixed(4)}`;
+  } else if(tail==='right'){
+    shadedData=xs.map(x=>({x,y: x>=zv ? normPDF(x) : null}));
+    prob=1-normCDF(zv);
+    probStr=`P(Z ≥ ${zv.toFixed(2)}) = ${prob.toFixed(4)}`;
+  } else {
+    const az=Math.abs(zv);
+    shadedData=xs.map(x=>({x,y: (x<=-az || x>=az) ? normPDF(x) : null}));
+    prob=2*(1-normCDF(az));
+    probStr=`P(|Z| ≥ ${az.toFixed(2)}) = ${prob.toFixed(4)}`;
+  }
+  document.getElementById('zNote').textContent=`▲ 陰影面積 = ${probStr}`;
+  const datasets=[
+    {label:'N(0,1)',data:mainData,borderColor:'#378ADD',backgroundColor:'rgba(55,138,221,0.08)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:0},
+    {label:'陰影面積',data:shadedData,borderColor:'#E24B4A',backgroundColor:'rgba(226,75,74,0.30)',fill:true,tension:0.4,borderWidth:0,pointRadius:0}
+  ];
+  if(zChartInst)zChartInst.destroy();
+  zChartInst=new Chart(document.getElementById('zChart'),{
+    type:'line',data:{datasets},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,
+      parsing:{xAxisKey:'x',yAxisKey:'y'},
+      plugins:{legend:{display:true,position:'top',labels:{color:tickColor,font:{size:11},boxWidth:16,padding:8}},
+               tooltip:{mode:'index',intersect:false}},
+      scales:{
+        x:{type:'linear',min:-4,max:4,title:{display:true,text:'z 值',color:tickColor},ticks:{color:tickColor,font:{size:11}},grid:{color:gridColor}},
+        y:{min:0,max:0.45,title:{display:true,text:'密度 f(z)',color:tickColor},ticks:{color:tickColor,font:{size:11}},grid:{color:gridColor}}
+      }}
+  });
+}
+
+const Z_COLS=[.00,.01,.02,.03,.04,.05,.06,.07,.08,.09];
+function buildZTable(){
+  [[-3.4,0,'zTable1'],[0,3.4,'zTable2']].forEach(([s,e,id])=>{
+    const t=document.getElementById(id);
+    let html='<tr><th>z</th>'+Z_COLS.map(c=>`<th>.0${Math.round(c*100).toString().padStart(1,'0')}</th>`).join('')+'</tr>';
+    const steps=[];
+    for(let v=Math.round(s*10);v<=Math.round(e>0?e*10:0);v++) steps.push(v/10);
+    if(e===0 && !steps.includes(0)) steps.push(0);
+    steps.forEach(r=>{
+      html+=`<tr><td class="row-head">${r.toFixed(1)}</td>`;
+      Z_COLS.forEach(c=>{
+        const z=r>=0 ? r+c : r-c;
+        const val=normCDF(z);
+        html+=`<td id="zt-${z.toFixed(2)}">${val.toFixed(4)}</td>`;
+      });
+      html+='</tr>';
+    });
+    t.innerHTML=html;
+  });
+}
+function highlightZ(){
+  document.querySelectorAll('[id^="zt-"]').forEach(el=>el.classList.remove('highlight-cell'));
+  const rawZ=parseFloat(document.getElementById('zLookupVal').value)||0;
+  const dir=document.getElementById('zLookupDir').value;
+  const z=Math.max(-3.49,Math.min(3.49,rawZ));
+  const prob=dir==='left'?normCDF(z):1-normCDF(z);
+  const dirStr=dir==='left'?`P(Z ≤ ${z.toFixed(2)})`:`P(Z ≥ ${z.toFixed(2)})`;
+  document.getElementById('zLookupResult').textContent=`${dirStr} = ${prob.toFixed(4)}`;
+  
+  const lookupZ = z.toFixed(2);
+  const cell=document.getElementById(`zt-${lookupZ}`);
+  if(cell){
+    cell.classList.add('highlight-cell');
+    const tabPanel=z<0?'z-t1':'z-t2';
+    if(!document.getElementById(tabPanel).classList.contains('active')){
+      activateTab('z',z<0?'t1':'t2');
+      document.getElementById('z-tab-row').querySelectorAll('.tab-btn').forEach((b,i)=>{b.classList.toggle('active',i===(z<0?0:1));});
+    }
+    cell.scrollIntoView({block:'nearest'});
+  }
+}
+
+// ──────────────────────────────────────────────
+//  t Chart & Table
+// ──────────────────────────────────────────────
+let tChartInst=null;
+function drawT(){
+  const df=parseInt(document.getElementById('tDf').value);
+  document.getElementById('tDfVal').textContent=df;
+  const xs=makeRange(-5,5,600);
+  const critVal=tinv(0.975,df);
+  const mainData=xs.map(x=>({x,y:tpdf(x,df)}));
+  const shadedData=xs.map(x=>({x,y: (x<=-critVal || x>=critVal) ? tpdf(x,df) : null}));
+  const zData=xs.map(x=>({x,y:normPDF(x)}));
+  const datasets=[
+    {label:`t(ν=${df})`,data:mainData,borderColor:'#7F77DD',backgroundColor:'rgba(127,119,221,0.08)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:0},
+    {label:`α=0.05 雙尾拒絕域`,data:shadedData,borderColor:'#E24B4A',backgroundColor:'rgba(226,75,74,0.25)',fill:true,tension:0.4,borderWidth:1.5,pointRadius:0},
+    {label:'Z (ν=∞)',data:zData,borderColor:'rgba(55,138,221,0.6)',backgroundColor:'transparent',fill:false,tension:0.4,borderWidth:1.5,pointRadius:0,borderDash:[4,3]}
+  ];
+  if(tChartInst)tChartInst.destroy();
+  tChartInst=new Chart(document.getElementById('tChart'),{
+    type:'line',data:{datasets},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,
+      parsing:{xAxisKey:'x',yAxisKey:'y'},
+      plugins:{legend:{display:true,position:'top',labels:{color:tickColor,font:{size:11},boxWidth:16,padding:8}},
+               tooltip:{mode:'index',intersect:false}},
+      scales:{
+        x:{type:'linear',min:-5,max:5,title:{display:true,text:'t 值',color:tickColor},ticks:{color:tickColor,font:{size:11}},grid:{color:gridColor}},
+        y:{min:0,max:0.45,title:{display:true,text:'密度 f(t)',color:tickColor},ticks:{color:tickColor,font:{size:11}},grid:{color:gridColor}}
+      }}
+  });
+}
+
+const T_ALPHAS=[0.100,0.050,0.025,0.010,0.005];
+const T_LABELS=['0.100','0.050','0.025','0.010','0.005'];
+function tCrit(df,alpha){return tinv(1-alpha,df);}
+function buildTTable(){
+  let t=document.getElementById('tTable1');
+  let html='<tr><th>ν \\ α</th>'+T_LABELS.map(a=>`<th>${a}</th>`).join('')+'</tr>';
+  for(let df=1;df<=30;df++){
+    html+=`<tr><td class="row-head">${df}</td>`;
+    T_ALPHAS.forEach(a=>html+=`<td id="tt-${df}-${a.toFixed(3)}">${tCrit(df,a).toFixed(3)}</td>`);
+    html+='</tr>';
+  }
+  t.innerHTML=html;
+
+  t=document.getElementById('tTable2');
+  html='<tr><th>ν \\ α</th>'+T_LABELS.map(a=>`<th>${a}</th>`).join('')+'</tr>';
+  const rows2=[31,32,33,34,35,36,37,38,39,40,42,44,46,48,50,55,60,65,70,80,90,100,110,120];
+  rows2.forEach(df=>{
+    html+=`<tr><td class="row-head">${df}</td>`;
+    T_ALPHAS.forEach(a=>html+=`<td id="tt-${df}-${a.toFixed(3)}">${tCrit(df,a).toFixed(3)}</td>`);
+    html+='</tr>';
+  });
+  html+=`<tr style="background:var(--amber-light);"><td class="row-head">∞ (Z)</td>`;
+  T_ALPHAS.forEach(a=>html+=`<td><strong>${normInv(1-a).toFixed(3)}</strong></td>`);
+  html+='</tr>';
+  t.innerHTML=html;
+}
+function highlightT(){
+  document.querySelectorAll('[id^="tt-"]').forEach(el=>el.classList.remove('highlight-cell'));
+  const df=Math.min(Math.max(parseInt(document.getElementById('tLookupDf').value)||10,1),120);
+  const ai=parseInt(document.getElementById('tLookupAlpha').value);
+  const alpha=T_ALPHAS[ai];
+  const val=tCrit(df,alpha);
+  document.getElementById('tLookupResult').textContent=`t${T_LABELS[ai]}, ν=${df} = ${val.toFixed(3)}`;
+  const allRows=[...Array.from({length:30},(_,i)=>i+1),31,32,33,34,35,36,37,38,39,40,42,44,46,48,50,55,60,65,70,80,90,100,110,120];
+  const nearest=allRows.reduce((p,c)=>Math.abs(c-df)<Math.abs(p-df)?c:p);
+  const cell=document.getElementById(`tt-${nearest}-${alpha.toFixed(3)}`);
+  if(cell){
+    cell.classList.add('highlight-cell');
+    const inTab1=nearest<=30;
+    if(inTab1&&!document.getElementById('t-t1').classList.contains('active')){activateTab('t','t1');document.getElementById('t-tab-row').querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===0));}
+    if(!inTab1&&!document.getElementById('t-t2').classList.contains('active')){activateTab('t','t2');document.getElementById('t-tab-row').querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===1));}
+    cell.scrollIntoView({block:'nearest'});
+  }
+}
+
+// ──────────────────────────────────────────────
+//  Chi Chart & Table
+// ──────────────────────────────────────────────
+let chiChartInst=null;
+function drawChi(){
+  const df=parseInt(document.getElementById('chiDf').value);
+  document.getElementById('chiDfVal').textContent=df;
+  const xMax=Math.max(df*3.5,25);
+  const xs=makeRange(0.01,xMax,500);
+  const critVal=chi2inv(0.95,df);
+  const mainData=xs.map(x=>({x,y:chi2pdf(x,df)}));
+  const shadedData=xs.filter(x=>x>=critVal).map(x=>({x,y:chi2pdf(x,df)}));
+  const refDfs=[1,3,10].filter(d=>d!==df);
+  const yPeak=chi2pdf(Math.max(df-2,0.3),df);
+  const yMax=Math.min(yPeak*1.2,0.55);
+  const datasets=[
+    {label:`χ²(ν=${df})`,data:mainData,borderColor:'#378ADD',backgroundColor:'rgba(55,138,221,0.09)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:0},
+    {label:'α=0.05 拒絕域',data:shadedData,borderColor:'#E24B4A',backgroundColor:'rgba(226,75,74,0.22)',fill:true,tension:0.4,borderWidth:1.5,pointRadius:0},
+    ...refDfs.map(d=>({label:`χ²(ν=${d})`,data:xs.map(x=>({x,y:chi2pdf(x,d)})),borderColor:'rgba(136,135,128,0.5)',backgroundColor:'transparent',fill:false,tension:0.4,borderWidth:1,pointRadius:0,borderDash:[4,3]}))
+  ];
+  if(chiChartInst)chiChartInst.destroy();
+  chiChartInst=new Chart(document.getElementById('chiChart'),{
+    type:'line',data:{datasets},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,
+      parsing:{xAxisKey:'x',yAxisKey:'y'},
+      plugins:{legend:{display:true,position:'top',labels:{color:tickColor,font:{size:11},boxWidth:16,padding:8}},tooltip:{mode:'index',intersect:false}},
+      scales:{
+        x:{type:'linear',min:0,max:xMax,title:{display:true,text:'χ² 值',color:tickColor},ticks:{color:tickColor,font:{size:11}},grid:{color:gridColor}},
+        y:{min:0,max:yMax||0.4,title:{display:true,text:'密度 f(x)',color:tickColor},ticks:{color:tickColor,font:{size:11}},grid:{color:gridColor}}
+      }}
+  });
+}
+
+const CHI_ALPHAS=[0.995,0.990,0.975,0.950,0.050,0.025,0.010,0.005];
+const CHI_LABELS=['0.995','0.990','0.975','0.950','0.050','0.025','0.010','0.005'];
+function chiCrit(df,alpha){return chi2inv(1-alpha,df);}
+function buildChiTable(){
+  [[1,15,'chiTable1'],[16,30,'chiTable2']].forEach(([s,e,id])=>{
+    const t=document.getElementById(id);
+    let html='<tr><th>ν \\ α</th>'+CHI_LABELS.map(a=>`<th>${a}</th>`).join('')+'</tr>';
+    for(let df=s;df<=e;df++){
+      html+=`<tr><td class="row-head">${df}</td>`;
+      CHI_ALPHAS.forEach(a=>html+=`<td id="chi-${df}-${a.toFixed(3)}">${chiCrit(df,a).toFixed(3)}</td>`);
+      html+='</tr>';
+    }
+    t.innerHTML=html;
+  });
+}
+function highlightChi(){
+  document.querySelectorAll('[id^="chi-"]').forEach(el=>el.classList.remove('highlight-cell'));
+  const df=Math.min(Math.max(parseInt(document.getElementById('chiLookupDf').value)||5,1),30);
+  const ai=parseInt(document.getElementById('chiLookupAlpha').value);
+  const alpha=CHI_ALPHAS[ai];
+  const val=chiCrit(df,alpha);
+  document.getElementById('chiLookupResult').textContent=`χ²${CHI_LABELS[ai]}, ν=${df} = ${val.toFixed(3)}`;
+  const cell=document.getElementById(`chi-${df}-${alpha.toFixed(3)}`);
+  if(cell){
+    cell.classList.add('highlight-cell');
+    if(df<=15&&!document.getElementById('chi-t1').classList.contains('active')){activateTab('chi','t1');document.getElementById('chi-tab-row').querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===0));}
+    if(df>15&&!document.getElementById('chi-t2').classList.contains('active')){activateTab('chi','t2');document.getElementById('chi-tab-row').querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===1));}
+    cell.scrollIntoView({block:'nearest'});
+  }
+}
+
+// ──────────────────────────────────────────────
+//  F Chart & Table
+// ──────────────────────────────────────────────
+let fChartInst=null;
+function drawF(){
+  const d1=parseInt(document.getElementById('fDf1').value);
+  const d2=parseInt(document.getElementById('fDf2').value);
+  document.getElementById('fDf1Val').textContent=d1;
+  document.getElementById('fDf2Val').textContent=d2;
+  const xMax=8;
+  const xs=makeRange(0.02,xMax,600);
+  const critVal=finv(0.95,d1,d2);
+  const mainData=xs.map(x=>({x,y:fpdf(x,d1,d2)}));
+  const shadedData=xs.filter(x=>x>=critVal).map(x=>({x,y:fpdf(x,d1,d2)}));
+  const refs=[[2,10],[5,20]].filter(([a,b])=>!(a===d1&&b===d2));
+  const modeX=d1>2?(d1-2)/d1*d2/(d2+2):0.1;
+  const yPeak=fpdf(modeX,d1,d2);
+  const yMax=Math.min(yPeak*1.2,3.0);
+  const datasets=[
+    {label:`F(d₁=${d1}, d₂=${d2})`,data:mainData,borderColor:'#3B6D11',backgroundColor:'rgba(59,109,17,0.09)',fill:true,tension:0.4,borderWidth:2.5,pointRadius:0},
+    {label:'α=0.05 拒絕域',data:shadedData,borderColor:'#E24B4A',backgroundColor:'rgba(226,75,74,0.22)',fill:true,tension:0.4,borderWidth:1.5,pointRadius:0},
+    ...refs.map(([a,b])=>({label:`F(${a},${b})`,data:xs.map(x=>({x,y:fpdf(x,a,b)})),borderColor:'rgba(136,135,128,0.5)',backgroundColor:'transparent',fill:false,tension:0.4,borderWidth:1,pointRadius:0,borderDash:[4,3]}))
+  ];
+  if(fChartInst)fChartInst.destroy();
+  fChartInst=new Chart(document.getElementById('fChart'),{
+    type:'line',data:{datasets},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,
+      parsing:{xAxisKey:'x',yAxisKey:'y'},
+      plugins:{legend:{display:true,position:'top',labels:{color:tickColor,font:{size:11},boxWidth:16,padding:8}},tooltip:{mode:'index',intersect:false}},
+      scales:{
+        x:{type:'linear',min:0,max:xMax,title:{display:true,text:'F 值',color:tickColor},ticks:{color:tickColor,font:{size:11}},grid:{color:gridColor}},
+        y:{min:0,max:yMax||1,title:{display:true,text:'密度 f(x)',color:tickColor},ticks:{color:tickColor,font:{size:11}},grid:{color:gridColor}}
+      }}
+  });
+}
+
+const F_D1_COLS=[1,2,3,4,5,6,7,8,9,10,12,15,20];
+const F_D2_ROWS1=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+const F_D2_ROWS2=[21,22,23,24,25,26,27,28,29,30,32,35,40];
+const F_D2_ROWS3=[40,50,60,80,100,120];
+function getFAlpha(){return parseFloat(document.getElementById('fLookupAlpha').value)||0.05;}
+function buildFTableSection(rows,tid){
+  const alpha=getFAlpha();
+  const t=document.getElementById(tid);
+  let html='<tr><th>d₂ \\ d₁</th>'+F_D1_COLS.map(d=>`<th>${d}</th>`).join('')+'</tr>';
+  rows.forEach(d2=>{
+    html+=`<tr><td class="row-head">${d2}</td>`;
+    F_D1_COLS.forEach(d1=>{const v=finv(1-alpha,d1,d2);html+=`<td id="f-${d1}-${d2}">${v.toFixed(2)}</td>`;});
+    html+='</tr>';
+  });
+  t.innerHTML=html;
+}
+function buildFTable(){
+  buildFTableSection(F_D2_ROWS1,'fTable1');
+  buildFTableSection(F_D2_ROWS2,'fTable2');
+  buildFTableSection(F_D2_ROWS3,'fTable3');
+}
+function highlightF(){
+  document.querySelectorAll('[id^="f-"]').forEach(el=>el.classList.remove('highlight-cell'));
+  const d1idx=parseInt(document.getElementById('fLookupD1').value);
+  const d1=F_D1_COLS[d1idx];
+  const d2raw=parseInt(document.getElementById('fLookupD2').value)||10;
+  const alpha=getFAlpha();
+  const allRows=[...F_D2_ROWS1,...F_D2_ROWS2,...F_D2_ROWS3];
+  const nearest=allRows.reduce((p,c)=>Math.abs(c-d2raw)<Math.abs(p-d2raw)?c:p);
+  const val=finv(1-alpha,d1,d2raw);
+  document.getElementById('fLookupResult').textContent=`F${alpha}, d₁=${d1}, d₂=${d2raw} = ${val.toFixed(2)}`;
+  const cell=document.getElementById(`f-${d1}-${nearest}`);
+  if(cell){
+    cell.classList.add('highlight-cell');
+    cell.scrollIntoView({block:'nearest'});
+  }
+}
+
+// ──────────────────────────────────────────────
+//  Tabs 
+// ──────────────────────────────────────────────
+function activateTab(prefix,suffix){
+  ['t1','t2','t3'].forEach(s=>{const p=document.getElementById(`${prefix}-${s}`);if(p)p.classList.remove('active');});
+  const p=document.getElementById(`${prefix}-${suffix}`);if(p)p.classList.add('active');
+}
+function switchTab(prefix,suffix,btn){
+  activateTab(prefix,suffix);
+  const rowId=`${prefix}-tab-row`;
+  document.getElementById(rowId).querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ──────────────────────────────────────────────
+//  Init (確保依序執行，不報錯)
+// ──────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  try {
+    buildZTable();
+    buildTTable();
+    buildChiTable();
+    buildFTable();
+    drawZ();
+    drawT();
+    drawChi();
+    drawF();
+    setTimeout(() => {
+      highlightZ();
+      highlightT();
+      highlightChi();
+      highlightF();
+      window.scrollTo(0, 0);
+    }, 100);
+  } catch(e) {
+    console.error(e);
+  }
+});
+</script>
+</body>
+</html>

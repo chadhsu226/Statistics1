@@ -199,6 +199,20 @@
   }
   .chapter-card.pending .ch-num strong { color: var(--muted); }
 
+  /* supplement card */
+  .chapter-card.supplement {
+    border-style: dashed;
+    border-color: rgba(34,211,238,0.25);
+  }
+  .chapter-card.supplement::before { background: var(--cyan); }
+  a.chapter-card.supplement:hover { border-color: rgba(34,211,238,0.45); }
+  .chapter-card.supplement .ch-num strong { color: var(--cyan); font-size: 1.1rem; }
+  .chapter-card.supplement .btn-lecture {
+    color: var(--cyan);
+    background: rgba(34,211,238,0.08);
+    border-color: rgba(34,211,238,0.25);
+  }
+
   .ch-num {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.78rem;
@@ -394,7 +408,19 @@
       <div class="btn-pending">🚧 製作中</div>
     </div>
 
-  <<footer>統計學（一）課程講義 · chadhsu226</footer>
+    <a href="tables.html" class="chapter-card supplement">
+      <div class="ch-num"><strong>補充</strong></div>
+      <div class="ch-info">
+        <div class="ch-title">互動式查表系統</div>
+        <div class="ch-en">Interactive Statistical Tables</div>
+      </div>
+      <div class="btn-lecture">📖 講義</div>
+    </a>
+
+  </div>
+</main>
+
+<footer>統計學（一）課程講義 · chadhsu226</footer>
 
 </body>
 </html>
