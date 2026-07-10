@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 1　何謂統計學？</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false }
+                ],
+                throwOnError: false,
+                strict: "ignore"
+            });
+        });
+    </script>
+    <style>
+        :root {
+            --navy: #1a3a6b;
+            --blue: #2e6cb8;
+            --blue-light: #4a90d9;
+            --accent: #c0392b;
+            --gold: #d4a017;
+            --green: #27ae60;
+            --bg: #f7f9fc;
+            --card: #ffffff;
+            --border: #d0dcea;
+            --text: #2c3e50;
+            --muted: #5a6a7a;
+            --math-bg: #eaf3ff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Noto Sans TC', 'Source Serif 4', Georgia, serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 36px 24px 80px;
+        }
+        h1 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 2rem; font-weight: 700;
+            color: var(--navy);
+            border-bottom: 4px solid var(--blue-light);
+            padding-bottom: 12px; margin-bottom: 20px;
+        }
+        h2 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 1.45rem; font-weight: 600;
+            color: var(--navy);
+            margin-top: 48px; margin-bottom: 14px;
+            border-left: 5px solid var(--blue-light);
+            padding-left: 12px;
+        }
+        h3 { font-size: 1.1rem; font-weight: 700; color: var(--blue); margin-top: 28px; margin-bottom: 10px; }
+        p { margin-bottom: 12px; }
+        ul, ol { margin-left: 24px; margin-bottom: 12px; }
+        li { margin-bottom: 6px; }
+        hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+        .chapter-intro {
+            font-size: 1.05rem; color: var(--muted);
+            border-left: 3px solid var(--blue-light);
+            padding: 10px 16px; background: #eef4fb;
+            border-radius: 0 6px 6px 0; margin-bottom: 24px;
+        }
+        .learning-goals {
+            background: #fffbea; border: 1.5px solid var(--gold);
+            border-radius: 8px; padding: 18px 22px; margin: 24px 0;
+        }
+        .learning-goals h3 { color: #8a6000; margin-top: 0; }
+        .toc {
+            background: var(--card); border: 1.5px solid var(--border);
+            border-radius: 8px; padding: 18px 24px; margin: 24px 0;
+            box-shadow: 0 2px 8px rgba(30,60,110,0.06);
+        }
+        .toc h3 { color: var(--navy); margin-top: 0; }
+        .toc a { color: var(--blue); text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+        .highlight {
+            background: #fffbe6; border-left: 4px solid var(--gold);
+            padding: 12px 16px; margin: 16px 0; border-radius: 0 6px 6px 0;
+        }
+        .math-block {
+            background: var(--math-bg); border-radius: 6px;
+            padding: 14px 18px; margin: 14px 0;
+            overflow-x: auto; font-size: 1.05em; text-align: center;
+        }
+        .formula-card {
+            background: var(--card); border: 2px solid var(--blue-light);
+            border-radius: 10px; padding: 18px 22px; margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(74,144,217,0.1);
+        }
+        .formula-card h3 { margin-top: 0; color: var(--navy); }
+        .formula-card .note {
+            font-size: 0.9em; color: var(--muted);
+            background: #f0f6ff; border-left: 3px solid #aac4ee;
+            padding: 8px 12px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .example-block {
+            background: #f0faff; border-left: 5px solid var(--blue-light);
+            border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 20px 0;
+        }
+        .example-block h3 { color: var(--navy); margin-top: 0; }
+        .example-block .note {
+            font-size: 0.92em; color: #333;
+            background: #e6f7e6; border-left: 3px solid var(--green);
+            padding: 10px 14px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .scenario {
+            background: #f8f4ff; border: 1.5px dashed #9b7fd4;
+            border-radius: 8px; padding: 12px 18px; margin-bottom: 14px;
+            font-size: 0.97em; color: #3d2070;
+        }
+        .scenario strong { color: #6a3fbf; }
+        table {
+            width: 100%; border-collapse: collapse;
+            margin: 14px 0; font-size: 0.95em;
+        }
+        th, td { border: 1px solid #c8d8ec; padding: 8px 12px; text-align: center; }
+        th { background: #ddeeff; color: var(--navy); font-weight: 600; }
+        tr:nth-child(even) { background: #f5f8ff; }
+
+        /* ── 母體/樣本 流程圖 ── */
+        .flow-diagram {
+            display: grid; grid-template-columns: 1fr 90px 1fr;
+            align-items: center; gap: 0; margin: 24px 0;
+        }
+        .flow-node {
+            border: 2px solid var(--blue-light); border-radius: 12px;
+            background: var(--card); padding: 18px 16px; text-align: center;
+            box-shadow: 0 2px 8px rgba(74,144,217,0.12);
+        }
+        .flow-node h4 { color: var(--navy); font-size: 1.05em; margin-bottom: 6px; }
+        .flow-node p { font-size: 0.88em; color: var(--muted); margin-bottom: 0; }
+        .flow-node .tag {
+            display: inline-block; margin-top: 8px; padding: 3px 12px;
+            border-radius: 12px; font-size: 0.85em; font-weight: 700;
+        }
+        .flow-node .tag.param { background: #ffe8e0; color: #b03a20; }
+        .flow-node .tag.stat  { background: #e0f2e9; color: #1e7a45; }
+        .flow-arrow {
+            text-align: center; font-size: 0.8em; color: var(--muted); line-height: 1.4;
+        }
+        .flow-arrow .arr { font-size: 1.6em; color: var(--blue); display: block; }
+
+        /* ── Quiz ── */
+        .quiz-box {
+            background: #f0f6ff; border: 1.5px solid var(--blue-light);
+            border-radius: 10px; padding: 22px 26px; margin: 28px 0;
+        }
+        .quiz-box h3 { color: var(--navy); margin-top: 0; }
+        .quiz-q { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin-bottom: 16px; }
+        .quiz-q p { font-weight: 600; margin-bottom: 10px; }
+        .quiz-q label { display: block; margin: 6px 0; cursor: pointer; font-size: 0.97em; font-weight: 400; }
+        .quiz-q button { margin-top: 10px; padding: 7px 18px; background: var(--blue); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9em; }
+        .quiz-q button:hover { background: var(--navy); }
+        .quiz-feedback { display: none; margin-top: 10px; padding: 10px 14px; border-radius: 6px; font-size: 0.95em; }
+        .quiz-feedback.correct { background: #d4edda; border-left: 4px solid var(--green); color: #155724; }
+        .quiz-feedback.wrong { background: #f8d7da; border-left: 4px solid var(--accent); color: #721c24; }
+
+        /* ── Exercises ── */
+        .exercises-list { counter-reset: ex-counter; list-style: none; padding: 0; margin-left: 0; }
+        .exercises-list > li {
+            counter-increment: ex-counter;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 8px; padding: 16px 20px; margin-bottom: 16px;
+        }
+        .exercises-list > li strong { color: var(--navy); }
+        details summary { cursor: pointer; color: var(--blue); font-weight: 700; margin-top: 12px; user-select: none; }
+        details summary:hover { color: var(--navy); }
+        details > div { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+
+        /* ── Summary ── */
+        .summary {
+            background: var(--navy); color: #e8f0fc;
+            border-radius: 10px; padding: 22px 26px; margin-top: 40px;
+        }
+        .summary h2 { color: #c8dcf8; border-left-color: #6aaae8; }
+        .summary ul { margin-bottom: 0; }
+        .summary li { margin-bottom: 10px; color: #d8e8f8; }
+        .summary strong { color: #a8d0f8; }
+
+        /* ── Two-col layout ── */
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+        .col-box { border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; background: #fafbff; }
+        .col-box h3 { font-size: 0.98em; margin-top: 0; text-align: center; }
+
+        /* ── 模擬器 ── */
+        .calc-box {
+            background: var(--card); border: 1.5px solid var(--border);
+            border-radius: 10px; padding: 22px 26px; margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(30,60,110,0.06);
+        }
+        .calc-box h3 { margin-top: 0; color: var(--navy); }
+        .calc-box button { padding: 8px 22px; background: var(--blue); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.95em; margin-right: 8px; }
+        .calc-box button:hover { background: var(--navy); }
+        .calc-box button.secondary { background: #7a8aa0; }
+        .sim-result {
+            margin-top: 14px;
+            background: #f0f6ff; border-left: 4px solid var(--blue-light);
+            padding: 12px 16px; border-radius: 0 6px 6px 0;
+            font-family: monospace; font-size: 0.95em; white-space: pre-line;
+        }
+
+        @media (max-width: 640px) {
+            .two-col { grid-template-columns: 1fr; }
+            .flow-diagram { grid-template-columns: 1fr; gap: 10px; }
+            .flow-arrow .arr { transform: rotate(90deg); }
+            body { padding: 20px 14px 60px; }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Chapter 1　何謂統計學？ (What is Statistics?)</h1>
+
+<p class="chapter-intro">
+統計學是一種「從資料中萃取資訊」的科學方法。本章是整個統計學課程的地圖：我們將認識統計學的兩大分支——敘述統計與推論統計，學會母體、樣本、參數、統計量這四個貫穿全書的核心詞彙，並初步理解「用樣本推論母體」的邏輯與其可信程度的衡量方式。
+</p>
+
+<div class="learning-goals">
+<h3>🎯 Learning Objectives</h3>
+<ul>
+    <li>能說明統計學的定義，理解「資料 → 統計方法 → 資訊」的轉換過程。</li>
+    <li>能區分<strong>敘述統計</strong>與<strong>推論統計</strong>，並判斷實際情境屬於何者。</li>
+    <li>能正確定義並辨識<strong>母體、樣本、參數、統計量</strong>四個核心概念。</li>
+    <li>理解統計推論的必要性，以及<strong>信賴水準</strong>與<strong>顯著水準</strong>的初步意涵。</li>
+    <li>認識統計學在商業與經濟各領域的應用場景。</li>
+</ul>
+</div>
+
+<div class="toc">
+<h3>📋 本章內容</h3>
+<ol>
+    <li><a href="#s11">§1.1　統計學：從資料到資訊</a>
+        <ol style="margin-top:4px;">
+            <li><a href="#s11-1">統計學的定義</a></li>
+            <li><a href="#s11-2">敘述統計 (Descriptive Statistics)</a></li>
+            <li><a href="#s11-3">推論統計 (Inferential Statistics)</a></li>
+        </ol>
+    </li>
+    <li><a href="#s12">§1.2　重要的統計觀念</a>
+        <ol style="margin-top:4px;">
+            <li><a href="#s12-1">母體與參數、樣本與統計量</a></li>
+            <li><a href="#s12-2">統計推論的邏輯</a></li>
+            <li><a href="#s12-3">信賴水準與顯著水準</a></li>
+        </ol>
+    </li>
+    <li><a href="#s13">§1.3　統計學在商業上的應用</a></li>
+    <li><a href="#sim">🔢 互動模擬：體驗「用樣本猜母體」</a></li>
+    <li><a href="#quiz">🧠 Quick Quiz</a></li>
+    <li><a href="#exercises">📚 綜合練習</a></li>
+    <li><a href="#summary">📌 Chapter Summary</a></li>
+</ol>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 1.1
+══════════════════════════════════════════ -->
+<h2 id="s11">§1.1　統計學：從資料到資訊 (From Data to Information)</h2>
+
+<h3 id="s11-1">一、統計學的定義</h3>
+
+<div class="formula-card">
+<h3>📐 統計學是什麼？</h3>
+<div class="math-block" style="font-size:1.1em;">
+$$\text{資料 (Data)} \;\xrightarrow{\;\text{統計方法 (Statistics)}\;}\; \text{資訊 (Information)}$$
+</div>
+<p><strong>統計學 (Statistics)</strong> 是一種從資料中取得資訊、產生新的認知與理解的科學方法。</p>
+<ul>
+    <li><strong>資料 (Data)</strong>：未經整理的原始事實與數字。例如：全班 60 位同學各自的期中考分數。</li>
+    <li><strong>資訊 (Information)</strong>：經過整理、彙整與分析後，具有意義、能協助決策的知識。例如：「全班平均 72 分、及格率 85%、分數呈現右偏分布」。</li>
+</ul>
+<p class="note">一長串未整理的數字本身幾乎沒有用處；統計學的價值就在於把「一堆數字」變成「可以做決策的依據」。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 1.1　選課前的情報蒐集</h3>
+<div class="scenario">
+<strong>情境：</strong>小林是剛入學的大一新生，正在猶豫要不要選修某位教授的「統計學」。他聽學長姐說這門課「很硬」，心裡有些不安。此時教授公布了去年修課學生的期末總成績清單（共 120 筆分數）。
+</div>
+<p><strong>問題：</strong>這 120 筆原始分數對小林而言是「資料」還是「資訊」？他能如何利用統計方法幫助自己做決策？</p>
+<p><strong>解析：</strong></p>
+<ul>
+    <li>120 筆未整理的分數是<strong>資料</strong>——直接盯著清單看，很難得到有用的結論。</li>
+    <li>若將分數整理成：平均數 74 分、中位數 76 分、不及格比例 8%、分數直方圖⋯⋯這些彙整後的結果就是<strong>資訊</strong>。</li>
+    <li>小林便可根據「平均成績不低、當人比例不高」的資訊，判斷這門課的實際風險，做出選課決策。</li>
+</ul>
+<div class="note">✅ 這個「整理原始分數、產生有用資訊」的過程，正是下一段要介紹的<strong>敘述統計</strong>。</div>
+</div>
+
+<h3 id="s11-2">二、敘述統計 (Descriptive Statistics)</h3>
+<p><strong>敘述統計</strong>是指將資料<strong>組織、彙整並呈現</strong>成方便閱讀與理解之形式的統計方法。它回答的問題是：「<em>手上這批資料長什麼樣子？</em>」敘述統計有兩大類技術：</p>
+
+<div class="two-col">
+    <div class="col-box">
+        <h3>圖表技術 (Graphical Techniques)</h3>
+        <p style="font-size:0.93em;">用圖形呈現資料的全貌與型態，例如<strong>直方圖、長條圖、圓餅圖、折線圖、散佈圖</strong>。</p>
+        <p style="font-size:0.88em; color:var(--muted);">→ 第 2、3 章將完整介紹。</p>
+    </div>
+    <div class="col-box">
+        <h3>數值技術 (Numerical Techniques)</h3>
+        <p style="font-size:0.93em;">用少數幾個數字彙整資料的特徵，例如<strong>平均數、中位數、標準差、百分位數</strong>。</p>
+        <p style="font-size:0.88em; color:var(--muted);">→ 第 4 章將完整介紹。</p>
+    </div>
+</div>
+
+<div class="highlight">
+<strong>💡 關鍵限制：</strong>敘述統計只描述「<em>手上這批資料</em>」本身。如果我們想根據這批資料，對「更大的群體」下結論——例如用 400 位受訪學生的平均，去推測全校 32,000 位學生的平均——那就超出敘述統計的範圍，必須使用<strong>推論統計</strong>。
+</div>
+
+<h3 id="s11-3">三、推論統計 (Inferential Statistics)</h3>
+<p><strong>推論統計</strong>是一系列<strong>根據樣本資料，對母體特性做出結論或推論</strong>的統計方法。它回答的問題是：「<em>從這一小批資料，我能對整個群體說什麼？</em>」</p>
+
+<div class="example-block">
+<h3>📝 本章案例　「山嵐咖啡」的校園設櫃決策</h3>
+<div class="scenario">
+<strong>情境：</strong>連鎖品牌「山嵐咖啡」正在評估是否進駐一所擁有 <strong>32,000 名學生</strong>的大學，取得校內唯一咖啡設櫃的三年合約。校方開出的條件是：山嵐咖啡每年須支付權利金 <strong>$1,500,000</strong>，並將營收的 <strong>10%</strong> 回饋校方。每杯咖啡平均售價 $75、原物料與人工成本約 $45。管理部門估算後發現：<strong>只要全校學生平均每人每週購買 0.9 杯以上</strong>，這份合約就有利可圖。
+</div>
+<p><strong>問題來了：</strong>山嵐咖啡要如何知道「全校學生平均每人每週喝幾杯咖啡」？</p>
+<ul>
+    <li><strong>方法一：普查（訪問全部 32,000 人）</strong>——最準確，但成本極高、曠日廢時，實務上幾乎不可行。</li>
+    <li><strong>方法二：抽樣調查</strong>——隨機抽出 <strong>400 位</strong>學生，請他們記錄未來一週購買咖啡的杯數，再<strong>用這 400 人的樣本平均，去推論全校 32,000 人的母體平均</strong>。</li>
+</ul>
+<p>假設調查結果出爐：400 位學生的樣本平均為每週 <strong>1.05 杯</strong>。山嵐咖啡可以直接下結論說「全校平均就是 1.05 杯，簽約！」嗎？</p>
+<div class="note">✅ 不行——樣本平均 1.05 杯只是母體平均的<strong>估計值</strong>。換一批 400 人來調查，數字就會不同。推論統計的價值，就在於它不只給出估計值，還能告訴我們這個估計<strong>有多可信</strong>（例如：「有 95% 的信心，全校平均落在 0.95 到 1.15 杯之間」），讓決策者在「知道不確定性有多大」的情況下做決策。這正是第 10 章〈估計〉要處理的問題。</div>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 1.2　學生會會長選舉的出口民調</h3>
+<div class="scenario">
+<strong>情境：</strong>某大學學生會會長選舉，由候選人 A 與候選人 B 角逐，全校共有 <strong>18,500 名</strong>具投票資格的學生。校園媒體「新聞社」想在開票前搶先預測誰會當選，於是在各投票所出口隨機訪問了 <strong>520 位</strong>剛投完票的學生，其中 296 位（56.9%）表示投給候選人 A。
+</div>
+<p><strong>問題：</strong>新聞社能否根據這 520 人的調查結果，推論候選人 A 將勝選？</p>
+<p><strong>解析：</strong>這是典型的推論統計問題：</p>
+<ul>
+    <li>新聞社<strong>真正想知道</strong>的是：全體實際投票學生中，投給 A 的比例是否超過 50%。</li>
+    <li>但它<strong>手上只有</strong>：520 位受訪者中投給 A 的比例（56.9%）。</li>
+    <li>統計方法可以評估：「如果真實比例其實只有 50%，抽 520 人卻抽到 56.9% 的機會有多低？」若這個機會非常低，就有充分證據推論 A 會勝選。</li>
+</ul>
+<div class="note">✅ 由於只訪問了一部分投票者，預測有出錯的可能。統計學的做法不是假裝沒有風險，而是<strong>把出錯的機率量化並控制在可接受的水準</strong>（例如 5% 以下）——這是推論統計最重要的精神。</div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 1.2
+══════════════════════════════════════════ -->
+<h2 id="s12">§1.2　重要的統計觀念 (Key Statistical Concepts)</h2>
+
+<h3 id="s12-1">一、母體與參數、樣本與統計量</h3>
+
+<div class="formula-card">
+<h3>📐 四個核心定義</h3>
+<ul>
+    <li><strong>母體 (Population)</strong>：研究者<strong>感興趣的所有</strong>研究對象所形成的完整群體。母體通常非常大，甚至可視為無限大。</li>
+    <li><strong>參數 (Parameter)</strong>：描述<strong>母體</strong>特性的量數。例如母體平均數 $\mu$、母體比例 $p$、母體標準差 $\sigma$。</li>
+    <li><strong>樣本 (Sample)</strong>：從母體中抽出的<strong>一部分</strong>研究對象。</li>
+    <li><strong>統計量 (Statistic)</strong>：描述<strong>樣本</strong>特性的量數。例如樣本平均數 $\bar{X}$、樣本比例 $\hat{p}$、樣本標準差 $s$。</li>
+</ul>
+<p class="note">口訣：<strong>母體配參數（Population → Parameter），樣本配統計量（Sample → Statistic）</strong>——恰好都是 P 對 P、S 對 S。</p>
+</div>
+
+<div class="flow-diagram">
+    <div class="flow-node">
+        <h4>母體 Population</h4>
+        <p>全體研究對象<br>（通常太大，無法全查）</p>
+        <span class="tag param">參數 Parameter：$\mu$、$p$、$\sigma$</span>
+    </div>
+    <div class="flow-arrow">
+        <span class="arr">⟶</span>抽樣<br>Sampling
+    </div>
+    <div class="flow-node">
+        <h4>樣本 Sample</h4>
+        <p>母體的子集合<br>（實際蒐集到的資料）</p>
+        <span class="tag stat">統計量 Statistic：$\bar{X}$、$\hat{p}$、$s$</span>
+    </div>
+</div>
+<div class="flow-diagram" style="margin-top:-10px;">
+    <div style="text-align:center; grid-column: 1 / 4;">
+        <span style="display:inline-block; background:#eef4fb; border:1.5px solid var(--blue-light); border-radius:20px; padding:6px 22px; font-size:0.92em; color:var(--navy);">
+        ⟵ <strong>統計推論 Statistical Inference</strong>：用統計量回頭推估參數
+        </span>
+    </div>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 1.3　辨識四個核心概念</h3>
+<div class="scenario">
+<strong>情境：</strong>延續本章案例——山嵐咖啡抽出 400 位學生調查每週咖啡購買量，得到樣本平均 1.05 杯；它真正想知道的是全校 32,000 名學生的平均購買量。
+</div>
+<table>
+    <thead>
+        <tr><th>概念</th><th>本案例中對應的內容</th><th>已知或未知？</th></tr>
+    </thead>
+    <tbody>
+        <tr><td><strong>母體</strong></td><td>全校 32,000 名學生（每人每週的咖啡購買量）</td><td>存在，但無法全部觀察</td></tr>
+        <tr><td><strong>參數</strong></td><td>全校學生每週平均購買量 $\mu$</td><td><strong>未知</strong>（想知道的目標）</td></tr>
+        <tr><td><strong>樣本</strong></td><td>被抽中的 400 位學生（的購買量紀錄）</td><td>已蒐集</td></tr>
+        <tr><td><strong>統計量</strong></td><td>樣本平均 $\bar{X} = 1.05$ 杯</td><td><strong>已知</strong>（算得出來）</td></tr>
+    </tbody>
+</table>
+<div class="note">✅ 統計推論的本質：<strong>參數是未知的目標，統計量是已知的線索</strong>。我們永遠是「用算得出來的 $\bar{X}$，去推論看不到的 $\mu$」。</div>
+</div>
+
+<h3 id="s12-2">二、統計推論的邏輯</h3>
+<p><strong>統計推論 (Statistical Inference)</strong> 是根據樣本資料，對母體進行<strong>估計、預測或決策</strong>的過程。</p>
+<p>為什麼不直接調查母體就好？</p>
+<ul>
+    <li><strong>成本</strong>：訪問 32,000 人的成本是訪問 400 人的 80 倍，但獲得的資訊價值遠不到 80 倍。</li>
+    <li><strong>時間</strong>：普查耗時數月，市場機會稍縱即逝（山嵐咖啡只有兩週時間回覆校方）。</li>
+    <li><strong>可行性</strong>：有些母體根本無法普查——例如檢驗燈泡壽命必須把燈泡用到燒壞（破壞性檢驗），若普查就沒有產品可賣了。</li>
+</ul>
+
+<div class="highlight">
+<strong>⚠️ 天下沒有白吃的午餐：</strong>抽樣省下了成本與時間，代價是<strong>結論不保證正確</strong>——樣本只是母體的一小部分，據此做出的推論有一定機率出錯。因此，任何負責任的統計推論都必須<strong>附上可信程度的衡量</strong>。
+</div>
+
+<h3 id="s12-3">三、信賴水準與顯著水準</h3>
+<p>統計學用兩個指標來衡量推論的可信程度：</p>
+
+<div class="two-col">
+    <div class="col-box">
+        <h3>信賴水準 (Confidence Level)</h3>
+        <p style="font-size:0.93em;">當推論的目的是<strong>估計</strong>時使用。信賴水準是指「這個估計程序<strong>正確的</strong>比例」。</p>
+        <p style="font-size:0.9em; color:var(--muted);">例：以 95% 信賴水準估計全校學生平均咖啡購買量——代表若重複執行此估計程序 100 次，約有 95 次所得的區間會涵蓋真實的 $\mu$。</p>
+    </div>
+    <div class="col-box">
+        <h3>顯著水準 (Significance Level)</h3>
+        <p style="font-size:0.93em;">當推論的目的是<strong>下結論（做決策）</strong>時使用。顯著水準是指「這個結論<strong>錯誤的</strong>機率上限」。</p>
+        <p style="font-size:0.9em; color:var(--muted);">例：新聞社以 5% 顯著水準推論「候選人 A 將勝選」——代表這種推論方式出錯（A 其實沒過半卻被判定勝選）的機率被控制在 5%。</p>
+    </div>
+</div>
+
+<div class="highlight">
+<strong>💡 記憶方式：</strong>信賴水準衡量「對的機率」（越高越好，常用 90%、95%、99%）；顯著水準衡量「錯的機率」（越低越嚴格，常用 10%、5%、1%）。兩者是一體兩面，在第 10 章與第 11 章會正式定義。
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 1.3
+══════════════════════════════════════════ -->
+<h2 id="s13">§1.3　統計學在商業上的應用 (Statistical Applications in Business)</h2>
+
+<p>統計分析在商業與經濟的各個領域都扮演關鍵角色。以下是本課程後續章節會反覆出現的應用場景：</p>
+
+<table>
+    <thead>
+        <tr><th>領域</th><th>典型問題</th><th>使用的統計方法（章節）</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>行銷 Marketing</strong></td>
+            <td style="text-align:left;">新包裝上市後，顧客滿意度是否提升？兩種廣告文案哪個轉換率較高？</td>
+            <td>估計（ch10）、假設檢定（ch11–13）</td>
+        </tr>
+        <tr>
+            <td><strong>財務 Finance</strong></td>
+            <td style="text-align:left;">某支股票的報酬率波動有多大？兩檔基金的風險是否有顯著差異？</td>
+            <td>數值敘述法（ch4）、機率分配（ch7–8）</td>
+        </tr>
+        <tr>
+            <td><strong>作業管理 Operations</strong></td>
+            <td style="text-align:left;">生產線的不良率是否在控制範圍內？零件尺寸的變異是否過大？</td>
+            <td>抽樣分配（ch9）、假設檢定（ch12）</td>
+        </tr>
+        <tr>
+            <td><strong>人力資源 HR</strong></td>
+            <td style="text-align:left;">不同部門的員工滿意度是否有差異？教育訓練是否確實提升績效？</td>
+            <td>比較兩母體（ch13）、變異數分析（ch14）</td>
+        </tr>
+        <tr>
+            <td><strong>會計 Accounting</strong></td>
+            <td style="text-align:left;">查帳時如何抽驗傳票以估計錯誤金額總數？</td>
+            <td>抽樣方法（ch5）、估計（ch10）</td>
+        </tr>
+        <tr>
+            <td><strong>經濟 Economics</strong></td>
+            <td style="text-align:left;">失業率、通貨膨脹率如何估計？房價與所得的關係有多強？</td>
+            <td>抽樣（ch5）、迴歸分析（ch16）</td>
+        </tr>
+    </tbody>
+</table>
+
+<p>換句話說：本課程不是在學「一堆公式」，而是在學一套<strong>各行各業共通的決策語言</strong>。</p>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     互動模擬
+══════════════════════════════════════════ -->
+<h2 id="sim">🔢 互動模擬：體驗「用樣本猜母體」</h2>
+
+<div class="calc-box">
+<h3>☕ 山嵐咖啡抽樣模擬器</h3>
+<p style="font-size:0.95em;">下方藏著一個「全校 32,000 名學生每週咖啡購買量」的母體，其真實平均數 $\mu$ <strong>對你保密</strong>。請按「抽出一個樣本」，模擬隨機抽出 400 位學生並計算樣本平均 $\bar{X}$。多抽幾次，觀察每次的 $\bar{X}$ 是否相同，再揭曉真相。</p>
+<canvas id="simCanvas" width="820" height="200" style="max-width:100%; border:1px solid #ddd; border-radius:6px; background:#fff; display:block; margin:12px auto;"></canvas>
+<button onclick="drawSample()">🎲 抽出一個樣本（n = 400）</button>
+<button onclick="revealTruth()" class="secondary">🔍 揭曉母體真相</button>
+<button onclick="resetSim()" class="secondary">↻ 重設</button>
+<div class="sim-result" id="simResult">尚未抽樣。每按一次「抽出一個樣本」，就模擬一次完整的抽樣調查。</div>
+</div>
+
+<div class="highlight">
+<strong>💡 你應該觀察到：</strong>每次抽樣得到的 $\bar{X}$ 都不太一樣（這稱為<strong>抽樣變異</strong>），但都在真實 $\mu$ 附近擺盪。「$\bar{X}$ 究竟會怎麼擺盪、範圍多大」正是第 9 章〈抽樣分配〉的主題，也是所有統計推論的理論基礎。
+</div>
+
+<hr>
+
+<!-- ══ Quiz ══ -->
+<div class="quiz-box" id="quiz">
+<h3>🧠 Quick Quiz</h3>
+
+<div class="quiz-q">
+    <p>Q1. 「整理某公司全體 250 位員工的年資資料，繪製直方圖並計算平均年資」屬於下列何者？</p>
+    <label><input type="radio" name="q1" value="a"> A. 推論統計，因為有計算平均數</label>
+    <label><input type="radio" name="q1" value="b"> B. 敘述統計，因為只是彙整與呈現手上的資料</label>
+    <label><input type="radio" name="q1" value="c"> C. 統計推論，因為 250 人是樣本</label>
+    <label><input type="radio" name="q1" value="d"> D. 以上皆非</label>
+    <button onclick="checkQ('q1','b','✅ 正確！整理、彙整、呈現手上這批資料（不對更大的群體下結論），就是敘述統計。注意：這裡的 250 位員工是「全體」，本身就是研究者感興趣的完整群體。')">Submit</button>
+    <div class="quiz-feedback" id="q1-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q2. 某手機遊戲公司想知道全體 200 萬名玩家的平均每日遊玩時數，隨機抽出 1,000 名玩家調查，得到平均 42 分鐘。此處的「參數」是？</p>
+    <label><input type="radio" name="q2" value="a"> A. 42 分鐘</label>
+    <label><input type="radio" name="q2" value="b"> B. 1,000 名玩家</label>
+    <label><input type="radio" name="q2" value="c"> C. 全體 200 萬名玩家的平均每日遊玩時數</label>
+    <label><input type="radio" name="q2" value="d"> D. 200 萬名玩家</label>
+    <button onclick="checkQ('q2','c','✅ 正確！參數是描述「母體」特性的量數——全體 200 萬名玩家的（未知）平均時數。42 分鐘是樣本統計量；200 萬名玩家是母體本身（不是量數）；1,000 名玩家是樣本。')">Submit</button>
+    <div class="quiz-feedback" id="q2-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q3. 下列關於「樣本」與「母體」的敘述，何者正確？</p>
+    <label><input type="radio" name="q3" value="a"> A. 樣本一定比母體更能代表真實情況</label>
+    <label><input type="radio" name="q3" value="b"> B. 母體是樣本的子集合</label>
+    <label><input type="radio" name="q3" value="c"> C. 統計量描述母體，參數描述樣本</label>
+    <label><input type="radio" name="q3" value="d"> D. 樣本是母體的子集合，統計量由樣本計算而得</label>
+    <button onclick="checkQ('q3','d','✅ 正確！樣本 ⊂ 母體；統計量（如 X̄）由樣本算出、描述樣本，參數（如 μ）描述母體。選項 A 恰好相反——若能觀察整個母體，當然比樣本更準。')">Submit</button>
+    <div class="quiz-feedback" id="q3-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q4. 民調公司以 95% 信賴水準公布估計結果。這個「95%」的正確解讀是？</p>
+    <label><input type="radio" name="q4" value="a"> A. 有 95% 的受訪者回答問卷</label>
+    <label><input type="radio" name="q4" value="b"> B. 此估計程序在重複執行下，約有 95% 的次數會得到正確的結果</label>
+    <label><input type="radio" name="q4" value="c"> C. 母體中有 95% 的人支持該結論</label>
+    <label><input type="radio" name="q4" value="d"> D. 樣本涵蓋了母體的 95%</label>
+    <button onclick="checkQ('q4','b','✅ 正確！信賴水準描述的是「估計程序」的長期正確率——同樣的抽樣估計程序重複做很多次，約 95% 的次數會涵蓋真實參數。它不是回覆率，也不是支持率，更不是樣本涵蓋率。')">Submit</button>
+    <div class="quiz-feedback" id="q4-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q5. 某速食連鎖店抽查 60 家分店的得來速服務時間，並「根據這 60 家的資料，推估全臺 480 家分店的平均服務時間」。這個行為屬於？</p>
+    <label><input type="radio" name="q5" value="a"> A. 敘述統計，因為只是計算平均數</label>
+    <label><input type="radio" name="q5" value="b"> B. 普查，因為 60 家已經夠多了</label>
+    <label><input type="radio" name="q5" value="c"> C. 推論統計，因為用樣本（60 家）對母體（480 家）下結論</label>
+    <label><input type="radio" name="q5" value="d"> D. 實驗設計</label>
+    <button onclick="checkQ('q5','c','✅ 正確！關鍵不在「有沒有算平均」，而在「結論的對象是誰」——只描述 60 家是敘述統計；把結論推廣到 480 家，就是推論統計。')">Submit</button>
+    <div class="quiz-feedback" id="q5-fb"></div>
+</div>
+
+</div>
+
+<hr>
+
+<!-- ══ Exercises ══ -->
+<h2 id="exercises">📚 綜合練習 (Comprehensive Practice)</h2>
+<p>以下習題涵蓋本章的概念理解與情境判讀，請先獨立作答，再展開解答確認。</p>
+
+<h3>I. 概念複習</h3>
+<ol class="exercises-list">
+
+    <li>
+        <p>請用你自己的話，定義下列統計詞彙，並各舉一個生活中的例子：<br>
+        a. 母體　b. 樣本　c. 參數　d. 統計量　e. 統計推論</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <ul>
+                <li><strong>a. 母體：</strong>研究者感興趣的所有對象形成的完整群體。例：全臺灣所有大學生。</li>
+                <li><strong>b. 樣本：</strong>從母體中抽出的一部分對象。例：隨機抽出的 1,200 位大學生。</li>
+                <li><strong>c. 參數：</strong>描述母體特性的量數。例：全臺大學生每月平均生活費 $\mu$（未知）。</li>
+                <li><strong>d. 統計量：</strong>描述樣本特性的量數。例：1,200 位受訪學生的平均生活費 $\bar{X} = 9{,}350$ 元（可計算）。</li>
+                <li><strong>e. 統計推論：</strong>根據樣本資料對母體做估計、預測或決策的過程。例：由 $\bar{X} = 9{,}350$ 元推估全臺大學生的 $\mu$ 大約落在 9,100 到 9,600 元之間。</li>
+            </ul>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <p>請簡要說明「敘述統計」與「推論統計」的差異，並各舉一例。</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <ul>
+                <li><strong>敘述統計：</strong>組織、彙整、呈現<strong>手上這批資料</strong>，不對外推廣結論。例：計算並公布本班期中考的平均分數與分數分布圖。</li>
+                <li><strong>推論統計：</strong>根據<strong>樣本</strong>資料對<strong>母體</strong>做出結論。例：由 500 位受訪者的支持率，推估全體選民的支持率。</li>
+                <li><strong>判斷關鍵：</strong>看結論的對象——結論只涉及手上的資料 → 敘述統計；結論推廣到更大的群體 → 推論統計。</li>
+            </ul>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <p>為什麼實務上通常採用「抽樣調查」而非「普查」？請至少舉出三個理由，並各附一個例子。</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <ol>
+                <li><strong>成本考量：</strong>普查全體消費者的費用可能遠超過研究預算。例：訪問全國 900 萬戶家庭 vs. 抽訪 2,000 戶。</li>
+                <li><strong>時間考量：</strong>商業決策往往有時限，普查緩不濟急。例：新品上市前兩週內必須完成市場調查。</li>
+                <li><strong>可行性／破壞性檢驗：</strong>某些檢驗會毀損產品，普查等於毀掉全部產品。例：測試安全氣囊是否正常引爆、罐頭食品的無菌檢驗。</li>
+            </ol>
+            <p class="note" style="background:#f0f6ff;border-left:3px solid #4a90d9;padding:8px 12px;border-radius:0 4px 4px 0;">代價是：抽樣的結論有機率出錯，因此必須附上信賴水準或顯著水準來量化可信程度。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <p>「信賴水準」與「顯著水準」分別用於哪一類統計推論？兩者衡量的對象有何不同？</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <ul>
+                <li><strong>信賴水準</strong>：用於<strong>估計</strong>問題，衡量「估計程序正確的比例」，常用 90%、95%、99%。</li>
+                <li><strong>顯著水準</strong>：用於<strong>下結論（決策）</strong>的問題，衡量「結論錯誤的機率上限」，常用 10%、5%、1%。</li>
+                <li>兩者一體兩面：一個量化「對的機率」，一個量化「錯的機率」。它們提醒我們：所有從樣本得到的推論都<strong>不保證正確</strong>，只能控制錯誤風險。</li>
+            </ul>
+        </div>
+        </details>
+    </li>
+
+</ol>
+
+<h3>II. 情境判讀</h3>
+<ol class="exercises-list">
+
+    <li>
+        <strong>1.1　電動機車電池的品質檢驗</strong>
+        <p>某電動機車廠每月生產 80,000 顆電池。品管部門每月隨機抽出 200 顆進行完整充放電測試（測試後電池即報廢），本月測得樣本平均循環壽命為 1,240 次。品管經理據此推估本月全部 80,000 顆電池的平均循環壽命。</p>
+        <ul>
+            <li>a. 指出本情境中的母體、樣本、參數、統計量。</li>
+            <li>b. 為什麼此情境「不可能」採用普查？</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong></p>
+            <ul>
+                <li>母體：本月生產的全部 80,000 顆電池（的循環壽命）。</li>
+                <li>樣本：被抽出測試的 200 顆電池。</li>
+                <li>參數：80,000 顆電池的平均循環壽命 $\mu$（未知）。</li>
+                <li>統計量：200 顆樣本的平均循環壽命 $\bar{X} = 1{,}240$ 次（已知）。</li>
+            </ul>
+            <p><strong>b.</strong> 這是<strong>破壞性檢驗</strong>——完整測試會使電池報廢。若對全部 80,000 顆普查，等於毀掉整個月的產量，因此只能抽樣。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>1.2　線上課程平臺的續訂率</strong>
+        <p>某線上課程平臺共有 45,000 名付費會員。行銷部門想知道全體會員下一年度的續訂意願，寄出問卷給隨機抽選的 1,500 名會員，其中 1,020 人（68%）表示願意續訂。</p>
+        <ul>
+            <li>a. 此處的母體與樣本各是什麼？</li>
+            <li>b. 「68%」是參數還是統計量？請說明。</li>
+            <li>c. 行銷部門若宣稱「全體會員恰有 68% 願意續訂」，這樣的說法有什麼問題？</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> 母體：全體 45,000 名付費會員；樣本：被抽中且回覆的 1,500 名會員。</p>
+            <p><strong>b.</strong> <strong>統計量</strong>——68% 是由「樣本」計算出來的比例（$\hat{p} = 0.68$）。全體 45,000 名會員的真實續訂比例 $p$ 才是參數，而它是未知的。</p>
+            <p><strong>c.</strong> 樣本比例只是母體比例的<strong>估計值</strong>，存在抽樣誤差；換一批 1,500 人，數字就會不同。正確的做法是附上不確定性的量化，例如「在 95% 信賴水準下，全體會員續訂率約在 65.6% 至 70.4% 之間」。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>1.3　敘述統計還是推論統計？</strong>
+        <p>判斷下列各情境屬於「敘述統計」或「推論統計」，並簡述理由：</p>
+        <ul>
+            <li>a. 教務處計算並公布本學期全校各系的實際平均班級人數。</li>
+            <li>b. 某 YouTuber 從 50 萬訂閱者中抽出 800 人做問卷，推估全體訂閱者的平均年齡。</li>
+            <li>c. 主計總處根據約 2 萬戶的家庭收支調查，估計全國家庭的平均年所得。</li>
+            <li>d. 球隊經理整理隊上 25 名球員本季的打擊率並排序。</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <ul>
+                <li><strong>a. 敘述統計</strong>——使用全校完整資料（即母體本身），只做彙整與呈現。</li>
+                <li><strong>b. 推論統計</strong>——用 800 人的樣本對 50 萬訂閱者（母體）下結論。</li>
+                <li><strong>c. 推論統計</strong>——用 2 萬戶樣本推估全國所有家庭（母體）的平均所得。</li>
+                <li><strong>d. 敘述統計</strong>——25 名球員就是研究者關心的全部對象，僅整理排序，未推廣到其他群體。</li>
+            </ul>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>1.4　手搖飲新品的試賣決策</strong>
+        <p>某手搖飲品牌開發了一款新飲品，想知道全臺 350 家門市引進後的銷售潛力。行銷部門先在隨機挑選的 20 家門市試賣一個月，這 20 家的平均日銷量為 83 杯。財務部門估算，只要全臺門市平均日銷量能達到 75 杯，全面上市就有利可圖。</p>
+        <ul>
+            <li>a. 指出母體、樣本、參數、統計量。</li>
+            <li>b. 「$\bar{X} = 83 > 75$，所以一定能獲利」——這個推論犯了什麼錯誤？</li>
+            <li>c. 統計推論可以如何協助這個決策？</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> 母體：全臺 350 家門市（引進新品後的日銷量）；樣本：試賣的 20 家門市；參數：全臺門市平均日銷量 $\mu$（未知）；統計量：試賣門市平均日銷量 $\bar{X} = 83$ 杯。</p>
+            <p><strong>b.</strong> 它把<strong>統計量當成了參數</strong>。83 杯只是估計值，含有抽樣誤差；真實的 $\mu$ 有可能低於 75 杯，只是恰好抽到銷量較好的 20 家。</p>
+            <p><strong>c.</strong> 統計推論能量化不確定性——例如以假設檢定評估「有多強的證據支持 $\mu > 75$」，或以信賴區間估計 $\mu$ 的可能範圍，讓管理層在已知風險下做決策（第 10、11 章的主題）。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>1.5　綜合思考：設計你自己的調查</strong>
+        <p>假設你想知道「本校學生每週平均運動時數」。請規劃一個簡單的抽樣調查，並指出：</p>
+        <ul>
+            <li>a. 你的母體與想估計的參數。</li>
+            <li>b. 你會如何抽樣？樣本是誰？統計量是什麼？</li>
+            <li>c. 你的調查結論為什麼「不保證正確」？可以怎麼表達這種不確定性？</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>參考答案（合理即可）：</strong></p>
+            <ul>
+                <li><strong>a.</strong> 母體：全校所有在學學生；參數：全校學生每週平均運動時數 $\mu$。</li>
+                <li><strong>b.</strong> 從全校學生名冊隨機抽出 300 人（樣本），請其記錄一週運動時數；統計量為這 300 人的平均時數 $\bar{X}$。</li>
+                <li><strong>c.</strong> 因為只觀察了母體的一小部分，$\bar{X}$ 會隨抽到的人不同而變動（抽樣誤差）。可以用信賴區間表達不確定性，例如「95% 信賴水準下，全校平均每週運動時數約在 3.2 至 4.0 小時之間」。</li>
+            </ul>
+            <p class="note" style="background:#fff3cd;border-left:3px solid #d4a017;padding:8px 12px;border-radius:0 4px 4px 0;">⚠️ 進階思考：如果你只在健身房門口發問卷，會發生什麼事？——這是「抽樣偏差」，第 5 章將詳細討論。</p>
+        </div>
+        </details>
+    </li>
+
+</ol>
+
+<hr>
+
+<!-- ══ Summary ══ -->
+<div class="summary" id="summary">
+<h2>📌 Chapter Summary</h2>
+<ul>
+    <li><strong>統計學</strong>是從資料中萃取資訊的方法：資料（原始數字）經過統計方法的處理，成為能支持決策的資訊。</li>
+    <li><strong>敘述統計</strong>：組織、彙整、呈現手上的資料（圖表技術 → ch2–3；數值技術 → ch4）。<strong>推論統計</strong>：根據樣本資料對母體做估計、預測或決策。</li>
+    <li><strong>四個核心概念</strong>：母體（全體對象）配<strong>參數</strong>（$\mu$、$p$、$\sigma$，未知的目標）；樣本（母體的子集合）配<strong>統計量</strong>（$\bar{X}$、$\hat{p}$、$s$，已知的線索）。</li>
+    <li><strong>統計推論的邏輯</strong>：因成本、時間與可行性限制，實務上以抽樣取代普查；代價是結論不保證正確，必須量化其可信程度。</li>
+    <li><strong>信賴水準</strong>衡量估計程序「正確的比例」（常用 95%）；<strong>顯著水準</strong>衡量結論「錯誤的機率上限」（常用 5%）。</li>
+    <li>統計學是商業各領域（行銷、財務、作業、人資、會計、經濟）共通的<strong>決策語言</strong>。</li>
+</ul>
+</div>
+
+<!-- ══ Scripts ══ -->
+<script>
+// ── Quiz ──
+function checkQ(qid, correct, msg) {
+    const selected = document.querySelector(`input[name="${qid}"]:checked`);
+    const fb = document.getElementById(`${qid}-fb`);
+    if (!selected) { fb.style.display='block'; fb.className='quiz-feedback wrong'; fb.textContent='請先選擇一個答案。'; return; }
+    fb.style.display = 'block';
+    if (selected.value === correct) {
+        fb.className = 'quiz-feedback correct';
+        fb.innerHTML = msg;
+    } else {
+        fb.className = 'quiz-feedback wrong';
+        fb.innerHTML = '❌ 不正確，請再想想。提示：' + msg;
+    }
+}
+
+// ── 抽樣模擬器 ──
+(function(){
+    // 母體：全校每週咖啡購買量（混合分配，真實平均約 1.02 杯，對使用者保密）
+    const TRUE_MU = 1.02;
+    let sampleMeans = [];
+    let revealed = false;
+
+    // 產生一筆「學生每週購買杯數」：40% 不喝(0)，其餘為右偏分布
+    function drawOne(){
+        if (Math.random() < 0.38) return 0;
+        // 指數+截斷，製造右偏
+        let v = -Math.log(1 - Math.random()) * 1.35 + 0.3;
+        return Math.min(Math.round(v * 2) / 2, 10);  // 以 0.5 杯為單位，上限 10
+    }
+
+    window.drawSample = function(){
+        const n = 400;
+        let sum = 0;
+        for (let i = 0; i < n; i++) sum += drawOne();
+        const mean = sum / n;
+        sampleMeans.push(mean);
+        render();
+        const last = sampleMeans.map((m,i)=>`第 ${i+1} 次抽樣：X̄ = ${m.toFixed(3)} 杯`).slice(-6).join('\n');
+        document.getElementById('simResult').textContent =
+            last + (sampleMeans.length > 6 ? `\n（僅顯示最近 6 次，共抽了 ${sampleMeans.length} 次）` : '') +
+            (revealed ? `\n\n母體真實平均 μ = ${TRUE_MU} 杯` : '\n\n母體真實平均 μ = ？？？（按「揭曉」查看）');
+    };
+
+    window.revealTruth = function(){
+        revealed = true;
+        render();
+        const msg = sampleMeans.length === 0
+            ? `母體真實平均 μ = ${TRUE_MU} 杯。\n先抽幾個樣本，再看看 X̄ 離 μ 有多近！`
+            : `母體真實平均 μ = ${TRUE_MU} 杯。\n你抽出的 ${sampleMeans.length} 個樣本平均分別落在 μ 附近——這就是「用樣本推論母體」可行的原因，\n而 X̄ 擺盪的規律，就是第 9 章抽樣分配要探討的主題。`;
+        document.getElementById('simResult').textContent = msg;
+    };
+
+    window.resetSim = function(){
+        sampleMeans = [];
+        revealed = false;
+        render();
+        document.getElementById('simResult').textContent = '已重設。按「抽出一個樣本」開始。';
+    };
+
+    function render(){
+        const cv = document.getElementById('simCanvas');
+        if (!cv) return;
+        const ctx = cv.getContext('2d');
+        const W = cv.width, H = cv.height;
+        const pL = 50, pR = 30, axisY = H - 42;
+        const xMin = 0.85, xMax = 1.20;
+        function px(x){ return pL + (x - xMin) / (xMax - xMin) * (W - pL - pR); }
+
+        ctx.clearRect(0, 0, W, H);
+        ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, W, H);
+
+        // 軸
+        ctx.strokeStyle = '#999'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(pL, axisY); ctx.lineTo(W - pR, axisY); ctx.stroke();
+        ctx.fillStyle = '#555'; ctx.font = '12px sans-serif'; ctx.textAlign = 'center';
+        for (let x = 0.85; x <= 1.201; x += 0.05) {
+            const xx = Math.round(x * 100) / 100;
+            ctx.beginPath(); ctx.strokeStyle = '#ccc';
+            ctx.moveTo(px(xx), axisY); ctx.lineTo(px(xx), axisY + 5); ctx.stroke();
+            ctx.fillText(xx.toFixed(2), px(xx), axisY + 20);
+        }
+        ctx.fillText('樣本平均數 X̄（杯 / 週）', (pL + W - pR) / 2, axisY + 36);
+
+        // 樣本平均點（堆疊）
+        const counts = {};
+        sampleMeans.forEach(m => {
+            const key = Math.round(m * 200) / 200; // 0.005 精度分桶
+            counts[key] = (counts[key] || 0) + 1;
+            const stack = counts[key];
+            const x = px(Math.max(xMin, Math.min(xMax, key)));
+            const y = axisY - 10 - (stack - 1) * 13;
+            ctx.beginPath();
+            ctx.fillStyle = 'rgba(46,108,184,0.75)';
+            ctx.arc(x, y, 5.5, 0, 2 * Math.PI); ctx.fill();
+            ctx.beginPath(); ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.2;
+            ctx.arc(x, y, 5.5, 0, 2 * Math.PI); ctx.stroke();
+        });
+
+        // 真實 mu
+        if (revealed) {
+            const x = px(TRUE_MU);
+            ctx.beginPath(); ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
+            ctx.moveTo(x, 16); ctx.lineTo(x, axisY); ctx.stroke(); ctx.setLineDash([]);
+            ctx.fillStyle = '#c0392b'; ctx.font = 'bold 13px sans-serif';
+            ctx.fillText('真實 μ = ' + TRUE_MU, x, 12);
+        }
+
+        // 圖例
+        ctx.textAlign = 'left'; ctx.font = '12px sans-serif';
+        ctx.beginPath(); ctx.fillStyle = 'rgba(46,108,184,0.75)';
+        ctx.arc(pL + 8, 14, 5.5, 0, 2 * Math.PI); ctx.fill();
+        ctx.fillStyle = '#333';
+        ctx.fillText('每個點 = 一次抽樣調查（n = 400）得到的 X̄', pL + 20, 18);
+    }
+    document.addEventListener('DOMContentLoaded', render);
+})();
+</script>
+
+</body>
+</html>
