@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 10　估計的介紹</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false }
+                ],
+                throwOnError: false,
+                strict: "ignore"
+            });
+        });
+    </script>
+    <style>
+        :root {
+            --navy: #1a3a6b;
+            --blue: #2e6cb8;
+            --blue-light: #4a90d9;
+            --accent: #c0392b;
+            --gold: #d4a017;
+            --green: #27ae60;
+            --bg: #f7f9fc;
+            --card: #ffffff;
+            --border: #d0dcea;
+            --text: #2c3e50;
+            --muted: #5a6a7a;
+            --math-bg: #eaf3ff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Noto Sans TC', 'Source Serif 4', Georgia, serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 36px 24px 80px;
+        }
+        h1 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 2rem; font-weight: 700;
+            color: var(--navy);
+            border-bottom: 4px solid var(--blue-light);
+            padding-bottom: 12px; margin-bottom: 20px;
+        }
+        h2 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 1.45rem; font-weight: 600;
+            color: var(--navy);
+            margin-top: 48px; margin-bottom: 14px;
+            border-left: 5px solid var(--blue-light);
+            padding-left: 12px;
+        }
+        h3 { font-size: 1.1rem; font-weight: 700; color: var(--blue); margin-top: 28px; margin-bottom: 10px; }
+        p { margin-bottom: 12px; }
+        ul, ol { margin-left: 24px; margin-bottom: 12px; }
+        li { margin-bottom: 6px; }
+        hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+        .chapter-intro {
+            font-size: 1.05rem; color: var(--muted);
+            border-left: 3px solid var(--blue-light);
+            padding: 10px 16px; background: #eef4fb;
+            border-radius: 0 6px 6px 0; margin-bottom: 24px;
+        }
+        .learning-goals {
+            background: #fffbea; border: 1.5px solid var(--gold);
+            border-radius: 8px; padding: 18px 22px; margin: 24px 0;
+        }
+        .learning-goals h3 { color: #8a6000; margin-top: 0; }
+        .toc {
+            background: var(--card); border: 1.5px solid var(--border);
+            border-radius: 8px; padding: 18px 24px; margin: 24px 0;
+            box-shadow: 0 2px 8px rgba(30,60,110,0.06);
+        }
+        .toc h3 { color: var(--navy); margin-top: 0; }
+        .toc a { color: var(--blue); text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+        .highlight {
+            background: #fffbe6; border-left: 4px solid var(--gold);
+            padding: 12px 16px; margin: 16px 0; border-radius: 0 6px 6px 0;
+        }
+        .math-block {
+            background: var(--math-bg); border-radius: 6px;
+            padding: 14px 18px; margin: 14px 0;
+            overflow-x: auto; font-size: 1.05em; text-align: center;
+        }
+        .formula-card {
+            background: var(--card); border: 2px solid var(--blue-light);
+            border-radius: 10px; padding: 18px 22px; margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(74,144,217,0.1);
+        }
+        .formula-card h3 { margin-top: 0; color: var(--navy); }
+        .formula-card .note {
+            font-size: 0.9em; color: var(--muted);
+            background: #f0f6ff; border-left: 3px solid #aac4ee;
+            padding: 8px 12px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .example-block {
+            background: #f0faff; border-left: 5px solid var(--blue-light);
+            border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 20px 0;
+        }
+        .example-block h3 { color: var(--navy); margin-top: 0; }
+        .example-block .note {
+            font-size: 0.92em; color: #333;
+            background: #e6f7e6; border-left: 3px solid var(--green);
+            padding: 10px 14px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .example-block .warn {
+            font-size: 0.92em; background: #fff3cd;
+            border-left: 3px solid var(--gold);
+            padding: 10px 14px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .scenario {
+            background: #f8f4ff; border: 1.5px dashed #9b7fd4;
+            border-radius: 8px; padding: 12px 18px; margin-bottom: 14px;
+            font-size: 0.97em; color: #3d2070;
+        }
+        .scenario strong { color: #6a3fbf; }
+        table {
+            width: 100%; border-collapse: collapse;
+            margin: 14px 0; font-size: 0.95em;
+        }
+        th, td { border: 1px solid #c8d8ec; padding: 8px 12px; text-align: center; }
+        th { background: #ddeeff; color: var(--navy); font-weight: 600; }
+        tr:nth-child(even) { background: #f5f8ff; }
+
+        canvas.chart {
+            display: block; margin: 14px auto;
+            border: 1px solid #ddd; border-radius: 6px; background: #fff;
+            max-width: 100%;
+        }
+
+        .quiz-box {
+            background: #f0f6ff; border: 1.5px solid var(--blue-light);
+            border-radius: 10px; padding: 22px 26px; margin: 28px 0;
+        }
+        .quiz-box h3 { color: var(--navy); margin-top: 0; }
+        .quiz-q { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin-bottom: 16px; }
+        .quiz-q p { font-weight: 600; margin-bottom: 10px; }
+        .quiz-q label { display: block; margin: 6px 0; cursor: pointer; font-size: 0.97em; font-weight: 400; }
+        .quiz-q button { margin-top: 10px; padding: 7px 18px; background: var(--blue); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9em; }
+        .quiz-q button:hover { background: var(--navy); }
+        .quiz-feedback { display: none; margin-top: 10px; padding: 10px 14px; border-radius: 6px; font-size: 0.95em; }
+        .quiz-feedback.correct { background: #d4edda; border-left: 4px solid var(--green); color: #155724; }
+        .quiz-feedback.wrong { background: #f8d7da; border-left: 4px solid var(--accent); color: #721c24; }
+
+        .exercises-list { counter-reset: ex-counter; list-style: none; padding: 0; margin-left: 0; }
+        .exercises-list > li {
+            counter-increment: ex-counter;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 8px; padding: 16px 20px; margin-bottom: 16px;
+        }
+        .exercises-list > li strong { color: var(--navy); }
+        details summary { cursor: pointer; color: var(--blue); font-weight: 700; margin-top: 12px; user-select: none; }
+        details summary:hover { color: var(--navy); }
+        details > div { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+
+        .summary {
+            background: var(--navy); color: #e8f0fc;
+            border-radius: 10px; padding: 22px 26px; margin-top: 40px;
+        }
+        .summary h2 { color: #c8dcf8; border-left-color: #6aaae8; }
+        .summary ul { margin-bottom: 0; }
+        .summary li { margin-bottom: 10px; color: #d8e8f8; }
+        .summary strong { color: #a8d0f8; }
+
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+        .col-box { border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; background: #fafbff; }
+        .col-box h3 { font-size: 0.98em; margin-top: 0; text-align: center; }
+
+        .calc-box {
+            background: var(--card); border: 1.5px solid var(--border);
+            border-radius: 10px; padding: 22px 26px; margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(30,60,110,0.06);
+        }
+        .calc-box h3 { margin-top: 0; color: var(--navy); }
+        .inputs-row { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 12px; }
+        .inputs-row label { display: flex; flex-direction: column; font-size: 0.88em; color: var(--muted); min-width: 110px; flex: 1; }
+        .inputs-row input, .inputs-row select {
+            margin-top: 4px; padding: 6px 8px;
+            border: 1px solid var(--border); border-radius: 5px; font-size: 1em;
+        }
+        .calc-box button { padding: 8px 22px; background: var(--blue); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.95em; margin-right: 6px; }
+        .calc-box button:hover { background: var(--navy); }
+        .calc-result {
+            display: none; margin-top: 14px;
+            background: #f0f6ff; border-left: 4px solid var(--blue-light);
+            padding: 12px 16px; border-radius: 0 6px 6px 0;
+            font-family: monospace; font-size: 0.93em; white-space: pre-line;
+        }
+        @media (max-width: 640px) {
+            .two-col { grid-template-columns: 1fr; }
+            body { padding: 20px 14px 60px; }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Chapter 10　估計的介紹 (Introduction to Estimation)</h1>
+
+<p class="chapter-intro">
+方向正式反轉：前九章都是「已知參數、推樣本」，從本章起我們「拿著樣本、回推參數」。第 1 章星夜客運案例曾說：「有 95% 的信心，長期平均載客落在 20.4 到 24.8 人之間」——當時只能請你先相信；讀完本章，你將親手把這個區間算出來，並且準確理解「95% 的信心」四個字的真正意義。
+</p>
+
+<div class="learning-goals">
+<h3>🎯 Learning Objectives</h3>
+<ul>
+    <li>區分<strong>點估計</strong>與<strong>區間估計</strong>，理解好估計量的三個特質（不偏性、一致性、相對有效性）。</li>
+    <li>能在 $\sigma$ 已知下建立母體平均數的<strong>信賴區間</strong> $\bar{x} \pm z_{\alpha/2}\,\sigma/\sqrt{n}$。</li>
+    <li>能給出信賴區間的<strong>正確詮釋</strong>，並辨識常見的錯誤說法。</li>
+    <li>理解信賴水準、$\sigma$、$n$ 如何影響<strong>區間寬度</strong>。</li>
+    <li>能以 $n = (z_{\alpha/2}\,\sigma / B)^2$ 決定達到指定精確度所需的<strong>樣本大小</strong>。</li>
+</ul>
+</div>
+
+<div class="toc">
+<h3>📋 本章內容</h3>
+<ol>
+    <li><a href="#s101">§10.1　估計的概念</a></li>
+    <li><a href="#s102">§10.2　母體標準差已知下估計母體平均數</a>
+        <ol style="margin-top:4px;">
+            <li><a href="#s102-1">信賴區間估計量</a></li>
+            <li><a href="#s102-2">信賴區間的正確詮釋</a></li>
+            <li><a href="#s102-3">影響區間寬度的因素</a></li>
+        </ol>
+    </li>
+    <li><a href="#s103">§10.3　選擇樣本大小</a></li>
+    <li><a href="#tool">🔢 互動工具：信賴區間模擬器與計算機</a></li>
+    <li><a href="#quiz">🧠 Quick Quiz</a></li>
+    <li><a href="#exercises">📚 綜合練習</a></li>
+    <li><a href="#summary">📌 Chapter Summary</a></li>
+</ol>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 10.1
+══════════════════════════════════════════ -->
+<h2 id="s101">§10.1　估計的概念 (Concepts of Estimation)</h2>
+
+<div class="two-col">
+    <div class="col-box">
+        <h3>點估計 (Point Estimator)</h3>
+        <p style="font-size:0.93em;">用<strong>單一數值</strong>估計參數。例：以 $\bar{x} = 22.6$ 估計 $\mu$。</p>
+        <p style="font-size:0.9em; color:var(--muted); margin-bottom:0;">缺點：① 幾乎肯定不會恰好等於參數（連續變數 $P(\bar{X} = \mu) = 0$）；② 沒有附上「離多遠」的資訊；③ 無法反映樣本大小帶來的信心差異。</p>
+    </div>
+    <div class="col-box">
+        <h3>區間估計 (Interval Estimator)</h3>
+        <p style="font-size:0.93em;">用<strong>一段範圍</strong>估計參數，並附上信賴水準。例：「95% 信賴水準下，$\mu$ 介於 20.4 與 24.8 之間」。</p>
+        <p style="font-size:0.9em; color:var(--muted); margin-bottom:0;">同時回答了「估計值是多少」與「這個估計有多精確」兩個問題。</p>
+    </div>
+</div>
+
+<h3>好估計量的三個特質</h3>
+
+<div class="formula-card">
+<h3>📐 評價估計量的標準</h3>
+<ul>
+    <li><strong>不偏性 (Unbiasedness)</strong>：估計量的期望值等於被估參數。$E(\bar{X}) = \mu$（ch9），所以 $\bar{X}$ 是 $\mu$ 的不偏估計量——長期而言不會系統性地高估或低估。（這也是 ch4 樣本變異數除以 $n-1$ 的原因：讓 $s^2$ 成為 $\sigma^2$ 的不偏估計量。）</li>
+    <li><strong>一致性 (Consistency)</strong>：$n$ 越大，估計量與參數的差距越小。$\bar{X}$ 的標準誤 $\sigma/\sqrt{n} \to 0$，故具一致性——資料越多越準。</li>
+    <li><strong>相對有效性 (Relative Efficiency)</strong>：兩個不偏估計量中，變異數較小者較有效。常態母體下 $\bar{X}$ 比樣本中位數有效——同樣的資料，$\bar{X}$ 擺盪較小。</li>
+</ul>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 10.2
+══════════════════════════════════════════ -->
+<h2 id="s102">§10.2　母體標準差已知下估計母體平均數</h2>
+
+<h3 id="s102-1">一、信賴區間估計量</h3>
+
+<p>由 ch9：$Z = \dfrac{\bar{X} - \mu}{\sigma/\sqrt{n}}$ 服從標準常態，因此有 $1-\alpha$ 的機率 $\bar{X}$ 落在 $\mu \pm z_{\alpha/2}\,\sigma/\sqrt{n}$ 內——把不等式對 $\mu$ 反解，就得到：</p>
+
+<div class="formula-card">
+<h3>📐 $\mu$ 的 $1-\alpha$ 信賴區間（$\sigma$ 已知）</h3>
+<div class="math-block">$$\bar{x} \;\pm\; z_{\alpha/2}\,\frac{\sigma}{\sqrt{n}} \qquad \text{即} \quad \left[\ \bar{x} - z_{\alpha/2}\frac{\sigma}{\sqrt{n}},\ \ \bar{x} + z_{\alpha/2}\frac{\sigma}{\sqrt{n}}\ \right]$$</div>
+<table>
+    <thead><tr><th>信賴水準 $1-\alpha$</th><th>$\alpha$</th><th>$\alpha/2$</th><th>$z_{\alpha/2}$</th></tr></thead>
+    <tbody>
+        <tr><td>90%</td><td>0.10</td><td>0.05</td><td>1.645</td></tr>
+        <tr><td>95%</td><td>0.05</td><td>0.025</td><td><strong>1.96</strong></td></tr>
+        <tr><td>98%</td><td>0.02</td><td>0.01</td><td>2.33</td></tr>
+        <tr><td>99%</td><td>0.01</td><td>0.005</td><td>2.575</td></tr>
+    </tbody>
+</table>
+<p class="note">± 後面的整塊 $z_{\alpha/2}\,\sigma/\sqrt{n}$ 稱為<strong>誤差界限 (Bound on the Error, $B$)</strong>——新聞裡的「±3 個百分點」就是它。下限記作 LCL、上限記作 UCL。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 主範例 10.1　兌現第 1 章的承諾：星夜客運的信賴區間</h3>
+<div class="scenario">
+<strong>情境：</strong>第 1 章的星夜客運試營運：隨機抽 $n = 45$ 個深夜班次，樣本平均載客 $\bar{x} = 22.6$ 人；由長期同業資料，載客數的母體標準差 $\sigma = 7.5$ 人。建立長期平均載客數 $\mu$ 的 95% 信賴區間，並回答營運長最關心的問題：<strong>平均載客有沒有達到 20 人的損益門檻？</strong>
+</div>
+<p><strong>Step 1　所需數值</strong>：$\bar{x} = 22.6$、$\sigma = 7.5$、$n = 45$、$z_{0.025} = 1.96$。</p>
+<p><strong>Step 2　標準誤與誤差界限</strong>：</p>
+<div class="math-block">$$\frac{\sigma}{\sqrt{n}} = \frac{7.5}{\sqrt{45}} = 1.118 \qquad B = 1.96 \times 1.118 = 2.19$$</div>
+<p><strong>Step 3　信賴區間</strong>：</p>
+<div class="math-block">$$22.6 \pm 2.19 \quad\Longrightarrow\quad \text{LCL} = 20.41,\ \ \text{UCL} = 24.79$$</div>
+<div class="note">✅ 這正是第 1 章寫的「20.4 到 24.8 人」！決策判讀：整個區間都在損益門檻 20 人<strong>之上</strong>——即使按最保守的下限估計，常態化深夜班次仍有利可圖。若區間跨越 20（例如 [19.2, 26.0]），結論就會是「證據不足，建議延長試營運」。</div>
+</div>
+
+<h3 id="s102-2">二、信賴區間的正確詮釋</h3>
+
+<div class="two-col">
+    <div class="col-box" style="border-color:#e8b4b4; background:#fdf5f5;">
+        <h3 style="color:#a03030;">❌ 錯誤詮釋</h3>
+        <p style="font-size:0.93em; margin-bottom:0;">「$\mu$ 有 95% 的機率落在 20.41 與 24.79 之間。」<br><br>
+        <span style="color:var(--muted); font-size:0.9em;">$\mu$ 是固定常數不是隨機變數——它要嘛在區間內、要嘛不在，沒有機率可言。隨機的是<strong>區間</strong>（因為 $\bar{X}$ 隨樣本而變），不是 $\mu$。</span></p>
+    </div>
+    <div class="col-box" style="border-color:#b4d8b4; background:#f5fdf5;">
+        <h3 style="color:#1e7a45;">✅ 正確詮釋</h3>
+        <p style="font-size:0.93em; margin-bottom:0;">「若重複抽樣並每次建立 95% 信賴區間，長期而言約有 95% 的區間會涵蓋 $\mu$。我們有 95% 的信心，這次算出的 [20.41, 24.79] 是成功涵蓋 $\mu$ 的那些區間之一。」<br><br>
+        <span style="color:var(--muted); font-size:0.9em;">「信心」指的是<strong>方法的長期成功率</strong>，不是這一個區間的機率。</span></p>
+    </div>
+</div>
+
+<p>這個區分很抽象？文末的<strong>信賴區間模擬器</strong>會一次畫出 100 個區間讓你數：大約 95 個抓住 $\mu$、5 個落空——親眼看過一次就再也不會忘。</p>
+
+<h3 id="s102-3">三、影響區間寬度的因素</h3>
+
+<table>
+    <thead><tr><th>因素</th><th>變動</th><th>區間寬度</th><th>直覺</th></tr></thead>
+    <tbody>
+        <tr><td>信賴水準 $1-\alpha$</td><td>↑（95% → 99%）</td><td><strong>變寬</strong></td><td style="text-align:left;">想要更有把握，就得把網撒得更大</td></tr>
+        <tr><td>母體標準差 $\sigma$</td><td>↑</td><td><strong>變寬</strong></td><td style="text-align:left;">母體越亂，估得越不準</td></tr>
+        <tr><td>樣本大小 $n$</td><td>↑</td><td><strong>變窄</strong></td><td style="text-align:left;">資訊越多越精確——但以 $\sqrt{n}$ 的速度，$n$ 翻 4 倍寬度才減半</td></tr>
+    </tbody>
+</table>
+
+<div class="highlight">
+<strong>💡 精確與把握的取捨：</strong>同一份資料下，「更有把握（99%）」和「更精確（窄區間）」不可兼得——唯一能同時改善兩者的方法是<strong>增加樣本</strong>。「我 100% 確信 $\mu$ 介於 $-\infty$ 與 $\infty$ 之間」把握十足卻毫無用處，就是這個取捨的極端寫照。
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 10.3
+══════════════════════════════════════════ -->
+<h2 id="s103">§10.3　選擇樣本大小 (Selecting the Sample Size)</h2>
+
+<div class="formula-card">
+<h3>📐 由目標精確度反推 $n$</h3>
+<p>先決定「可容忍的最大估計誤差」$B$（希望 $\bar{x}$ 與 $\mu$ 的差距不超過多少），由 $B = z_{\alpha/2}\,\sigma/\sqrt{n}$ 反解：</p>
+<div class="math-block">$$n = \left(\frac{z_{\alpha/2}\;\sigma}{B}\right)^{2}$$</div>
+<p class="note"><strong>計算結果必須無條件進位</strong>（取比它大的最小整數）——四捨五入「捨」的話，精確度會低於要求。$\sigma$ 未知時，實務上以歷史資料、試調（pilot study）或「全距 ÷ 4」粗估。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 主範例 10.2　想更準？算算要付出多少（延續主範例 10.1）</h3>
+<div class="scenario">
+<strong>情境：</strong>營運長覺得 ±2.19 人的誤差偏大，希望在 95% 信賴水準下把估計誤差控制在 <strong>±1 人</strong>以內。試營運需要觀察多少個班次？
+</div>
+<div class="math-block">$$n = \left(\frac{1.96 \times 7.5}{1}\right)^2 = (14.7)^2 = 216.09 \;\Longrightarrow\; n = 217 \text{ 班}$$</div>
+<div class="note">✅ 誤差要從 2.19 縮到 1（約縮小一半多一點），樣本得從 45 班暴增到 217 班（將近 5 倍）——$\sqrt{n}$ 法則的代價再度現身。營運長此時就能做成本效益判斷：「多開 172 班試營運的成本」值不值得換「±1 人的精確度」。</div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     互動工具
+══════════════════════════════════════════ -->
+<h2 id="tool">🔢 互動工具：信賴區間模擬器與計算機</h2>
+
+<div class="calc-box">
+<h3>🔬 模擬器：「95% 的信心」到底是什麼意思？</h3>
+<p style="font-size:0.93em; color:var(--muted);">設定真實母體 $\mu = 50$、$\sigma = 10$（上帝視角，實務上看不到）。按一下按鈕：模擬抽 100 次樣本、每次建一個信賴區間——<strong>綠色</strong>＝成功涵蓋 $\mu$，<strong>紅色</strong>＝落空。數數看紅色有幾條？</p>
+<div class="inputs-row">
+    <label>信賴水準
+        <select id="simLevel">
+            <option value="0.90">90%</option>
+            <option value="0.95" selected>95%</option>
+            <option value="0.99">99%</option>
+        </select>
+    </label>
+    <label>每個樣本的 n
+        <select id="simN">
+            <option value="10">10</option>
+            <option value="25" selected>25</option>
+            <option value="100">100</option>
+        </select>
+    </label>
+</div>
+<button onclick="ciSim()">🎲 抽 100 個樣本、建 100 個區間</button>
+<canvas id="ciSimChart" class="chart" width="680" height="330"></canvas>
+<div class="calc-result" id="ciSimResult" style="display:block;">請按按鈕開始模擬。</div>
+</div>
+
+<div class="calc-box">
+<h3>🧮 信賴區間計算機（σ 已知）</h3>
+<div class="inputs-row">
+    <label>樣本平均數 x̄<input type="number" id="ciXbar" value="22.6" step="any"></label>
+    <label>母體標準差 σ<input type="number" id="ciSigma" value="7.5" step="any" min="0.0001"></label>
+    <label>樣本大小 n<input type="number" id="ciN" value="45" min="1"></label>
+    <label>信賴水準
+        <select id="ciLevel">
+            <option value="0.90">90%</option>
+            <option value="0.95" selected>95%</option>
+            <option value="0.98">98%</option>
+            <option value="0.99">99%</option>
+        </select>
+    </label>
+</div>
+<button onclick="ciCalc()">計算信賴區間</button>
+<div class="calc-result" id="ciCalcResult"></div>
+</div>
+
+<hr>
+
+<!-- ══ Quiz ══ -->
+<div class="quiz-box" id="quiz">
+<h3>🧠 Quick Quiz</h3>
+
+<div class="quiz-q">
+    <p>Q1. 點估計量最主要的缺點是？</p>
+    <label><input type="radio" name="q1" value="a"> A. 計算太複雜</label>
+    <label><input type="radio" name="q1" value="b"> B. 沒有附上「估計有多精確」的資訊</label>
+    <label><input type="radio" name="q1" value="c"> C. 一定會高估參數</label>
+    <label><input type="radio" name="q1" value="d"> D. 只能用於常態母體</label>
+    <button onclick="checkQ('q1','b','✅ 正確！單一數值幾乎肯定不等於參數，且完全沒說「離多遠」。區間估計同時給出估計值與精確度（±B），並附上信賴水準。')">Submit</button>
+    <div class="quiz-feedback" id="q1-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q2. 某研究報告 95% 信賴區間為 [36, 44]。下列詮釋何者正確？</p>
+    <label><input type="radio" name="q2" value="a"> A. μ 有 95% 的機率落在 36 與 44 之間</label>
+    <label><input type="radio" name="q2" value="b"> B. 95% 的觀測值落在 36 與 44 之間</label>
+    <label><input type="radio" name="q2" value="c"> C. 重複抽樣建區間，長期約 95% 的區間會涵蓋 μ；我們有 95% 的信心這次的區間是其中之一</label>
+    <label><input type="radio" name="q2" value="d"> D. 樣本平均數有 95% 的機率等於 μ</label>
+    <button onclick="checkQ('q2','c','✅ 正確！μ 是固定常數、區間才是隨機的——「95%」描述的是這套方法的長期成功率。選 A 是最常見的誤解；選 B 混淆了「觀測值的分布」與「參數的區間估計」。')">Submit</button>
+    <div class="quiz-feedback" id="q2-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q3. 其他條件不變，把信賴水準從 95% 提高到 99%，信賴區間會？</p>
+    <label><input type="radio" name="q3" value="a"> A. 變窄——更有信心表示更精準</label>
+    <label><input type="radio" name="q3" value="b"> B. 變寬——想更有把握就得撒更大的網</label>
+    <label><input type="radio" name="q3" value="c"> C. 不變——寬度只跟 n 有關</label>
+    <label><input type="radio" name="q3" value="d"> D. 無法判斷</label>
+    <button onclick="checkQ('q3','b','✅ 正確！z 值從 1.96 升到 2.575，區間變寬。「把握」與「精確」互相拉扯，想兩者兼得只能加大樣本。')">Submit</button>
+    <div class="quiz-feedback" id="q3-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q4. $\bar{x} = 120$、$\sigma = 24$、$n = 36$。90% 信賴區間為？</p>
+    <label><input type="radio" name="q4" value="a"> A. 120 ± 1.645 × 4 = [113.42, 126.58]</label>
+    <label><input type="radio" name="q4" value="b"> B. 120 ± 1.96 × 4 = [112.16, 127.84]</label>
+    <label><input type="radio" name="q4" value="c"> C. 120 ± 1.645 × 24 = [80.52, 159.48]</label>
+    <label><input type="radio" name="q4" value="d"> D. 120 ± 1.645 × 0.67 = [118.9, 121.1]</label>
+    <button onclick="checkQ('q4','a','✅ 正確！標準誤 = 24/√36 = 4；90% 用 z₀.₀₅ = 1.645 → 120 ± 6.58。選 B 用錯 z 值；選 C 忘了除以 √n（最常見的錯誤）。')">Submit</button>
+    <div class="quiz-feedback" id="q4-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q5. 樣本大小公式算出 $n = 108.16$，實際應抽多少？</p>
+    <label><input type="radio" name="q5" value="a"> A. 108（四捨五入）</label>
+    <label><input type="radio" name="q5" value="b"> B. 109（無條件進位）</label>
+    <label><input type="radio" name="q5" value="c"> C. 110（湊整數比較好看）</label>
+    <label><input type="radio" name="q5" value="d"> D. 108.16 不是整數，公式一定算錯了</label>
+    <button onclick="checkQ('q5','b','✅ 正確！無條件進位到 109——抽 108 個的誤差界限會略大於要求的 B，精確度不達標。「寧多勿少」是樣本數計算的鐵律。')">Submit</button>
+    <div class="quiz-feedback" id="q5-fb"></div>
+</div>
+
+</div>
+
+<hr>
+
+<!-- ══ Exercises ══ -->
+<h2 id="exercises">📚 綜合練習 (Comprehensive Practice)</h2>
+<p>以下習題涵蓋信賴區間的建立、詮釋與樣本大小決定，請先獨立作答，再展開解答確認。</p>
+
+<h3>I. 概念複習</h3>
+<ol class="exercises-list">
+
+    <li>
+        <p>「不偏性」與「一致性」各是什麼意思？請以 $\bar{X}$ 為例說明。</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>不偏性</strong>：估計量的期望值等於參數——$E(\bar{X}) = \mu$，重複抽樣下 $\bar{X}$ 平均而言正中目標，不系統性偏高或偏低。</p>
+            <p><strong>一致性</strong>：$n$ 越大估得越準——$\bar{X}$ 的標準誤 $\sigma/\sqrt{n}$ 隨 $n$ 增大而趨近 0，樣本夠大時 $\bar{X}$ 幾乎必然貼近 $\mu$。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <p>你的同學說：「95% 信賴區間 [8.2, 9.4] 表示母體平均數有 95% 的機率在 8.2 到 9.4 之間。」請指出錯誤並給出正確說法。</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>錯誤：把 $\mu$ 當成隨機變數。$\mu$ 是固定常數，它在或不在區間內是既定事實（只是我們不知道），沒有機率可言；隨機的是每次抽樣算出的<strong>區間</strong>。</p>
+            <p>正確：「用這套方法重複抽樣建區間，長期約 95% 的區間會涵蓋 $\mu$；我們有 95% 的信心，[8.2, 9.4] 屬於成功涵蓋的那一群。」</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <p>為什麼「提高信賴水準」與「縮窄區間」不可兼得？什麼手段可以同時改善兩者？</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>寬度 $= 2 \times z_{\alpha/2}\,\sigma/\sqrt{n}$。信賴水準提高 → $z_{\alpha/2}$ 變大 → 區間變寬；兩者被同一個 $z$ 綁在一起，方向相反。</p>
+            <p>唯一同時改善的手段：<strong>增加樣本 $n$</strong>（或降低 $\sigma$，例如改善量測方式），讓標準誤變小——付出成本換精確度。</p>
+        </div>
+        </details>
+    </li>
+
+</ol>
+
+<h3>II. 計算與應用</h3>
+<ol class="exercises-list">
+
+    <li>
+        <strong>10.1　超商的日銷售額</strong>
+        <p>某連鎖超商想估計旗下門市的平均日銷售額。已知 $\sigma = \$1{,}200$，隨機抽 $n = 36$ 個門市日，得 $\bar{x} = \$8{,}500$。</p>
+        <ul>
+            <li>a. 建立 $\mu$ 的 95% 信賴區間。</li>
+            <li>b. 改用 90% 與 99%，區間各是多少？比較三者寬度。</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>標準誤 $= 1200/\sqrt{36} = 200$。</p>
+            <p><strong>a.</strong> $8500 \pm 1.96(200) = 8500 \pm 392 = [8108,\ 8892]$</p>
+            <p><strong>b.</strong> 90%：$8500 \pm 1.645(200) = 8500 \pm 329 = [8171,\ 8829]$；99%：$8500 \pm 2.575(200) = 8500 \pm 515 = [7985,\ 9015]$。</p>
+            <p>寬度：90% < 95% < 99%（658 / 784 / 1030）——信心越高、網越大。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>10.2　樣本翻倍的效果</strong>
+        <p>承 10.1，若把樣本擴大為 $n = 144$（4 倍），假設仍得 $\bar{x} = 8500$，95% 信賴區間變成多少？寬度變化符合什麼規律？</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>標準誤 $= 1200/\sqrt{144} = 100$；區間 $= 8500 \pm 1.96(100) = 8500 \pm 196 = [8304,\ 8696]$。</p>
+            <p>寬度從 784 縮到 392——<strong>恰好減半</strong>。$n$ 放大 4 倍、$\sqrt{n}$ 放大 2 倍、誤差縮小一半：$\sqrt{n}$ 法則。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>10.3　健身房的停留時間調查</strong>
+        <p>健身房想估計會員平均單次停留時間，已知 $\sigma = 18$ 分鐘。希望在 95% 信賴水準下，估計誤差不超過 3 分鐘。需要抽多少位會員？</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <div class="math-block">$$n = \left(\frac{1.96 \times 18}{3}\right)^2 = (11.76)^2 = 138.3 \;\Longrightarrow\; n = 139 \text{ 人}$$</div>
+            <p>（無條件進位；抽 138 人的誤差界限會略超過 3 分鐘。）</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>10.4　從設計到報告：套房租金調查（呼應第 1 章）</strong>
+        <p>市府想正式估計全市套房的平均月租金。由歷年資料，租金標準差約 $\sigma = \$3{,}000$。</p>
+        <ul>
+            <li>a. 要求 95% 信賴水準、誤差不超過 $500，需要抽多少筆租賃契約？</li>
+            <li>b. 依 (a) 的樣本數抽樣後得 $\bar{x} = \$9{,}200$，建立 95% 信賴區間。</li>
+            <li>c. 房東協會宣稱全市平均租金「明顯低於 $9,000」。你的區間支持這個說法嗎？</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> $n = \left(\dfrac{1.96 \times 3000}{500}\right)^2 = (11.76)^2 = 138.3 \Rightarrow 139$ 筆。</p>
+            <p><strong>b.</strong> 標準誤 $= 3000/\sqrt{139} = 254.4$；$B = 1.96 \times 254.4 = 498.7$；區間 $= 9200 \pm 498.7 = [8701,\ 9699]$。</p>
+            <p><strong>c.</strong> 不支持。區間包含 9000 以上的大片範圍（上限近 9700），且下限 8701 也談不上「明顯低於」——以這份資料，「平均租金低於 $9,000」的說法證據不足。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>10.5　抓出計算錯誤</strong>
+        <p>學弟的作業：「$\bar{x} = 64$、$\sigma = 20$、$n = 25$、95% 信賴水準。信賴區間 $= 64 \pm 1.96 \times 20 = [24.8,\ 103.2]$。另外，若想讓誤差不超過 2，需要 $n = (1.96 \times 20/2)^2 = 384.16$，四捨五入取 384 人。」請找出兩個錯誤並修正。</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>錯誤一</strong>：忘了把 $\sigma$ 除以 $\sqrt{n}$。標準誤 $= 20/\sqrt{25} = 4$，正確區間 $= 64 \pm 1.96(4) = [56.16,\ 71.84]$。</p>
+            <p><strong>錯誤二</strong>：樣本數不可四捨五入，必須無條件進位：$n = 385$。</p>
+        </div>
+        </details>
+    </li>
+
+</ol>
+
+<hr>
+
+<!-- ══ Summary ══ -->
+<div class="summary" id="summary">
+<h2>📌 Chapter Summary</h2>
+<ul>
+    <li><strong>點估計</strong>給單一數值但不帶精確度資訊；<strong>區間估計</strong>同時回答「多少」與「多準」。好估計量：不偏（$E(\bar{X}) = \mu$）、一致（$n$ 大則準）、相對有效（變異數小者勝）。</li>
+    <li><strong>信賴區間（$\sigma$ 已知）</strong>：$\bar{x} \pm z_{\alpha/2}\,\sigma/\sqrt{n}$；常用 $z$：90%→1.645、95%→1.96、98%→2.33、99%→2.575。± 後的整塊是誤差界限 $B$。</li>
+    <li><strong>正確詮釋</strong>：「95%」是方法的長期成功率——重複建區間約 95% 會涵蓋 $\mu$；不是「$\mu$ 有 95% 機率在區間內」（$\mu$ 是常數，區間才是隨機的）。</li>
+    <li><strong>寬度</strong>：信賴水準↑或 $\sigma$↑ → 變寬；$n$↑ → 變窄（$\sqrt{n}$ 法則：$n$ 翻 4 倍寬度才減半）。把握與精確的兩難只有加大樣本能同時解。</li>
+    <li><strong>樣本大小</strong>：$n = (z_{\alpha/2}\,\sigma/B)^2$，結果<strong>無條件進位</strong>。</li>
+    <li>下一步（統計學（二）ch11）：把「區間是否涵蓋某個宣稱值」的判斷正式化——假設檢定。</li>
+</ul>
+</div>
+
+<!-- ══ Scripts ══ -->
+<script>
+// ── Quiz ──
+function checkQ(qid, correct, msg) {
+    const selected = document.querySelector(`input[name="${qid}"]:checked`);
+    const fb = document.getElementById(`${qid}-fb`);
+    if (!selected) { fb.style.display='block'; fb.className='quiz-feedback wrong'; fb.textContent='請先選擇一個答案。'; return; }
+    fb.style.display = 'block';
+    if (selected.value === correct) {
+        fb.className = 'quiz-feedback correct';
+        fb.innerHTML = msg;
+    } else {
+        fb.className = 'quiz-feedback wrong';
+        fb.innerHTML = '❌ 不正確，請再想想。提示：' + msg;
+    }
+}
+
+const ZMAP = { "0.90": 1.645, "0.95": 1.96, "0.98": 2.33, "0.99": 2.575 };
+
+// ── 信賴區間模擬器 ──
+let ciSeed = 777;
+function ciRnd() { ciSeed = (ciSeed * 16807) % 2147483647; return ciSeed / 2147483647; }
+function ciNormal() {
+    const u1 = Math.max(ciRnd(), 1e-12), u2 = ciRnd();
+    return Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+}
+function ciSim() {
+    const MU = 50, SIGMA = 10;
+    const level = document.getElementById('simLevel').value;
+    const n = parseInt(document.getElementById('simN').value);
+    const z = ZMAP[level];
+    const se = SIGMA / Math.sqrt(n);
+    const cv = document.getElementById('ciSimChart');
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    const pL = 40, pR = 20, pT = 30, pB = 34;
+    const pW = W - pL - pR, pH = H - pT - pB;
+    const xMin = MU - 5.4 * se - 2, xMax = MU + 5.4 * se + 2;
+    function px(x) { return pL + (x - xMin) / (xMax - xMin) * pW; }
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    // μ 垂直線
+    ctx.beginPath(); ctx.strokeStyle = '#1a3a6b'; ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
+    ctx.moveTo(px(MU), pT); ctx.lineTo(px(MU), pT + pH); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('真實 μ = 50', px(MU), pT - 6);
+    let miss = 0;
+    const rows = 100, rowH = pH / rows;
+    for (let i = 0; i < rows; i++) {
+        let s = 0;
+        for (let k = 0; k < n; k++) s += MU + SIGMA * ciNormal();
+        const xbar = s / n;
+        const lo = xbar - z * se, hi = xbar + z * se;
+        const captured = (lo <= MU && MU <= hi);
+        if (!captured) miss++;
+        const y = pT + i * rowH + rowH / 2;
+        ctx.beginPath();
+        ctx.strokeStyle = captured ? 'rgba(39,174,96,0.75)' : '#c0392b';
+        ctx.lineWidth = captured ? 1.4 : 2.4;
+        ctx.moveTo(px(lo), y); ctx.lineTo(px(hi), y); ctx.stroke();
+        ctx.beginPath();
+        ctx.fillStyle = captured ? 'rgba(39,174,96,0.9)' : '#c0392b';
+        ctx.arc(px(xbar), y, captured ? 1.6 : 2.4, 0, 7); ctx.fill();
+    }
+    // 軸
+    ctx.strokeStyle = '#999'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(pL, pT + pH); ctx.lineTo(W - pR, pT + pH); ctx.stroke();
+    ctx.fillStyle = '#555'; ctx.font = '10px sans-serif';
+    for (let x = Math.ceil(xMin / 5) * 5; x <= xMax; x += 5) {
+        ctx.fillText(x, px(x), pT + pH + 14);
+    }
+    const covered = 100 - miss;
+    document.getElementById('ciSimResult').textContent =
+'信賴水準 ' + (parseFloat(level) * 100) + '%、n = ' + n + '、標準誤 = ' + se.toFixed(2) + '\n' +
+'100 個區間中：成功涵蓋 μ 的（綠）= ' + covered + ' 個，落空的（紅）= ' + miss + ' 個\n' +
+'→ 這就是「' + (parseFloat(level) * 100) + '% 的信心」的真正意思：方法的長期成功率約 ' + (parseFloat(level) * 100) + '%。\n多按幾次，觀察紅色數量在期望值附近浮動；把 n 改大，區間變窄但成功率不變。';
+}
+
+// ── 信賴區間計算機 ──
+function ciCalc() {
+    const xbar = parseFloat(document.getElementById('ciXbar').value);
+    const sigma = parseFloat(document.getElementById('ciSigma').value);
+    const n = parseInt(document.getElementById('ciN').value);
+    const level = document.getElementById('ciLevel').value;
+    const out = document.getElementById('ciCalcResult');
+    if (isNaN(xbar) || isNaN(sigma) || sigma <= 0 || isNaN(n) || n < 1) {
+        out.style.display = 'block'; out.textContent = '請輸入有效的 x̄、σ（>0）、n（≥1）。'; return;
+    }
+    const z = ZMAP[level];
+    const se = sigma / Math.sqrt(n);
+    const B = z * se;
+    out.style.display = 'block';
+    out.textContent =
+'標準誤 σ/√n = ' + sigma + '/√' + n + ' = ' + se.toFixed(4) + '\n' +
+'誤差界限 B = ' + z + ' × ' + se.toFixed(4) + ' = ' + B.toFixed(4) + '\n' +
+(parseFloat(level) * 100) + '% 信賴區間 = ' + xbar + ' ± ' + B.toFixed(4) + '\n' +
+'LCL = ' + (xbar - B).toFixed(4) + '　　UCL = ' + (xbar + B).toFixed(4);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    ciSim();
+    ciCalc();
+});
+</script>
+
+</body>
+</html>
