@@ -323,6 +323,30 @@
 右尾 $P(Z > z) = 1 - P(Z < z)$；區間 $P(a < Z < b) = P(Z < b) - P(Z < a)$；對稱 $P(Z < -z) = P(Z > z)$。</p>
 </div>
 
+<h3>Z 轉換的幾何意義：平移＋伸縮</h3>
+<p>標準化公式 $z = (x - \mu)/\sigma$ 其實是<strong>兩個幾何動作</strong>的組合：</p>
+<ol>
+    <li><strong>平移 (Shift)</strong>：分子的「$-\,\mu$」把整個鐘形<strong>往左移 $\mu$ 單位</strong>，中心從 $\mu$ 移到 0——邊界跟著移動：$x \to x - \mu$。</li>
+    <li><strong>伸縮 (Scale)</strong>：分母的「$\div\,\sigma$」把橫軸<strong>壓縮（或拉伸）$\sigma$ 倍</strong>，胖瘦變成 1——邊界跟著縮放：$x - \mu \to (x-\mu)/\sigma$。</li>
+</ol>
+<p>整個過程中，<strong>著色區域的面積（機率）始終不變</strong>——這就是「任何常態分配的機率都能改查 Z 表」的原因。用下面的動畫親眼看一次：</p>
+
+<div class="calc-box">
+<h3>🎬 互動動畫：Z 轉換 ＝ 平移 ＋ 伸縮</h3>
+<p style="font-size:0.93em; color:var(--muted);">預設 $X \sim N(5,\ 2^2)$、求 $P(X > 6)$。按「▶ 播放」看兩步驟連續變形；也可逐步點按，或修改 μ、σ、邊界後重新播放。灰色虛線是目標——標準常態 $N(0,1)$。</p>
+<div class="inputs-row">
+    <label>平均數 μ<input type="number" id="ztMu" value="5" step="any"></label>
+    <label>標準差 σ<input type="number" id="ztSigma" value="2" step="any" min="0.2"></label>
+    <label>邊界 x（求 P(X &gt; x)）<input type="number" id="ztX" value="6" step="any"></label>
+</div>
+<button onclick="ztPlay()">▶ 播放完整動畫</button>
+<button onclick="ztGoto(0)" style="background:#7a8aa0;">原始分配</button>
+<button onclick="ztGoto(1)" style="background:#7a8aa0;">① 平移 −μ</button>
+<button onclick="ztGoto(2)" style="background:#7a8aa0;">② 伸縮 ÷σ</button>
+<canvas id="ztCanvas" class="chart" width="680" height="280"></canvas>
+<div class="calc-result" id="ztStatus" style="display:block;"></div>
+</div>
+
 <div class="example-block">
 <h3>📝 主範例 8.2　外送時間的三種機率</h3>
 <div class="scenario">
@@ -861,6 +885,146 @@ P(X > ${xin}) = 1 − P(Z < ${z.toFixed(2)}) = ${(1 - pLt).toFixed(4)}`;
         }
     }
 }
+
+// ── Z 轉換動畫（平移＋伸縮）──
+(function () {
+    let mu = 5, sigma = 2, xb = 6;
+    let phase = 0;          // 0 = 原始, 1 = 平移完成, 2 = 伸縮完成
+    let animTarget = 0, animId = null;
+
+    function curveAt(p) {
+        if (p <= 1) {
+            return { m: mu * (1 - p), s: sigma, b: xb - mu * p };
+        }
+        const k = 1 + (1 / sigma - 1) * (p - 1);
+        return { m: 0, s: sigma * k, b: (xb - mu) * k };
+    }
+
+    function ztDraw() {
+        const cv = document.getElementById('ztCanvas');
+        if (!cv) return;
+        const ctx = cv.getContext('2d');
+        const W = cv.width, H = cv.height;
+        const pL = 42, pR = 20, pT = 30, pB = 42;
+        const pW = W - pL - pR, pH = H - pT - pB;
+        const xMin = Math.min(-4.6, mu - 4 * sigma);
+        const xMax = Math.max(4.6, mu + 4 * sigma, xb + 1);
+        const sMin = Math.min(1, sigma);
+        const yMax = 1 / (sMin * Math.sqrt(2 * Math.PI)) * 1.1;
+        const axisY = pT + pH;
+        function px(x) { return pL + (x - xMin) / (xMax - xMin) * pW; }
+        function py(v) { return pT + pH - v / yMax * pH; }
+        function pdf(x, m, s) { return Math.exp(-0.5 * ((x - m) / s) ** 2) / (s * Math.sqrt(2 * Math.PI)); }
+
+        ctx.clearRect(0, 0, W, H);
+        ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+
+        ctx.beginPath(); ctx.strokeStyle = '#b8c4d4'; ctx.lineWidth = 1.4; ctx.setLineDash([5, 4]);
+        for (let i = 0; i <= 300; i++) {
+            const x = xMin + (xMax - xMin) * i / 300;
+            const v = pdf(x, 0, 1);
+            i === 0 ? ctx.moveTo(px(x), py(v)) : ctx.lineTo(px(x), py(v));
+        }
+        ctx.stroke(); ctx.setLineDash([]);
+
+        const c = curveAt(phase);
+        ctx.fillStyle = 'rgba(192,57,43,0.30)';
+        ctx.beginPath(); ctx.moveTo(px(c.b), axisY);
+        for (let i = 0; i <= 200; i++) {
+            const x = c.b + (xMax - c.b) * i / 200;
+            ctx.lineTo(px(x), py(pdf(x, c.m, c.s)));
+        }
+        ctx.lineTo(px(xMax), axisY); ctx.closePath(); ctx.fill();
+
+        ctx.beginPath(); ctx.strokeStyle = '#1a3a6b'; ctx.lineWidth = 2.2;
+        for (let i = 0; i <= 300; i++) {
+            const x = xMin + (xMax - xMin) * i / 300;
+            const v = pdf(x, c.m, c.s);
+            i === 0 ? ctx.moveTo(px(x), py(v)) : ctx.lineTo(px(x), py(v));
+        }
+        ctx.stroke();
+
+        ctx.beginPath(); ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 2; ctx.setLineDash([4, 3]);
+        ctx.moveTo(px(c.b), axisY); ctx.lineTo(px(c.b), pT + 6); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = '#c0392b'; ctx.font = 'bold 12.5px sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText('邊界 = ' + c.b.toFixed(2), px(c.b), pT);
+
+        ctx.strokeStyle = '#999'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(pL, axisY); ctx.lineTo(W - pR, axisY); ctx.stroke();
+        ctx.fillStyle = '#555'; ctx.font = '11px sans-serif';
+        const step = (xMax - xMin) > 20 ? 4 : 2;
+        for (let x = Math.ceil(xMin); x <= xMax; x += step) {
+            ctx.beginPath(); ctx.strokeStyle = '#bbb';
+            ctx.moveTo(px(x), axisY); ctx.lineTo(px(x), axisY + 4); ctx.stroke();
+            ctx.fillText(x, px(x), axisY + 16);
+        }
+        ctx.beginPath(); ctx.strokeStyle = 'rgba(120,140,170,0.5)'; ctx.setLineDash([2, 3]);
+        ctx.moveTo(px(0), axisY); ctx.lineTo(px(0), pT + 6); ctx.stroke(); ctx.setLineDash([]);
+
+        let stageTxt;
+        if (phase < 0.02) stageTxt = '原始分配 X ~ N(' + mu + ', ' + sigma + '²)';
+        else if (phase < 1) stageTxt = '① 平移中：全體減去 μ = ' + mu + ' ⋯';
+        else if (phase < 1.02) stageTxt = '① 平移完成 → N(0, ' + sigma + '²)';
+        else if (phase < 2) stageTxt = '② 伸縮中：全體除以 σ = ' + sigma + ' ⋯';
+        else stageTxt = '② 伸縮完成 → 標準常態 N(0, 1)　（與灰色虛線重合）';
+        ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 13px "Noto Sans TC", sans-serif'; ctx.textAlign = 'left';
+        ctx.fillText(stageTxt, pL, 18);
+    }
+
+    function ztStatusUpdate() {
+        const el = document.getElementById('ztStatus');
+        if (!el) return;
+        const z = (xb - mu) / sigma;
+        const pRight = 1 - normCDF(z);
+        el.textContent =
+'原始：X ~ N(' + mu + ', ' + sigma + '²)，求 P(X > ' + xb + ')\n' +
+'① 平移：全體 − μ　→　N(0, ' + sigma + '²)，邊界 ' + xb + ' − ' + mu + ' = ' + (xb - mu).toFixed(2) + '\n' +
+'② 伸縮：全體 ÷ σ　→　N(0, 1)，邊界 ' + (xb - mu).toFixed(2) + ' ÷ ' + sigma + ' = ' + z.toFixed(2) + '\n' +
+'∴ P(X > ' + xb + ') = P(Z > ' + z.toFixed(2) + ') = ' + pRight.toFixed(4) + '　（面積全程不變）';
+    }
+
+    function readInputs() {
+        const m = parseFloat(document.getElementById('ztMu').value);
+        const s = parseFloat(document.getElementById('ztSigma').value);
+        const x = parseFloat(document.getElementById('ztX').value);
+        if (!isNaN(m)) mu = m;
+        if (!isNaN(s) && s > 0.05) sigma = s;
+        if (!isNaN(x)) xb = x;
+    }
+
+    function stepAnim() {
+        const speed = 0.016;
+        if (Math.abs(phase - animTarget) <= speed) {
+            phase = animTarget;
+            ztDraw();
+            animId = null;
+            return;
+        }
+        phase += (animTarget > phase ? speed : -speed);
+        ztDraw();
+        animId = requestAnimationFrame(stepAnim);
+    }
+    function animateTo(t) {
+        animTarget = t;
+        if (animId) cancelAnimationFrame(animId);
+        animId = requestAnimationFrame(stepAnim);
+    }
+
+    window.ztPlay = function () {
+        readInputs(); ztStatusUpdate();
+        phase = 0; ztDraw();
+        setTimeout(() => animateTo(2), 350);
+    };
+    window.ztGoto = function (t) {
+        readInputs(); ztStatusUpdate();
+        animateTo(t);
+    };
+
+    document.addEventListener('DOMContentLoaded', function () {
+        ztStatusUpdate();
+        ztDraw();
+    });
+})();
 
 document.addEventListener('DOMContentLoaded', function () {
     drawUniform();
