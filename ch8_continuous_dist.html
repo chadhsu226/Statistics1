@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 8　連續機率分配</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false }
+                ],
+                throwOnError: false,
+                strict: "ignore"
+            });
+        });
+    </script>
+    <style>
+        :root {
+            --navy: #1a3a6b;
+            --blue: #2e6cb8;
+            --blue-light: #4a90d9;
+            --accent: #c0392b;
+            --gold: #d4a017;
+            --green: #27ae60;
+            --bg: #f7f9fc;
+            --card: #ffffff;
+            --border: #d0dcea;
+            --text: #2c3e50;
+            --muted: #5a6a7a;
+            --math-bg: #eaf3ff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Noto Sans TC', 'Source Serif 4', Georgia, serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 36px 24px 80px;
+        }
+        h1 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 2rem; font-weight: 700;
+            color: var(--navy);
+            border-bottom: 4px solid var(--blue-light);
+            padding-bottom: 12px; margin-bottom: 20px;
+        }
+        h2 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 1.45rem; font-weight: 600;
+            color: var(--navy);
+            margin-top: 48px; margin-bottom: 14px;
+            border-left: 5px solid var(--blue-light);
+            padding-left: 12px;
+        }
+        h3 { font-size: 1.1rem; font-weight: 700; color: var(--blue); margin-top: 28px; margin-bottom: 10px; }
+        p { margin-bottom: 12px; }
+        ul, ol { margin-left: 24px; margin-bottom: 12px; }
+        li { margin-bottom: 6px; }
+        hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+        .chapter-intro {
+            font-size: 1.05rem; color: var(--muted);
+            border-left: 3px solid var(--blue-light);
+            padding: 10px 16px; background: #eef4fb;
+            border-radius: 0 6px 6px 0; margin-bottom: 24px;
+        }
+        .learning-goals {
+            background: #fffbea; border: 1.5px solid var(--gold);
+            border-radius: 8px; padding: 18px 22px; margin: 24px 0;
+        }
+        .learning-goals h3 { color: #8a6000; margin-top: 0; }
+        .toc {
+            background: var(--card); border: 1.5px solid var(--border);
+            border-radius: 8px; padding: 18px 24px; margin: 24px 0;
+            box-shadow: 0 2px 8px rgba(30,60,110,0.06);
+        }
+        .toc h3 { color: var(--navy); margin-top: 0; }
+        .toc a { color: var(--blue); text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+        .highlight {
+            background: #fffbe6; border-left: 4px solid var(--gold);
+            padding: 12px 16px; margin: 16px 0; border-radius: 0 6px 6px 0;
+        }
+        .math-block {
+            background: var(--math-bg); border-radius: 6px;
+            padding: 14px 18px; margin: 14px 0;
+            overflow-x: auto; font-size: 1.05em; text-align: center;
+        }
+        .formula-card {
+            background: var(--card); border: 2px solid var(--blue-light);
+            border-radius: 10px; padding: 18px 22px; margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(74,144,217,0.1);
+        }
+        .formula-card h3 { margin-top: 0; color: var(--navy); }
+        .formula-card .note {
+            font-size: 0.9em; color: var(--muted);
+            background: #f0f6ff; border-left: 3px solid #aac4ee;
+            padding: 8px 12px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .example-block {
+            background: #f0faff; border-left: 5px solid var(--blue-light);
+            border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 20px 0;
+        }
+        .example-block h3 { color: var(--navy); margin-top: 0; }
+        .example-block .note {
+            font-size: 0.92em; color: #333;
+            background: #e6f7e6; border-left: 3px solid var(--green);
+            padding: 10px 14px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .example-block .warn {
+            font-size: 0.92em; background: #fff3cd;
+            border-left: 3px solid var(--gold);
+            padding: 10px 14px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .scenario {
+            background: #f8f4ff; border: 1.5px dashed #9b7fd4;
+            border-radius: 8px; padding: 12px 18px; margin-bottom: 14px;
+            font-size: 0.97em; color: #3d2070;
+        }
+        .scenario strong { color: #6a3fbf; }
+        table {
+            width: 100%; border-collapse: collapse;
+            margin: 14px 0; font-size: 0.95em;
+        }
+        th, td { border: 1px solid #c8d8ec; padding: 8px 12px; text-align: center; }
+        th { background: #ddeeff; color: var(--navy); font-weight: 600; }
+        tr:nth-child(even) { background: #f5f8ff; }
+
+        canvas.chart {
+            display: block; margin: 14px auto;
+            border: 1px solid #ddd; border-radius: 6px; background: #fff;
+            max-width: 100%;
+        }
+
+        .quiz-box {
+            background: #f0f6ff; border: 1.5px solid var(--blue-light);
+            border-radius: 10px; padding: 22px 26px; margin: 28px 0;
+        }
+        .quiz-box h3 { color: var(--navy); margin-top: 0; }
+        .quiz-q { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin-bottom: 16px; }
+        .quiz-q p { font-weight: 600; margin-bottom: 10px; }
+        .quiz-q label { display: block; margin: 6px 0; cursor: pointer; font-size: 0.97em; font-weight: 400; }
+        .quiz-q button { margin-top: 10px; padding: 7px 18px; background: var(--blue); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9em; }
+        .quiz-q button:hover { background: var(--navy); }
+        .quiz-feedback { display: none; margin-top: 10px; padding: 10px 14px; border-radius: 6px; font-size: 0.95em; }
+        .quiz-feedback.correct { background: #d4edda; border-left: 4px solid var(--green); color: #155724; }
+        .quiz-feedback.wrong { background: #f8d7da; border-left: 4px solid var(--accent); color: #721c24; }
+
+        .exercises-list { counter-reset: ex-counter; list-style: none; padding: 0; margin-left: 0; }
+        .exercises-list > li {
+            counter-increment: ex-counter;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 8px; padding: 16px 20px; margin-bottom: 16px;
+        }
+        .exercises-list > li strong { color: var(--navy); }
+        details summary { cursor: pointer; color: var(--blue); font-weight: 700; margin-top: 12px; user-select: none; }
+        details summary:hover { color: var(--navy); }
+        details > div { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+
+        .summary {
+            background: var(--navy); color: #e8f0fc;
+            border-radius: 10px; padding: 22px 26px; margin-top: 40px;
+        }
+        .summary h2 { color: #c8dcf8; border-left-color: #6aaae8; }
+        .summary ul { margin-bottom: 0; }
+        .summary li { margin-bottom: 10px; color: #d8e8f8; }
+        .summary strong { color: #a8d0f8; }
+
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+        .col-box { border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; background: #fafbff; }
+        .col-box h3 { font-size: 0.98em; margin-top: 0; text-align: center; }
+
+        .calc-box {
+            background: var(--card); border: 1.5px solid var(--border);
+            border-radius: 10px; padding: 22px 26px; margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(30,60,110,0.06);
+        }
+        .calc-box h3 { margin-top: 0; color: var(--navy); }
+        .inputs-row { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 12px; }
+        .inputs-row label { display: flex; flex-direction: column; font-size: 0.88em; color: var(--muted); min-width: 110px; flex: 1; }
+        .inputs-row input, .inputs-row select {
+            margin-top: 4px; padding: 6px 8px;
+            border: 1px solid var(--border); border-radius: 5px; font-size: 1em;
+        }
+        .calc-box button { padding: 8px 22px; background: var(--blue); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.95em; }
+        .calc-box button:hover { background: var(--navy); }
+        .calc-result {
+            display: none; margin-top: 14px;
+            background: #f0f6ff; border-left: 4px solid var(--blue-light);
+            padding: 12px 16px; border-radius: 0 6px 6px 0;
+            font-family: monospace; font-size: 0.93em; white-space: pre-line;
+        }
+        .optional-tag {
+            display: inline-block; background: #e8e0f8; color: #6a3fbf;
+            font-size: 0.72em; padding: 2px 10px; border-radius: 10px;
+            vertical-align: middle; margin-left: 8px; font-weight: 500;
+        }
+        @media (max-width: 640px) {
+            .two-col { grid-template-columns: 1fr; }
+            body { padding: 20px 14px 60px; }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Chapter 8　連續機率分配 (Continuous Probability Distributions)</h1>
+
+<p class="chapter-intro">
+第 7 章的隨機變數用「數」的；本章的隨機變數用「量」的——時間、重量、金額可以取區間內的任何值。連續世界的機率規則改變了：單點機率為零，機率變成「曲線下的面積」。本章的主角是統計學最重要的分配——常態分配：學會標準化與查表，你就拿到了第 9、10 章統計推論的鑰匙。
+</p>
+
+<div class="learning-goals">
+<h3>🎯 Learning Objectives</h3>
+<ul>
+    <li>理解<strong>機率密度函數</strong>的兩個條件，以及「機率＝面積」「單點機率為零」的意義。</li>
+    <li>能計算<strong>均勻分配</strong>的機率。</li>
+    <li>掌握<strong>常態分配</strong>的性質，能以 $z = (x-\mu)/\sigma$ <strong>標準化</strong>並查表計算機率。</li>
+    <li>能<strong>反向查表</strong>：由給定的機率求出 $z_A$ 與對應的原始值 $x$。</li>
+    <li>認識<strong>指數分配</strong>與其應用場景（選讀）。</li>
+</ul>
+</div>
+
+<div class="toc">
+<h3>📋 本章內容</h3>
+<ol>
+    <li><a href="#s81">§8.1　機率密度函數與均勻分配</a></li>
+    <li><a href="#s82">§8.2　常態分配</a>
+        <ol style="margin-top:4px;">
+            <li><a href="#s82-1">常態分配的性質</a></li>
+            <li><a href="#s82-2">標準化與查表（正查）</a></li>
+            <li><a href="#s82-3">反向查表與反標準化</a></li>
+        </ol>
+    </li>
+    <li><a href="#s83">§8.3　指數分配（選讀補充）</a></li>
+    <li><a href="#tool">🔢 互動工具：常態分配計算機</a></li>
+    <li><a href="#quiz">🧠 Quick Quiz</a></li>
+    <li><a href="#exercises">📚 綜合練習</a></li>
+    <li><a href="#summary">📌 Chapter Summary</a></li>
+</ol>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 8.1
+══════════════════════════════════════════ -->
+<h2 id="s81">§8.1　機率密度函數與均勻分配 (Probability Density Functions)</h2>
+
+<h3>一、連續隨機變數的機率規則</h3>
+
+<div class="formula-card">
+<h3>📐 機率密度函數 (PDF)</h3>
+<p>連續隨機變數以<strong>機率密度函數 $f(x)$</strong> 描述，必須滿足：</p>
+<ol>
+    <li><strong>非負</strong>：對所有 $x$，$f(x) \geq 0$。</li>
+    <li><strong>總面積為 1</strong>：$f(x)$ 曲線下的總面積等於 1。</li>
+</ol>
+<p><strong>機率 ＝ 曲線下的面積</strong>：$P(x_1 < X < x_2)$ ＝ 曲線下介於 $x_1$ 與 $x_2$ 之間的面積。</p>
+<p class="note"><strong>單點機率為零</strong>：$P(X = x) = 0$（單點的「面積」寬度為 0）。因此對連續變數而言，$P(X < a)$ 與 $P(X \leq a)$ 相等——「＜」與「≤」不必計較。這點與離散變數完全不同！</p>
+</div>
+
+<h3>二、均勻分配 (Uniform Distribution)</h3>
+
+<div class="formula-card">
+<h3>📐 均勻分配</h3>
+<div class="math-block">$$f(x) = \frac{1}{b-a}, \quad a \leq x \leq b \qquad\qquad E(X) = \frac{a+b}{2}$$</div>
+<p>密度是水平直線（矩形分配），區間內每一段等寬範圍的機率都相同。機率計算就是矩形面積：</p>
+<div class="math-block">$$P(x_1 < X < x_2) = (x_2 - x_1) \times \frac{1}{b-a}$$</div>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 8.1　捷運月台的等候時間</h3>
+<div class="scenario">
+<strong>情境：</strong>離峰時段捷運每 <strong>12 分鐘</strong>一班。小葉不看時刻表、隨機抵達月台，因此她的等候時間 $X$ 服從 $U(0, 12)$ 的均勻分配。
+</div>
+<p><strong>a. 機率密度函數</strong>：$f(x) = \dfrac{1}{12}$，$0 \leq x \leq 12$；平均等候 $E(X) = \dfrac{0+12}{2} = 6$ 分鐘。</p>
+<p><strong>b. 等超過 8 分鐘的機率</strong>：</p>
+<div class="math-block">$$P(X > 8) = (12 - 8) \times \frac{1}{12} = \frac{4}{12} = 0.333$$</div>
+<p><strong>c. 等 2 到 5 分鐘的機率</strong>：</p>
+<div class="math-block">$$P(2 < X < 5) = (5 - 2) \times \frac{1}{12} = 0.25$$</div>
+<p><strong>d. 恰好等 6 分鐘的機率</strong>：$P(X = 6) = 0$（連續變數單點機率為零）。</p>
+<canvas id="unifChart" class="chart" width="560" height="200"></canvas>
+<div class="note">✅ 均勻分配是「完全無知」的模型——除了範圍之外，對 $X$ 落在哪裡毫無線索。多數真實變數（如身高、誤差）反而會向中央集中，這就輪到常態分配登場。</div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 8.2
+══════════════════════════════════════════ -->
+<h2 id="s82">§8.2　常態分配 (Normal Distribution)</h2>
+
+<h3 id="s82-1">一、常態分配的性質</h3>
+
+<div class="formula-card">
+<h3>📐 常態分配 $X \sim N(\mu, \sigma^2)$</h3>
+<ul>
+    <li>由兩個參數決定：<strong>平均數 $\mu$</strong>（位置——曲線的中心）與<strong>標準差 $\sigma$</strong>（形狀——曲線的胖瘦）。</li>
+    <li>圖形為對稱的<strong>鐘形</strong>：平均數＝中位數＝眾數，皆位於 $\mu$。</li>
+    <li>兩尾向左右無限延伸、逐漸貼近橫軸但永不觸及。</li>
+    <li>第 4 章的<strong>經驗法則（68–95–99.7）</strong>正是常態分配的精確性質。</li>
+</ul>
+</div>
+
+<canvas id="normFamily" class="chart" width="680" height="240"></canvas>
+
+<h3 id="s82-2">二、標準化與查表（正查）</h3>
+
+<div class="formula-card">
+<h3>📐 標準常態分配與 z 轉換</h3>
+<p>把 $\mu = 0$、$\sigma = 1$ 的常態分配稱為<strong>標準常態分配 $Z$</strong>。任何常態變數都能透過<strong>標準化</strong>轉換成 $Z$：</p>
+<div class="math-block">$$Z = \frac{X - \mu}{\sigma}$$</div>
+<p class="note">$z$ 值的意義：「$x$ 距離平均數幾個標準差」。z 表（見<a href="tables.html">互動查表系統</a>）給出<strong>累積機率</strong> $P(Z < z)$，即曲線下 $z$ 左邊的面積。三個常用轉換：<br>
+右尾 $P(Z > z) = 1 - P(Z < z)$；區間 $P(a < Z < b) = P(Z < b) - P(Z < a)$；對稱 $P(Z < -z) = P(Z > z)$。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 主範例 8.2　外送時間的三種機率</h3>
+<div class="scenario">
+<strong>情境：</strong>某外送平台的送達時間 $X$ 近似常態分配，$\mu = 32$ 分鐘、$\sigma = 5$ 分鐘。
+</div>
+<p><strong>a. 40 分鐘內送達的機率 $P(X < 40)$</strong></p>
+<div class="math-block">$$z = \frac{40 - 32}{5} = 1.6 \qquad P(X < 40) = P(Z < 1.6) = 0.9452$$</div>
+<p><strong>b. 超過 30 分鐘的機率 $P(X > 30)$</strong></p>
+<div class="math-block">$$z = \frac{30 - 32}{5} = -0.4 \qquad P(X > 30) = P(Z > -0.4) = 1 - 0.3446 = 0.6554$$</div>
+<p><strong>c. 25 到 35 分鐘之間的機率 $P(25 < X < 35)$</strong></p>
+<div class="math-block">$$z_1 = \frac{25-32}{5} = -1.4 \qquad z_2 = \frac{35-32}{5} = 0.6$$</div>
+<div class="math-block">$$P(-1.4 < Z < 0.6) = P(Z < 0.6) - P(Z < -1.4) = 0.7257 - 0.0808 = 0.6449$$</div>
+<canvas id="normEx2" class="chart" width="640" height="230"></canvas>
+<div class="note">✅ 查表三步驟：<strong>標準化 → 畫圖著色 → 組合面積</strong>。強烈建議每題都先畫一張小草圖，把要求的面積塗出來——右尾要用 1 減、區間要相減，畫了圖就不會弄反。</div>
+</div>
+
+<h3 id="s82-3">三、反向查表與反標準化</h3>
+
+<div class="formula-card">
+<h3>📐 分位數記號 $z_A$ 與反標準化</h3>
+<p><strong>$z_A$</strong>：右尾面積為 $A$ 的 z 值，即 $P(Z > z_A) = A$。查表方式：在表身找累積機率 $1 - A$，讀出對應的 $z$。</p>
+<div class="math-block">$$z_{0.10} = 1.28 \qquad z_{0.05} = 1.645 \qquad z_{0.025} = 1.96 \qquad z_{0.01} = 2.33 \qquad z_{0.005} = 2.575$$</div>
+<p><strong>反標準化</strong>：求出 $z$ 後換回原始尺度：</p>
+<div class="math-block">$$x = \mu + z\,\sigma$$</div>
+<p class="note">這五個 $z_A$ 值在第 10 章以後會不斷出現（信賴區間、假設檢定的臨界值），值得現在就記熟。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 主範例 8.3　白金會員的門檻</h3>
+<div class="scenario">
+<strong>情境：</strong>某連鎖書店會員的年消費金額近似常態分配，$\mu = 24{,}000$ 元、$\sigma = 6{,}000$ 元。行銷部門想把<strong>消費最高的前 10%</strong> 會員升級為白金會員。年消費門檻應設在多少？
+</div>
+<p><strong>Step 1　找 z 值</strong>：前 10% ＝ 右尾面積 $A = 0.10$ → $z_{0.10} = 1.28$。</p>
+<p><strong>Step 2　反標準化</strong>：</p>
+<div class="math-block">$$x = \mu + z\,\sigma = 24{,}000 + 1.28 \times 6{,}000 = 31{,}680$$</div>
+<div class="note">✅ 門檻約 $31,680 元（實務上取整為 32,000）。注意方向：「前 10%」在右尾，$z$ 為正；若是「最低的 10%」則 $z = -1.28$、門檻為 $24{,}000 - 7{,}680 = 16{,}320$ 元。</div>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 8.4　保固期該設幾個月？</h3>
+<div class="scenario">
+<strong>情境：</strong>某品牌電動機車電池的壽命近似常態分配，$\mu = 36$ 個月、$\sigma = 4$ 個月。公司希望「保固期內故障而需免費更換」的比例不超過 <strong>2.5%</strong>。保固期最長可以設幾個月？
+</div>
+<p><strong>Step 1</strong>：故障比例 2.5% 在<strong>左尾</strong> → $z = -z_{0.025} = -1.96$。</p>
+<p><strong>Step 2</strong>：</p>
+<div class="math-block">$$x = \mu + z\,\sigma = 36 + (-1.96)(4) = 36 - 7.84 = 28.16$$</div>
+<div class="note">✅ 保固期設 <strong>28 個月</strong>，理論更換率約 2.3%（略低於 2.5% 的上限，因為 28 比 28.16 更嚴格）。這類「由容許風險反推規格」的計算，是常態分配在商業上最實用的形態之一。</div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 8.3
+══════════════════════════════════════════ -->
+<h2 id="s83">§8.3　指數分配 <span class="optional-tag">選讀補充</span></h2>
+
+<div class="formula-card">
+<h3>📐 指數分配 (Exponential Distribution)</h3>
+<p>描述「事件與事件之間的<strong>間隔時間</strong>」。若某事件的發生次數服從卜瓦松分配（第 7 章，平均每單位時間 $\lambda$ 次），則相鄰兩次事件的間隔時間 $X$ 服從指數分配：</p>
+<div class="math-block">$$f(x) = \lambda e^{-\lambda x},\ x \geq 0 \qquad P(X > x) = e^{-\lambda x} \qquad E(X) = \frac{1}{\lambda}$$</div>
+<p class="note">右偏、從 $\lambda$ 高度起跳向右衰減。典型場景：來電間隔、機台故障間隔、顧客到店間隔。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 8.5　下一通電話多久後進來？（延續範例 7.5）</h3>
+<div class="scenario">
+<strong>情境：</strong>客服深夜來電服從卜瓦松分配、平均每小時 $\lambda = 3$ 通。剛掛掉一通電話，「接下來 20 分鐘（$1/3$ 小時）都沒有來電」的機率是多少？
+</div>
+<div class="math-block">$$P(X > \tfrac{1}{3}) = e^{-3 \times 1/3} = e^{-1} = 0.368$$</div>
+<div class="note">✅ 平均間隔 $E(X) = 1/3$ 小時 ＝ 20 分鐘，但「超過平均間隔」的機率只有 36.8%（不是 50%）——指數分配右偏，多數間隔比平均短、少數間隔特別長。卜瓦松（數次數）與指數（量間隔）是同一個隨機過程的兩面。</div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     互動工具
+══════════════════════════════════════════ -->
+<h2 id="tool">🔢 互動工具：常態分配計算機</h2>
+
+<div class="calc-box">
+<h3>🧮 正查（給 x 求機率）／反查（給機率求 x）</h3>
+<p style="font-size:0.93em; color:var(--muted);">預設為主範例 8.2 的外送時間。曲線會即時著色你要求的區域。</p>
+<div class="inputs-row">
+    <label>模式
+        <select id="ncMode" onchange="ncModeChange()">
+            <option value="lt">正查：P(X &lt; x)</option>
+            <option value="gt">正查：P(X &gt; x)</option>
+            <option value="inv">反查：給左尾機率 p 求 x</option>
+        </select>
+    </label>
+    <label>平均數 μ<input type="number" id="ncMu" value="32" step="any"></label>
+    <label>標準差 σ<input type="number" id="ncSigma" value="5" step="any" min="0.0001"></label>
+    <label id="ncXLabel">x 值<input type="number" id="ncX" value="40" step="any"></label>
+</div>
+<button onclick="calcNormal()">計算並繪圖</button>
+<div class="calc-result" id="ncResult"></div>
+<canvas id="ncChart" class="chart" width="660" height="240" style="display:none;"></canvas>
+</div>
+
+<hr>
+
+<!-- ══ Quiz ══ -->
+<div class="quiz-box" id="quiz">
+<h3>🧠 Quick Quiz</h3>
+
+<div class="quiz-q">
+    <p>Q1. 連續隨機變數 $X$（例如等候時間）。下列何者正確？</p>
+    <label><input type="radio" name="q1" value="a"> A. $P(X = 5)$ 可以是任何正數</label>
+    <label><input type="radio" name="q1" value="b"> B. $P(X < 5)$ 與 $P(X \leq 5)$ 相等，因為單點機率為零</label>
+    <label><input type="radio" name="q1" value="c"> C. $P(X \leq 5)$ 一定大於 $P(X < 5)$</label>
+    <label><input type="radio" name="q1" value="d"> D. 連續變數無法計算機率</label>
+    <button onclick="checkQ('q1','b','✅ 正確！連續變數的單點機率為 0（寬度為零的面積），所以 < 與 ≤ 沒有差別——這是連續與離散最重要的分野。')">Submit</button>
+    <div class="quiz-feedback" id="q1-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q2. $X \sim U(10, 30)$（均勻分配）。$P(X > 25)$ = ？</p>
+    <label><input type="radio" name="q2" value="a"> A. 0.20</label>
+    <label><input type="radio" name="q2" value="b"> B. 0.25</label>
+    <label><input type="radio" name="q2" value="c"> C. 0.30</label>
+    <label><input type="radio" name="q2" value="d"> D. 0.75</label>
+    <button onclick="checkQ('q2','b','✅ 正確！P(X>25) = (30−25) × 1/(30−10) = 5/20 = 0.25。均勻分配的機率就是矩形面積：底 × 高。')">Submit</button>
+    <div class="quiz-feedback" id="q2-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q3. 「標準化 $z = (x - \mu)/\sigma$」得到的 $z$ 值，其意義是？</p>
+    <label><input type="radio" name="q3" value="a"> A. x 占全體的百分比</label>
+    <label><input type="radio" name="q3" value="b"> B. x 與平均數的距離，以標準差為單位</label>
+    <label><input type="radio" name="q3" value="c"> C. x 出現的機率</label>
+    <label><input type="radio" name="q3" value="d"> D. x 的排名</label>
+    <button onclick="checkQ('q3','b','✅ 正確！z = 1.6 表示「x 在平均數右邊 1.6 個標準差處」。標準化讓所有常態分配共用同一張 z 表——這是它強大的原因。')">Submit</button>
+    <div class="quiz-feedback" id="q3-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q4. 已知 $P(Z < 1.28) = 0.90$。若想找出「中央 95%」對應的 $\pm z$，應該用哪個值？</p>
+    <label><input type="radio" name="q4" value="a"> A. ±1.28</label>
+    <label><input type="radio" name="q4" value="b"> B. ±1.645</label>
+    <label><input type="radio" name="q4" value="c"> C. ±1.96</label>
+    <label><input type="radio" name="q4" value="d"> D. ±2.575</label>
+    <button onclick="checkQ('q4','c','✅ 正確！中央 95% → 兩尾各 2.5% → z₀.₀₂₅ = 1.96。注意「中央 95%」要把剩餘 5% 平分到兩尾，不是查 z₀.₀₅。')">Submit</button>
+    <div class="quiz-feedback" id="q4-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q5. 某測驗分數 $\sim N(60, 10^2)$。老師想找出「最低 5% 的及格線下限」，正確的計算是？</p>
+    <label><input type="radio" name="q5" value="a"> A. 60 + 1.645 × 10 = 76.45</label>
+    <label><input type="radio" name="q5" value="b"> B. 60 − 1.645 × 10 = 43.55</label>
+    <label><input type="radio" name="q5" value="c"> C. 60 − 1.96 × 10 = 40.4</label>
+    <label><input type="radio" name="q5" value="d"> D. 60 × 0.05 = 3</label>
+    <button onclick="checkQ('q5','b','✅ 正確！最低 5% 在左尾 → z = −z₀.₀₅ = −1.645 → x = 60 − 16.45 = 43.55。選 A 算成了「最高 5%」的門檻——反查題永遠先確認方向（左尾還是右尾）。')">Submit</button>
+    <div class="quiz-feedback" id="q5-fb"></div>
+</div>
+
+</div>
+
+<hr>
+
+<!-- ══ Exercises ══ -->
+<h2 id="exercises">📚 綜合練習 (Comprehensive Practice)</h2>
+<p>以下習題涵蓋均勻分配、常態正查與反查，請先獨立作答，再展開解答確認。（z 值可利用<a href="tables.html">互動查表系統</a>）</p>
+
+<h3>I. 概念複習</h3>
+<ol class="exercises-list">
+
+    <li>
+        <p>為什麼連續隨機變數的單點機率 $P(X = x) = 0$？這是否代表「$X = x$ 不可能發生」？</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>機率＝曲線下面積，單點的寬度為 0，面積必為 0。</p>
+            <p>但機率為零<strong>不等於</strong>不可能——$X$ 總會落在某個確切的值上。正確理解：連續變數的機率只對「區間」有意義，「恰好等於某值」的機率在測度上為零。實務中我們問的也總是區間問題（「40 分鐘內」而非「恰好 40.000... 分鐘」）。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <p>常態分配的 $\mu$ 與 $\sigma$ 分別控制曲線的什麼？兩個常態分配 $N(50, 5^2)$ 與 $N(50, 10^2)$ 的圖形差異為何？</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>$\mu$ 控制<strong>位置</strong>（中心在哪）；$\sigma$ 控制<strong>形狀</strong>（胖瘦）。</p>
+            <p>兩者中心相同（都在 50），但 $N(50, 10^2)$ 更矮更寬（資料更分散），$N(50, 5^2)$ 更高更窄。總面積都是 1，所以變寬必然變矮。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <p>標準化（z 轉換）的目的是什麼？為什麼一張 z 表就能處理所有的常態分配問題？</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>標準化把任意 $N(\mu, \sigma^2)$ 線性轉換為同一個標準常態 $N(0,1)$，且轉換保持面積（機率）不變。</p>
+            <p>因此無論原始單位是分鐘、元或毫升，「距離平均幾個標準差」的機率結構完全相同——一張 $Z$ 表通吃所有常態問題。</p>
+        </div>
+        </details>
+    </li>
+
+</ol>
+
+<h3>II. 計算與應用</h3>
+<ol class="exercises-list">
+
+    <li>
+        <strong>8.1　自動洗車機的服務時間</strong>
+        <p>某自動洗車機的單次洗車時間 $X$（分鐘）服從 $U(4, 10)$。</p>
+        <ul>
+            <li>a. 寫出 $f(x)$ 並求平均服務時間。</li>
+            <li>b. 求 $P(X < 6)$。</li>
+            <li>c. 求 $P(5 < X < 8)$。</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> $f(x) = \dfrac{1}{10-4} = \dfrac{1}{6}$，$4 \leq x \leq 10$；$E(X) = (4+10)/2 = 7$ 分鐘。</p>
+            <p><strong>b.</strong> $P(X < 6) = (6-4) \times \dfrac{1}{6} = \dfrac{2}{6} = 0.333$</p>
+            <p><strong>c.</strong> $P(5 < X < 8) = (8-5) \times \dfrac{1}{6} = 0.5$</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>8.2　z 表基本功</strong>
+        <p>$X \sim N(50, 8^2)$。求：</p>
+        <ul>
+            <li>a. $P(X < 62)$</li>
+            <li>b. $P(X > 46)$</li>
+            <li>c. $P(42 < X < 58)$</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> $z = (62-50)/8 = 1.5$；$P(Z < 1.5) = 0.9332$</p>
+            <p><strong>b.</strong> $z = (46-50)/8 = -0.5$；$P(Z > -0.5) = 1 - 0.3085 = 0.6915$</p>
+            <p><strong>c.</strong> $z_1 = -1$、$z_2 = 1$；$P(-1 < Z < 1) = 0.8413 - 0.1587 = 0.6827$（正是經驗法則的 68%！）</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>8.3　高鐵通勤的時間管理</strong>
+        <p>阿哲每天通勤（門到門）時間 $\sim N(90, 6^2)$ 分鐘。</p>
+        <ul>
+            <li>a. 他提早 100 分鐘出門，準時抵達的機率？</li>
+            <li>b. 某天他只剩 78 分鐘可用，遲到的機率？</li>
+            <li>c. 若想有 99% 的把握準時，應該提早多久出門？</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> $z = (100-90)/6 = 1.67$；$P(X < 100) = 0.9525$。</p>
+            <p><strong>b.</strong> $z = (78-90)/6 = -2$；$P(X > 78) = 1 - 0.0228 = 0.9772$ → 遲到機率 $= P(X > 78)$？注意題意：可用時間 78 分鐘，「通勤時間超過 78 分鐘」就會遲到，故遲到機率 $= 0.9772$——幾乎肯定遲到。</p>
+            <p><strong>c.</strong> 99% 把握 → 左尾累積 0.99 → $z_{0.01} = 2.33$；$x = 90 + 2.33 \times 6 = 104$ 分鐘。提早約 <strong>104 分鐘</strong>出門。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>8.4　反查 z 值練習</strong>
+        <ul>
+            <li>a. 求 $z_{0.005}$（右尾 0.5%）。</li>
+            <li>b. 求使中央 98% 的面積落在 $\pm z$ 之間的 $z$ 值。</li>
+            <li>c. 求 $P(Z < z) = 0.20$ 的 $z$ 值。</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> 累積機率 $= 0.995$ → $z_{0.005} = 2.575$（表中 2.57 與 2.58 之間取中）。</p>
+            <p><strong>b.</strong> 兩尾各 1% → $z_{0.01} = 2.33$，即 $\pm 2.33$。</p>
+            <p><strong>c.</strong> 左尾 20% 在平均數左側 → 由對稱性，$P(Z < z)=0.20$ 對應 $z = -0.84$（因 $P(Z < 0.84) \approx 0.80$）。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>8.5　行動電源的續航宣傳</strong>
+        <p>某行動電源的實際續航力 $\sim N(30, 2.5^2)$ 小時。行銷部門要在廣告上寫「續航 ○○ 小時以上」，並希望<strong>至少 90% 的產品</strong>能達到宣稱值。宣稱值最高可以寫多少？</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>「90% 的產品超過宣稱值 $x$」→ $P(X > x) = 0.90$ → $x$ 在<strong>左尾</strong>、左尾面積 10% → $z = -1.28$。</p>
+            <div class="math-block">$$x = 30 + (-1.28)(2.5) = 30 - 3.2 = 26.8$$</div>
+            <p>宣稱「<strong>26 小時以上</strong>」（取整數並更保守）。若貪心寫 30 小時，會有一半的產品「不符廣告」——這就是為什麼規格標示通常明顯低於平均值。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>8.6　咖啡機的填充量設定</strong>
+        <p>自動咖啡機每杯的填充量標準差 $\sigma = 6$ mL（機器固有精度），平均填充量 $\mu$ 可由店家設定。杯子容量 360 mL，店長希望<strong>溢出的機率不超過 1%</strong>。$\mu$ 最高可設定為多少？</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>溢出 ⇔ $X > 360$；要求 $P(X > 360) \leq 0.01$ → $\dfrac{360 - \mu}{6} \geq z_{0.01} = 2.33$。</p>
+            <div class="math-block">$$\mu \leq 360 - 2.33 \times 6 = 360 - 13.98 = 346.0 \text{ mL}$$</div>
+            <p>最高設 <strong>346 mL</strong>。想多裝一點（提高 $\mu$）就得先讓機器更精準（降低 $\sigma$）——品質工程「規格 = 平均 + 安全邊際」的基本邏輯。</p>
+        </div>
+        </details>
+    </li>
+
+</ol>
+
+<hr>
+
+<!-- ══ Summary ══ -->
+<div class="summary" id="summary">
+<h2>📌 Chapter Summary</h2>
+<ul>
+    <li><strong>連續變數</strong>：機率＝密度曲線下的面積；$f(x) \geq 0$、總面積 1；單點機率為零，故 $<$ 與 $\leq$ 等價。</li>
+    <li><strong>均勻分配</strong> $U(a,b)$：$f(x) = 1/(b-a)$，機率＝矩形面積；$E(X) = (a+b)/2$。</li>
+    <li><strong>常態分配</strong> $N(\mu, \sigma^2)$：對稱鐘形；$\mu$ 管位置、$\sigma$ 管胖瘦；經驗法則是其精確性質。</li>
+    <li><strong>正查</strong>：標準化 $z = (x-\mu)/\sigma$ → 畫圖著色 → 查表組合（右尾用 $1-$、區間用相減）。</li>
+    <li><strong>反查</strong>：由機率找 $z_A$（$z_{0.10}=1.28$、$z_{0.05}=1.645$、$z_{0.025}=1.96$、$z_{0.01}=2.33$、$z_{0.005}=2.575$），再反標準化 $x = \mu + z\sigma$；先確認方向（左尾／右尾／中央）。</li>
+    <li><strong>指數分配</strong>（選讀）：事件間隔時間，$P(X > x) = e^{-\lambda x}$，與卜瓦松是同一過程的兩面。</li>
+</ul>
+</div>
+
+<!-- ══ Scripts ══ -->
+<script>
+// ── Quiz ──
+function checkQ(qid, correct, msg) {
+    const selected = document.querySelector(`input[name="${qid}"]:checked`);
+    const fb = document.getElementById(`${qid}-fb`);
+    if (!selected) { fb.style.display='block'; fb.className='quiz-feedback wrong'; fb.textContent='請先選擇一個答案。'; return; }
+    fb.style.display = 'block';
+    if (selected.value === correct) {
+        fb.className = 'quiz-feedback correct';
+        fb.innerHTML = msg;
+    } else {
+        fb.className = 'quiz-feedback wrong';
+        fb.innerHTML = '❌ 不正確，請再想想。提示：' + msg;
+    }
+}
+
+// ── 常態 CDF 與反函數 ──
+function normCDF(z) {
+    const t = 1 / (1 + 0.2316419 * Math.abs(z));
+    const poly = t * (0.319381530 + t * (-0.356563782 + t * (1.781477937 + t * (-1.821255978 + t * 1.330274429))));
+    const pdf = Math.exp(-0.5 * z * z) / Math.sqrt(2 * Math.PI);
+    const cdf = 1 - pdf * poly;
+    return z >= 0 ? cdf : 1 - cdf;
+}
+function normInv(p) {
+    // 牛頓法，起點 0
+    if (p <= 0 || p >= 1) return NaN;
+    let z = 0;
+    for (let i = 0; i < 60; i++) {
+        const err = normCDF(z) - p;
+        const pdf = Math.exp(-0.5 * z * z) / Math.sqrt(2 * Math.PI);
+        if (pdf < 1e-12) break;
+        z -= err / pdf;
+        if (Math.abs(err) < 1e-10) break;
+    }
+    return z;
+}
+
+// ── 常態曲線繪圖（著色區域）──
+function drawNormal(canvasId, mu, sigma, shadeFrom, shadeTo, opts) {
+    const cv = document.getElementById(canvasId);
+    if (!cv) return;
+    cv.style.display = 'block';
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    const pL = 40, pR = 24, pT = 30, pB = 44;
+    const pW = W - pL - pR, pH = H - pT - pB;
+    const xMin = mu - 4 * sigma, xMax = mu + 4 * sigma;
+    const yMax = 1 / (sigma * Math.sqrt(2 * Math.PI));
+    function px(x) { return pL + (x - xMin) / (xMax - xMin) * pW; }
+    function pdf(x) { return Math.exp(-0.5 * ((x - mu) / sigma) ** 2) / (sigma * Math.sqrt(2 * Math.PI)); }
+    function py(v) { return pT + pH - v / (yMax * 1.08) * pH; }
+    const axisY = pT + pH;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    if (opts && opts.title) {
+        ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 13px "Noto Sans TC", sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText(opts.title, W / 2, 18);
+    }
+    // 著色
+    if (shadeFrom !== null) {
+        const s1 = Math.max(xMin, shadeFrom), s2 = Math.min(xMax, shadeTo);
+        ctx.fillStyle = 'rgba(192,57,43,0.30)';
+        ctx.beginPath(); ctx.moveTo(px(s1), axisY);
+        for (let i = 0; i <= 200; i++) {
+            const x = s1 + (s2 - s1) * i / 200;
+            ctx.lineTo(px(x), py(pdf(x)));
+        }
+        ctx.lineTo(px(s2), axisY); ctx.closePath(); ctx.fill();
+    }
+    // 曲線
+    ctx.beginPath(); ctx.strokeStyle = '#1a3a6b'; ctx.lineWidth = 2;
+    for (let i = 0; i <= 300; i++) {
+        const x = xMin + (xMax - xMin) * i / 300;
+        i === 0 ? ctx.moveTo(px(x), py(pdf(x))) : ctx.lineTo(px(x), py(pdf(x)));
+    }
+    ctx.stroke();
+    // 軸與刻度
+    ctx.strokeStyle = '#999'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(pL, axisY); ctx.lineTo(W - pR, axisY); ctx.stroke();
+    ctx.fillStyle = '#555'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
+    for (let k = -3; k <= 3; k++) {
+        const x = mu + k * sigma;
+        ctx.beginPath(); ctx.strokeStyle = '#bbb';
+        ctx.moveTo(px(x), axisY); ctx.lineTo(px(x), axisY + 4); ctx.stroke();
+        ctx.fillText((Math.round(x * 100) / 100), px(x), axisY + 17);
+    }
+    if (opts && opts.xlabel) {
+        ctx.fillStyle = '#555'; ctx.font = '11px "Noto Sans TC", sans-serif';
+        ctx.fillText(opts.xlabel, pL + pW / 2, H - 6);
+    }
+    if (opts && opts.marks) {
+        opts.marks.forEach(m => {
+            ctx.beginPath(); ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 1.6; ctx.setLineDash([4, 3]);
+            ctx.moveTo(px(m.x), axisY); ctx.lineTo(px(m.x), py(pdf(m.x)) - 8); ctx.stroke(); ctx.setLineDash([]);
+            ctx.fillStyle = '#c0392b'; ctx.font = 'bold 11.5px sans-serif';
+            ctx.fillText(m.label, px(m.x), py(pdf(m.x)) - 14);
+        });
+    }
+}
+
+// ── 均勻分配圖 ──
+function drawUniform() {
+    const cv = document.getElementById('unifChart');
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    const pL = 50, pR = 24, pT = 34, pB = 40;
+    const pW = W - pL - pR, pH = H - pT - pB;
+    const a = 0, b = 12, hVal = 1 / 12;
+    function px(x) { return pL + (x - (-1)) / (14) * pW; }
+    const yTop = pT + pH * 0.25, axisY = pT + pH;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 13px "Noto Sans TC", sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('圖 8.1　等候時間 U(0, 12)：P(X > 8) 為著色矩形', W / 2, 18);
+    // 著色 P(X>8)
+    ctx.fillStyle = 'rgba(192,57,43,0.30)';
+    ctx.fillRect(px(8), yTop, px(12) - px(8), axisY - yTop);
+    // 密度線
+    ctx.strokeStyle = '#1a3a6b'; ctx.lineWidth = 2.2;
+    ctx.beginPath(); ctx.moveTo(px(a), yTop); ctx.lineTo(px(b), yTop); ctx.stroke();
+    ctx.setLineDash([4, 3]); ctx.strokeStyle = '#8aa8cc'; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(px(a), yTop); ctx.lineTo(px(a), axisY); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(px(b), yTop); ctx.lineTo(px(b), axisY); ctx.stroke();
+    ctx.setLineDash([]);
+    // 軸
+    ctx.strokeStyle = '#999'; ctx.beginPath(); ctx.moveTo(pL, axisY); ctx.lineTo(W - pR, axisY); ctx.stroke();
+    ctx.fillStyle = '#555'; ctx.font = '11px sans-serif';
+    [0, 2, 4, 6, 8, 10, 12].forEach(x => {
+        ctx.beginPath(); ctx.strokeStyle = '#bbb'; ctx.moveTo(px(x), axisY); ctx.lineTo(px(x), axisY + 4); ctx.stroke();
+        ctx.fillText(x, px(x), axisY + 16);
+    });
+    ctx.fillText('等候時間（分鐘）', pL + pW / 2, H - 4);
+    ctx.fillStyle = '#1a3a6b'; ctx.textAlign = 'left';
+    ctx.fillText('f(x) = 1/12', px(0.3), yTop - 8);
+    ctx.fillStyle = '#c0392b'; ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('面積 = 4 × 1/12 = 1/3', px(10), yTop + (axisY - yTop) / 2);
+}
+
+// ── 常態家族圖（μ、σ 的影響）──
+function drawFamily() {
+    const cv = document.getElementById('normFamily');
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    const pL = 30, pR = 20, pT = 30, pB = 36;
+    const pW = W - pL - pR, pH = H - pT - pB;
+    const xMin = 10, xMax = 90;
+    function px(x) { return pL + (x - xMin) / (xMax - xMin) * pW; }
+    const yMax = 1 / (6 * Math.sqrt(2 * Math.PI));
+    function py(v) { return pT + pH - v / (yMax * 1.1) * pH; }
+    const axisY = pT + pH;
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 13px "Noto Sans TC", sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('圖 8.2　μ 控制位置、σ 控制胖瘦（面積都是 1）', W / 2, 18);
+    const curves = [
+        { mu: 35, s: 6, col: '#2e6cb8', label: 'N(35, 6²)' },
+        { mu: 60, s: 6, col: '#27ae60', label: 'N(60, 6²)：μ 較大 → 右移' },
+        { mu: 60, s: 12, col: '#c0392b', label: 'N(60, 12²)：σ 較大 → 矮胖' }
+    ];
+    curves.forEach(c => {
+        ctx.beginPath(); ctx.strokeStyle = c.col; ctx.lineWidth = 2;
+        for (let i = 0; i <= 300; i++) {
+            const x = xMin + (xMax - xMin) * i / 300;
+            const v = Math.exp(-0.5 * ((x - c.mu) / c.s) ** 2) / (c.s * Math.sqrt(2 * Math.PI));
+            i === 0 ? ctx.moveTo(px(x), py(v)) : ctx.lineTo(px(x), py(v));
+        }
+        ctx.stroke();
+    });
+    ctx.strokeStyle = '#999'; ctx.beginPath(); ctx.moveTo(pL, axisY); ctx.lineTo(W - pR, axisY); ctx.stroke();
+    // 圖例
+    ctx.font = '12px "Noto Sans TC", sans-serif'; ctx.textAlign = 'left';
+    let ly = 40;
+    curves.forEach(c => {
+        ctx.fillStyle = c.col;
+        ctx.fillRect(W - 265, ly - 9, 14, 4);
+        ctx.fillText(c.label, W - 245, ly - 3);
+        ly += 20;
+    });
+}
+
+// ── 計算機 ──
+function ncModeChange() {
+    const mode = document.getElementById('ncMode').value;
+    document.getElementById('ncXLabel').firstChild.textContent = (mode === 'inv') ? '左尾機率 p（0–1）' : 'x 值';
+    if (mode === 'inv') document.getElementById('ncX').value = 0.90;
+    else document.getElementById('ncX').value = 40;
+}
+function calcNormal() {
+    const mode = document.getElementById('ncMode').value;
+    const mu = parseFloat(document.getElementById('ncMu').value);
+    const sigma = parseFloat(document.getElementById('ncSigma').value);
+    const xin = parseFloat(document.getElementById('ncX').value);
+    const out = document.getElementById('ncResult');
+    if (isNaN(mu) || isNaN(sigma) || sigma <= 0 || isNaN(xin)) {
+        out.style.display = 'block'; out.textContent = '請輸入有效的 μ、σ（>0）與數值。'; return;
+    }
+    out.style.display = 'block';
+    if (mode === 'inv') {
+        if (xin <= 0 || xin >= 1) { out.textContent = '反查模式的 p 必須介於 0 與 1 之間。'; return; }
+        const z = normInv(xin);
+        const x = mu + z * sigma;
+        out.textContent =
+`反查：P(X < x) = ${xin}
+z = ${z.toFixed(4)}
+x = μ + zσ = ${mu} + (${z.toFixed(4)})(${sigma}) = ${x.toFixed(4)}`;
+        drawNormal('ncChart', mu, sigma, mu - 4 * sigma, x,
+            { title: `N(${mu}, ${sigma}²)：左尾機率 ${xin} 對應 x = ${x.toFixed(2)}`, marks: [{ x: x, label: 'x = ' + x.toFixed(2) }] });
+    } else {
+        const z = (xin - mu) / sigma;
+        const pLt = normCDF(z);
+        if (mode === 'lt') {
+            out.textContent =
+`z = (${xin} − ${mu}) / ${sigma} = ${z.toFixed(4)}
+P(X < ${xin}) = P(Z < ${z.toFixed(2)}) = ${pLt.toFixed(4)}`;
+            drawNormal('ncChart', mu, sigma, mu - 4 * sigma, xin,
+                { title: `N(${mu}, ${sigma}²)：P(X < ${xin}) = ${pLt.toFixed(4)}`, marks: [{ x: xin, label: 'x = ' + xin }] });
+        } else {
+            out.textContent =
+`z = (${xin} − ${mu}) / ${sigma} = ${z.toFixed(4)}
+P(X > ${xin}) = 1 − P(Z < ${z.toFixed(2)}) = ${(1 - pLt).toFixed(4)}`;
+            drawNormal('ncChart', mu, sigma, xin, mu + 4 * sigma,
+                { title: `N(${mu}, ${sigma}²)：P(X > ${xin}) = ${(1 - pLt).toFixed(4)}`, marks: [{ x: xin, label: 'x = ' + xin }] });
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    drawUniform();
+    drawFamily();
+    drawNormal('normEx2', 32, 5, 25, 35,
+        { title: '主範例 8.2c　P(25 < X < 35)＝著色面積 = 0.6449', xlabel: '送達時間（分鐘）',
+          marks: [{ x: 25, label: '25' }, { x: 35, label: '35' }] });
+    calcNormal();
+});
+</script>
+
+</body>
+</html>
