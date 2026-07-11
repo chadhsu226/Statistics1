@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 9　抽樣分配</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: "$$", right: "$$", display: true },
+                    { left: "$", right: "$", display: false }
+                ],
+                throwOnError: false,
+                strict: "ignore"
+            });
+        });
+    </script>
+    <style>
+        :root {
+            --navy: #1a3a6b;
+            --blue: #2e6cb8;
+            --blue-light: #4a90d9;
+            --accent: #c0392b;
+            --gold: #d4a017;
+            --green: #27ae60;
+            --bg: #f7f9fc;
+            --card: #ffffff;
+            --border: #d0dcea;
+            --text: #2c3e50;
+            --muted: #5a6a7a;
+            --math-bg: #eaf3ff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Noto Sans TC', 'Source Serif 4', Georgia, serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 36px 24px 80px;
+        }
+        h1 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 2rem; font-weight: 700;
+            color: var(--navy);
+            border-bottom: 4px solid var(--blue-light);
+            padding-bottom: 12px; margin-bottom: 20px;
+        }
+        h2 {
+            font-family: 'Source Serif 4', serif;
+            font-size: 1.45rem; font-weight: 600;
+            color: var(--navy);
+            margin-top: 48px; margin-bottom: 14px;
+            border-left: 5px solid var(--blue-light);
+            padding-left: 12px;
+        }
+        h3 { font-size: 1.1rem; font-weight: 700; color: var(--blue); margin-top: 28px; margin-bottom: 10px; }
+        p { margin-bottom: 12px; }
+        ul, ol { margin-left: 24px; margin-bottom: 12px; }
+        li { margin-bottom: 6px; }
+        hr { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+        .chapter-intro {
+            font-size: 1.05rem; color: var(--muted);
+            border-left: 3px solid var(--blue-light);
+            padding: 10px 16px; background: #eef4fb;
+            border-radius: 0 6px 6px 0; margin-bottom: 24px;
+        }
+        .learning-goals {
+            background: #fffbea; border: 1.5px solid var(--gold);
+            border-radius: 8px; padding: 18px 22px; margin: 24px 0;
+        }
+        .learning-goals h3 { color: #8a6000; margin-top: 0; }
+        .toc {
+            background: var(--card); border: 1.5px solid var(--border);
+            border-radius: 8px; padding: 18px 24px; margin: 24px 0;
+            box-shadow: 0 2px 8px rgba(30,60,110,0.06);
+        }
+        .toc h3 { color: var(--navy); margin-top: 0; }
+        .toc a { color: var(--blue); text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+        .highlight {
+            background: #fffbe6; border-left: 4px solid var(--gold);
+            padding: 12px 16px; margin: 16px 0; border-radius: 0 6px 6px 0;
+        }
+        .math-block {
+            background: var(--math-bg); border-radius: 6px;
+            padding: 14px 18px; margin: 14px 0;
+            overflow-x: auto; font-size: 1.05em; text-align: center;
+        }
+        .formula-card {
+            background: var(--card); border: 2px solid var(--blue-light);
+            border-radius: 10px; padding: 18px 22px; margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(74,144,217,0.1);
+        }
+        .formula-card h3 { margin-top: 0; color: var(--navy); }
+        .formula-card .note {
+            font-size: 0.9em; color: var(--muted);
+            background: #f0f6ff; border-left: 3px solid #aac4ee;
+            padding: 8px 12px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .example-block {
+            background: #f0faff; border-left: 5px solid var(--blue-light);
+            border-radius: 0 8px 8px 0; padding: 18px 22px; margin: 20px 0;
+        }
+        .example-block h3 { color: var(--navy); margin-top: 0; }
+        .example-block .note {
+            font-size: 0.92em; color: #333;
+            background: #e6f7e6; border-left: 3px solid var(--green);
+            padding: 10px 14px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .example-block .warn {
+            font-size: 0.92em; background: #fff3cd;
+            border-left: 3px solid var(--gold);
+            padding: 10px 14px; margin-top: 10px; border-radius: 0 4px 4px 0;
+        }
+        .scenario {
+            background: #f8f4ff; border: 1.5px dashed #9b7fd4;
+            border-radius: 8px; padding: 12px 18px; margin-bottom: 14px;
+            font-size: 0.97em; color: #3d2070;
+        }
+        .scenario strong { color: #6a3fbf; }
+        table {
+            width: 100%; border-collapse: collapse;
+            margin: 14px 0; font-size: 0.95em;
+        }
+        th, td { border: 1px solid #c8d8ec; padding: 8px 12px; text-align: center; }
+        th { background: #ddeeff; color: var(--navy); font-weight: 600; }
+        tr:nth-child(even) { background: #f5f8ff; }
+        .logic-table th { background: var(--navy); color: white; }
+
+        canvas.chart {
+            display: block; margin: 14px auto;
+            border: 1px solid #ddd; border-radius: 6px; background: #fff;
+            max-width: 100%;
+        }
+
+        .quiz-box {
+            background: #f0f6ff; border: 1.5px solid var(--blue-light);
+            border-radius: 10px; padding: 22px 26px; margin: 28px 0;
+        }
+        .quiz-box h3 { color: var(--navy); margin-top: 0; }
+        .quiz-q { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin-bottom: 16px; }
+        .quiz-q p { font-weight: 600; margin-bottom: 10px; }
+        .quiz-q label { display: block; margin: 6px 0; cursor: pointer; font-size: 0.97em; font-weight: 400; }
+        .quiz-q button { margin-top: 10px; padding: 7px 18px; background: var(--blue); color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 0.9em; }
+        .quiz-q button:hover { background: var(--navy); }
+        .quiz-feedback { display: none; margin-top: 10px; padding: 10px 14px; border-radius: 6px; font-size: 0.95em; }
+        .quiz-feedback.correct { background: #d4edda; border-left: 4px solid var(--green); color: #155724; }
+        .quiz-feedback.wrong { background: #f8d7da; border-left: 4px solid var(--accent); color: #721c24; }
+
+        .exercises-list { counter-reset: ex-counter; list-style: none; padding: 0; margin-left: 0; }
+        .exercises-list > li {
+            counter-increment: ex-counter;
+            background: var(--card); border: 1px solid var(--border);
+            border-radius: 8px; padding: 16px 20px; margin-bottom: 16px;
+        }
+        .exercises-list > li strong { color: var(--navy); }
+        details summary { cursor: pointer; color: var(--blue); font-weight: 700; margin-top: 12px; user-select: none; }
+        details summary:hover { color: var(--navy); }
+        details > div { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+
+        .summary {
+            background: var(--navy); color: #e8f0fc;
+            border-radius: 10px; padding: 22px 26px; margin-top: 40px;
+        }
+        .summary h2 { color: #c8dcf8; border-left-color: #6aaae8; }
+        .summary ul { margin-bottom: 0; }
+        .summary li { margin-bottom: 10px; color: #d8e8f8; }
+        .summary strong { color: #a8d0f8; }
+
+        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+        .col-box { border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; background: #fafbff; }
+        .col-box h3 { font-size: 0.98em; margin-top: 0; text-align: center; }
+
+        .calc-box {
+            background: var(--card); border: 1.5px solid var(--border);
+            border-radius: 10px; padding: 22px 26px; margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(30,60,110,0.06);
+        }
+        .calc-box h3 { margin-top: 0; color: var(--navy); }
+        .inputs-row { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 12px; align-items: flex-end; }
+        .inputs-row label { display: flex; flex-direction: column; font-size: 0.88em; color: var(--muted); min-width: 130px; flex: 1; }
+        .inputs-row input, .inputs-row select {
+            margin-top: 4px; padding: 6px 8px;
+            border: 1px solid var(--border); border-radius: 5px; font-size: 1em;
+        }
+        .slider-row { display: flex; align-items: center; gap: 14px; margin: 8px 0; }
+        .slider-row input[type="range"] { flex: 1; }
+        .slider-row .val { font-family: monospace; font-weight: 700; color: var(--navy); min-width: 64px; }
+        .calc-box button { padding: 8px 22px; background: var(--blue); color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.95em; margin-right: 6px; }
+        .calc-box button:hover { background: var(--navy); }
+        .calc-result {
+            display: none; margin-top: 14px;
+            background: #f0f6ff; border-left: 4px solid var(--blue-light);
+            padding: 12px 16px; border-radius: 0 6px 6px 0;
+            font-family: monospace; font-size: 0.93em; white-space: pre-line;
+        }
+        @media (max-width: 640px) {
+            .two-col { grid-template-columns: 1fr; }
+            body { padding: 20px 14px 60px; }
+        }
+    </style>
+</head>
+<body>
+
+<h1>Chapter 9　抽樣分配 (Sampling Distributions)</h1>
+
+<p class="chapter-intro">
+第 1 章的抽樣模擬器留下了一個懸念：每次抽樣得到的 $\bar{X}$ 都不同，但都在 $\mu$ 附近擺盪——「擺盪的規律是什麼？」本章給出答案。抽樣分配是連接機率論（ch6–8）與統計推論（ch10 以後）的橋樑；其中的中央極限定理，是整個統計學最令人驚嘆的結果：不管母體長什麼樣子，樣本平均數都會走向常態分配。
+</p>
+
+<div class="learning-goals">
+<h3>🎯 Learning Objectives</h3>
+<ul>
+    <li>理解<strong>抽樣分配</strong>的意義：統計量本身也是隨機變數，有自己的分配。</li>
+    <li>掌握樣本平均數的抽樣分配：$\mu_{\bar{X}} = \mu$、$\sigma_{\bar{X}} = \sigma/\sqrt{n}$（<strong>標準誤</strong>）。</li>
+    <li>能敘述並正確使用<strong>中央極限定理（CLT）</strong>，區分「母體常態」與「$n$ 夠大」兩種適用情況。</li>
+    <li>掌握樣本比例的抽樣分配：$\mu_{\hat{p}} = p$、$\sigma_{\hat{p}} = \sqrt{p(1-p)/n}$，與常態近似的條件。</li>
+    <li>理解「機率分配 → 抽樣分配 → 統計推論」的邏輯進程。</li>
+</ul>
+</div>
+
+<div class="toc">
+<h3>📋 本章內容</h3>
+<ol>
+    <li><a href="#s91">§9.1　樣本平均數的抽樣分配</a>
+        <ol style="margin-top:4px;">
+            <li><a href="#s91-1">抽樣分配是什麼</a></li>
+            <li><a href="#s91-2">$\bar{X}$ 的平均數與標準誤</a></li>
+            <li><a href="#s91-3">中央極限定理</a></li>
+        </ol>
+    </li>
+    <li><a href="#s92">§9.2　樣本比例的抽樣分配</a></li>
+    <li><a href="#s93">§9.3　從抽樣分配到統計推論</a></li>
+    <li><a href="#tool">🔢 互動工具：中央極限定理模擬器</a></li>
+    <li><a href="#quiz">🧠 Quick Quiz</a></li>
+    <li><a href="#exercises">📚 綜合練習</a></li>
+    <li><a href="#summary">📌 Chapter Summary</a></li>
+</ol>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 9.1
+══════════════════════════════════════════ -->
+<h2 id="s91">§9.1　樣本平均數的抽樣分配 (Sampling Distribution of the Mean)</h2>
+
+<h3 id="s91-1">一、抽樣分配是什麼</h3>
+
+<div class="formula-card">
+<h3>📐 定義</h3>
+<p><strong>抽樣分配 (Sampling Distribution)</strong>：想像從母體<strong>重複抽取</strong>大小為 $n$ 的樣本無限多次，每次都計算統計量（如 $\bar{X}$）——這些統計量形成的機率分配，就是該統計量的抽樣分配。</p>
+<p class="note">關鍵的觀念轉換：$\bar{X}$ 在抽樣前是<strong>隨機變數</strong>（值取決於抽到誰），所以它有自己的平均數、自己的標準差、自己的分配形狀。「統計量也有分配」是本章唯一真正的新想法，其餘都是計算。</p>
+</div>
+
+<h3 id="s91-2">二、$\bar{X}$ 的平均數與標準誤</h3>
+
+<div class="formula-card">
+<h3>📐 $\bar{X}$ 的三個性質</h3>
+<p>自平均數 $\mu$、標準差 $\sigma$ 的母體抽取大小 $n$ 的隨機樣本：</p>
+<div class="math-block">$$\mu_{\bar{X}} = \mu \qquad\qquad \sigma^2_{\bar{X}} = \frac{\sigma^2}{n} \qquad\qquad \sigma_{\bar{X}} = \frac{\sigma}{\sqrt{n}}$$</div>
+<ul>
+    <li>$\bar{X}$ 的期望值＝母體平均數（$\bar{X}$ 不偏不倚地瞄準 $\mu$）。</li>
+    <li>$\sigma_{\bar{X}}$ 稱為<strong>平均數的標準誤 (Standard Error)</strong>——衡量 $\bar{X}$ 圍繞 $\mu$ 的擺盪幅度。</li>
+    <li>標準化公式因此變成：
+        <div class="math-block">$$Z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$$</div></li>
+</ul>
+<p class="note"><strong>標準差 vs 標準誤</strong>：$\sigma$ 描述「個別觀測值」的分散；$\sigma_{\bar{X}} = \sigma/\sqrt{n}$ 描述「樣本平均數」的分散。平均會抵銷極端值，所以 $\bar{X}$ 的擺盪永遠比個別值小——且 $n$ 越大越小。注意分母是 $\sqrt{n}$：樣本擴大 4 倍，標準誤只縮小一半。</p>
+</div>
+
+<h3 id="s91-3">三、中央極限定理 (Central Limit Theorem)</h3>
+
+<div class="formula-card">
+<h3>📐 CLT 與適用規則</h3>
+<p><strong>中央極限定理</strong>：自<strong>任何形狀</strong>的母體隨機抽樣，當 $n$ 足夠大時，$\bar{X}$ 的抽樣分配趨近常態分配。</p>
+<table>
+    <thead><tr><th>母體分配</th><th>$\bar{X}$ 的抽樣分配</th></tr></thead>
+    <tbody>
+        <tr><td>常態</td><td style="text-align:left;"><strong>任何 $n$</strong> 下都是精確的常態分配</td></tr>
+        <tr><td>非常態（偏態、雙峰⋯⋯）</td><td style="text-align:left;">$n$ 夠大時（經驗法則 <strong>$n \geq 30$</strong>）近似常態分配</td></tr>
+    </tbody>
+</table>
+<p class="note">母體偏得越嚴重，需要的 $n$ 越大；文末的 CLT 模擬器可以親手驗證「右偏、均勻、雙峰母體的 $\bar{X}$ 都被拉成鐘形」。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 主範例 9.1　星夜客運的載客數（延續第 1 章）</h3>
+<div class="scenario">
+<strong>情境：</strong>星夜客運深夜班次的載客數 $X$：母體平均 $\mu = 21$ 人、標準差 $\sigma = 7.5$ 人，分配<strong>右偏</strong>（多數班次普通、少數爆滿）。營運部門隨機抽出 $n = 36$ 個班次計算平均載客數 $\bar{X}$。
+</div>
+<p><strong>a. $\bar{X}$ 的抽樣分配是什麼？</strong></p>
+<p>母體非常態，但 $n = 36 \geq 30$，由 CLT：$\bar{X}$ 近似常態，且</p>
+<div class="math-block">$$\mu_{\bar{X}} = 21 \qquad \sigma_{\bar{X}} = \frac{7.5}{\sqrt{36}} = 1.25 \text{ 人}$$</div>
+<p><strong>b. $P(\bar{X} < 20)$——36 班的平均載客不到 20 人（低於損益門檻）的機率？</strong></p>
+<div class="math-block">$$Z = \frac{20 - 21}{1.25} = -0.8 \qquad P(\bar{X} < 20) = P(Z < -0.8) = 0.2119$$</div>
+<p><strong>c. $P(\bar{X} > 23)$？</strong></p>
+<div class="math-block">$$Z = \frac{23 - 21}{1.25} = 1.6 \qquad P(\bar{X} > 23) = P(Z > 1.6) = 1 - 0.9452 = 0.0548$$</div>
+<p><strong>d. 能不能算「單一班次載客低於 20 人」的機率 $P(X < 20)$？</strong></p>
+<div class="warn">⚠️ <strong>不能！</strong>個別 $X$ 的機率需要知道母體分配的形狀——母體是右偏而非常態，z 表派不上用場。CLT 只保證「$\bar{X}$」近似常態，<strong>不會把母體本身變成常態</strong>。這是本章最常見的誤用。</div>
+<div class="note">✅ 第 1 章模擬器裡 $\bar{X}$ 在 μ 附近的「擺盪」，現在有了精確的描述：以 $\mu = 21$ 為中心、標準誤 1.25 的近似常態分配。</div>
+</div>
+
+<div class="example-block">
+<h3>📝 範例 9.2　個別值 vs 平均值：品管的視角</h3>
+<div class="scenario">
+<strong>情境：</strong>「沐茶」自動封口機的每杯填充量 $X \sim N(700, 20^2)$ mL（母體<strong>常態</strong>）。門市品管有兩種檢驗方式：(a) 隨機抽 1 杯；(b) 隨機抽 16 杯取平均。
+</div>
+<p><strong>a. 單杯超過 710 mL 的機率</strong>（母體常態 → 直接標準化 $X$）：</p>
+<div class="math-block">$$Z = \frac{710 - 700}{20} = 0.5 \qquad P(X > 710) = P(Z > 0.5) = 0.3085$$</div>
+<p><strong>b. 16 杯平均超過 710 mL 的機率</strong>（母體常態 → $\bar{X}$ 對任何 $n$ 都常態）：</p>
+<div class="math-block">$$\sigma_{\bar{X}} = \frac{20}{\sqrt{16}} = 5 \qquad Z = \frac{710 - 700}{5} = 2 \qquad P(\bar{X} > 710) = P(Z > 2) = 0.0228$$</div>
+<canvas id="xVsXbar" class="chart" width="660" height="250"></canvas>
+<div class="note">✅ 同樣是「超出 710」，單杯發生的機率 31%，16 杯的<strong>平均</strong>卻只有 2%——平均數的分配窄得多。所以品管用「樣本平均」判定機台異常，比看單杯靈敏可靠得多：若 16 杯平均真的超過 710，那幾乎不可能是運氣，而是機台出了問題——這正是第 11 章假設檢定的直覺。</div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 9.2
+══════════════════════════════════════════ -->
+<h2 id="s92">§9.2　樣本比例的抽樣分配 (Sampling Distribution of a Proportion)</h2>
+
+<div class="formula-card">
+<h3>📐 $\hat{p}$ 的抽樣分配</h3>
+<p>當母體中具有某特徵的比例為 $p$，抽 $n$ 個觀測值，樣本比例 $\hat{p} = X/n$（$X$ 為樣本中的成功數，服從二項分配）。當 <strong>$np \geq 5$ 且 $n(1-p) \geq 5$</strong> 時，$\hat{p}$ 近似常態：</p>
+<div class="math-block">$$\mu_{\hat{p}} = p \qquad \sigma_{\hat{p}} = \sqrt{\frac{p(1-p)}{n}} \qquad Z = \frac{\hat{p} - p}{\sqrt{p(1-p)/n}}$$</div>
+<p class="note">$\hat{p}$ 其實就是「把二項隨機變數除以 $n$」，其常態近似正是 CLT 在 0/1 資料上的化身。$\sigma_{\hat{p}}$ 稱為<strong>比例的標準誤</strong>。</p>
+</div>
+
+<div class="example-block">
+<h3>📝 主範例 9.3　準時率的週報表（延續第 7 章主範例 7.3）</h3>
+<div class="scenario">
+<strong>情境：</strong>披薩店的長期外送準時率 $p = 0.9$。本週共有 $n = 225$ 筆外送訂單。若服務水準不變，本週樣本準時率 $\hat{p}$ 低於 0.87 的機率是多少？
+</div>
+<p><strong>Step 1　檢查常態近似條件</strong>：$np = 202.5 \geq 5$、$n(1-p) = 22.5 \geq 5$ ✓</p>
+<p><strong>Step 2　標準誤</strong>：</p>
+<div class="math-block">$$\sigma_{\hat{p}} = \sqrt{\frac{0.9 \times 0.1}{225}} = \sqrt{0.0004} = 0.02$$</div>
+<p><strong>Step 3　標準化並查表</strong>：</p>
+<div class="math-block">$$Z = \frac{0.87 - 0.9}{0.02} = -1.5 \qquad P(\hat{p} < 0.87) = P(Z < -1.5) = 0.0668$$</div>
+<div class="note">✅ 判讀：服務水準正常時，一週準時率低於 87% 的機率只有 6.7%。如果本週真的只有 87%，店長該警覺：這比較可能是「服務變差了」而不是「運氣不好」——下一章開始，我們就把這種判斷正式化。</div>
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     Section 9.3
+══════════════════════════════════════════ -->
+<h2 id="s93">§9.3　從抽樣分配到統計推論 (Toward Statistical Inference)</h2>
+
+<p>把 ch7–ch10 的邏輯排成一列，就能看見整門課的地圖：</p>
+
+<table class="logic-table">
+    <thead>
+        <tr><th>階段</th><th>已知</th><th>推向</th><th>典型問題</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>機率分配</strong><br>(ch7–8)</td>
+            <td>母體參數</td>
+            <td>個別觀測值</td>
+            <td style="text-align:left;">已知 $\mu=700$、$\sigma=20$，單杯超過 710 mL 的機率？</td>
+        </tr>
+        <tr>
+            <td><strong>抽樣分配</strong><br>(ch9)</td>
+            <td>母體參數</td>
+            <td>樣本統計量</td>
+            <td style="text-align:left;">已知 $p=0.9$，225 筆訂單的準時率低於 0.87 的機率？</td>
+        </tr>
+        <tr>
+            <td><strong>統計推論</strong><br>(ch10 以後)</td>
+            <td>樣本統計量</td>
+            <td>母體參數</td>
+            <td style="text-align:left;">觀察到 $\bar{X} = 22.6$，母體平均 $\mu$ 可能落在哪個範圍？</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="highlight">
+<strong>💡 方向即將反轉：</strong>前九章都是「從母體推樣本」（參數已知，問統計量的機率）；實務上參數幾乎永遠未知，第 10 章起我們反過來「從樣本推母體」。而反推之所以可行，正是因為本章已經弄清楚「統計量圍繞參數擺盪的規律」——標準誤就是即將登場的信賴區間的核心零件。
+</div>
+
+<hr>
+
+<!-- ══════════════════════════════════════════
+     互動工具
+══════════════════════════════════════════ -->
+<h2 id="tool">🔢 互動工具：中央極限定理模擬器</h2>
+
+<div class="calc-box">
+<h3>🔬 親眼見證：任何母體的 $\bar{X}$ 都走向常態</h3>
+<p style="font-size:0.93em; color:var(--muted);">選一個「長得很不常態」的母體，拉動樣本大小 $n$，按「抽樣」模擬 2,000 次抽樣（每次抽 $n$ 個、算一個 $\bar{X}$）。觀察：直方圖如何變成鐘形、寬度如何以 $\sigma/\sqrt{n}$ 收窄（紅色曲線＝CLT 預測的常態分配）。</p>
+<div class="inputs-row">
+    <label>母體形狀
+        <select id="cltPop">
+            <option value="skew">右偏（如：所得、等待時間）</option>
+            <option value="unif">均勻（如：亂數）</option>
+            <option value="bimodal">雙峰（如：混合兩個群體）</option>
+        </select>
+    </label>
+</div>
+<div class="slider-row">
+    <span>樣本大小 n</span>
+    <input type="range" id="cltN" min="1" max="100" value="1" oninput="document.getElementById('cltNVal').textContent = 'n = ' + this.value">
+    <span class="val" id="cltNVal">n = 1</span>
+</div>
+<button onclick="cltRun()">🎲 抽樣 2,000 次</button>
+<canvas id="cltPopChart" class="chart" width="660" height="140"></canvas>
+<canvas id="cltChart" class="chart" width="660" height="260"></canvas>
+<div class="calc-result" id="cltResult" style="display:block;">請按「抽樣 2,000 次」開始。建議流程：先 n=1（就是母體本身的樣子）→ n=5 → n=30，看形狀與寬度的變化。</div>
+</div>
+
+<hr>
+
+<!-- ══ Quiz ══ -->
+<div class="quiz-box" id="quiz">
+<h3>🧠 Quick Quiz</h3>
+
+<div class="quiz-q">
+    <p>Q1. 「標準差 σ」與「標準誤 σ/√n」的差別是？</p>
+    <label><input type="radio" name="q1" value="a"> A. 兩者相同，只是名稱不同</label>
+    <label><input type="radio" name="q1" value="b"> B. σ 描述個別觀測值的分散；標準誤描述樣本平均數的分散</label>
+    <label><input type="radio" name="q1" value="c"> C. 標準誤描述母體，σ 描述樣本</label>
+    <label><input type="radio" name="q1" value="d"> D. 標準誤永遠大於 σ</label>
+    <button onclick="checkQ('q1','b','✅ 正確！σ 是個別值的擺盪、σ/√n 是平均數的擺盪。平均會抵銷極端值，所以標準誤永遠 ≤ σ（n=1 時相等）。')">Submit</button>
+    <div class="quiz-feedback" id="q1-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q2. 想把 $\bar{X}$ 的標準誤縮小為原來的一半，樣本大小 $n$ 應該？</p>
+    <label><input type="radio" name="q2" value="a"> A. 擴大 2 倍</label>
+    <label><input type="radio" name="q2" value="b"> B. 擴大 4 倍</label>
+    <label><input type="radio" name="q2" value="c"> C. 擴大 √2 倍</label>
+    <label><input type="radio" name="q2" value="d"> D. 縮小一半</label>
+    <button onclick="checkQ('q2','b','✅ 正確！標準誤 = σ/√n，分母是根號 n——要減半就得讓 √n 加倍，即 n 變 4 倍。「精確度的代價以平方成長」，這解釋了為什麼民調規模不會無限擴大。')">Submit</button>
+    <div class="quiz-feedback" id="q2-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q3. 母體呈<strong>嚴重右偏</strong>。下列哪個情況「可以」用常態分配計算機率？</p>
+    <label><input type="radio" name="q3" value="a"> A. 單一觀測值 X 的機率（n = 1）</label>
+    <label><input type="radio" name="q3" value="b"> B. n = 5 的樣本平均數</label>
+    <label><input type="radio" name="q3" value="c"> C. n = 64 的樣本平均數</label>
+    <label><input type="radio" name="q3" value="d"> D. 以上皆可</label>
+    <button onclick="checkQ('q3','c','✅ 正確！母體非常態時，CLT 要求 n 夠大（經驗法則 n ≥ 30）。n=64 合格；n=5 太小；個別 X 的機率永遠取決於母體本身的形狀——CLT 幫不了它。')">Submit</button>
+    <div class="quiz-feedback" id="q3-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q4. 母體比例 $p = 0.2$、樣本 $n = 100$。$\hat{p}$ 的標準誤是？</p>
+    <label><input type="radio" name="q4" value="a"> A. 0.16</label>
+    <label><input type="radio" name="q4" value="b"> B. 0.04</label>
+    <label><input type="radio" name="q4" value="c"> C. 0.002</label>
+    <label><input type="radio" name="q4" value="d"> D. 0.0016</label>
+    <button onclick="checkQ('q4','b','✅ 正確！σ_p̂ = √(0.2×0.8/100) = √0.0016 = 0.04。選 D 的同學忘了開根號——標準誤是標準差，不是變異數。')">Submit</button>
+    <div class="quiz-feedback" id="q4-fb"></div>
+</div>
+
+<div class="quiz-q">
+    <p>Q5. 從 $N(50, 12^2)$ 的常態母體抽 $n = 9$。$P(\bar{X} > 54)$ = ？</p>
+    <label><input type="radio" name="q5" value="a"> A. P(Z > 0.33) ≈ 0.371</label>
+    <label><input type="radio" name="q5" value="b"> B. P(Z > 1) ≈ 0.159</label>
+    <label><input type="radio" name="q5" value="c"> C. 無法計算，因為 n < 30</label>
+    <label><input type="radio" name="q5" value="d"> D. P(Z > 3) ≈ 0.001</label>
+    <button onclick="checkQ('q5','b','✅ 正確！標準誤 = 12/√9 = 4，Z = (54−50)/4 = 1。母體本身是常態，任何 n 下 X̄ 都是精確常態——n ≥ 30 的規則只在母體非常態時才需要。選 A 用成了 σ=12 忘記除以 √n。')">Submit</button>
+    <div class="quiz-feedback" id="q5-fb"></div>
+</div>
+
+</div>
+
+<hr>
+
+<!-- ══ Exercises ══ -->
+<h2 id="exercises">📚 綜合練習 (Comprehensive Practice)</h2>
+<p>以下習題涵蓋平均數與比例的抽樣分配，請先獨立作答，再展開解答確認。</p>
+
+<h3>I. 概念複習</h3>
+<ol class="exercises-list">
+
+    <li>
+        <p>什麼是「抽樣分配」？它與「母體分配」有何不同？</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>母體分配</strong>：個別觀測值 $X$ 的分配（描述母體成員長什麼樣）。</p>
+            <p><strong>抽樣分配</strong>：重複抽取大小 $n$ 的樣本、每次計算統計量，這些統計量形成的分配（描述統計量的隨機行為）。</p>
+            <p>兩者中心相同（$\mu_{\bar{X}} = \mu$），但抽樣分配窄得多（$\sigma/\sqrt{n}$），且形狀在 $n$ 大時趨近常態——不管母體是什麼形狀。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <p>請用白話說明中央極限定理，並指出它的適用條件。</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>白話版：「不管母體的分配多麼奇形怪狀，只要樣本夠大，樣本平均數的分配就會近似鐘形的常態分配，中心在 $\mu$、寬度為 $\sigma/\sqrt{n}$。」</p>
+            <p>條件：隨機抽樣；母體常態時任何 $n$ 皆可（且為精確常態）；母體非常態時需 $n$ 夠大（經驗法則 $n \geq 30$，偏態越嚴重需要越大）。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <p>民調常聽到「樣本 1,068 人、誤差 ±3 個百分點」。用比例的標準誤說明 3% 大約是怎麼來的。</p>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p>比例的標準誤 $\sqrt{p(1-p)/n}$ 在 $p = 0.5$ 時最大：$\sqrt{0.25/1068} \approx 0.0153$。</p>
+            <p>取約 2 個標準誤（95% 的擺盪範圍）：$2 \times 0.0153 \approx 0.031 \approx 3\%$。所以「±3%」的本意是：若重複抽樣，約 95% 的樣本比例會落在真實比例 ±3 個百分點內——第 10 章會把它正式化為信賴區間。</p>
+        </div>
+        </details>
+    </li>
+
+</ol>
+
+<h3>II. 計算與應用</h3>
+<ol class="exercises-list">
+
+    <li>
+        <strong>9.1　通勤時間的樣本平均</strong>
+        <p>某市上班族的單程通勤時間：$\mu = 34$ 分鐘、$\sigma = 8$ 分鐘，分配右偏。研究者隨機抽 $n = 64$ 人。</p>
+        <ul>
+            <li>a. $\bar{X}$ 的抽樣分配為何？為什麼可以用常態？</li>
+            <li>b. 求 $P(\bar{X} > 36)$。</li>
+            <li>c. 求 $P(33 < \bar{X} < 35)$。</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> $n = 64 \geq 30$，由 CLT，$\bar{X}$ 近似 $N(34, 1^2)$；標準誤 $= 8/\sqrt{64} = 1$。</p>
+            <p><strong>b.</strong> $Z = (36-34)/1 = 2$；$P(\bar{X} > 36) = P(Z > 2) = 0.0228$。</p>
+            <p><strong>c.</strong> $Z_1 = -1$、$Z_2 = 1$；$P(-1 < Z < 1) = 0.6827$。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>9.2　烘焙坊的重量檢驗</strong>
+        <p>吐司出爐重量 $X \sim N(450, 10^2)$ 公克。</p>
+        <ul>
+            <li>a. 隨機抽 1 條，重量低於 445 克的機率？</li>
+            <li>b. 隨機抽 25 條，平均重量低於 445 克的機率？</li>
+            <li>c. 若某天 25 條的平均真的只有 444 克，你會下什麼判斷？</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> $Z = (445-450)/10 = -0.5$；$P(X < 445) = 0.3085$。</p>
+            <p><strong>b.</strong> 標準誤 $= 10/\sqrt{25} = 2$；$Z = (445-450)/2 = -2.5$；$P(\bar{X} < 445) = 0.0062$。</p>
+            <p><strong>c.</strong> $\bar{X} = 444$ 比 445 更極端（$Z = -3$，機率約 0.0013）。若配方與機器正常，這種結果千分之一多都不到——合理的判斷是「製程出了問題」（例如麵團秤重偏低），應停機檢查。這就是統計品管的邏輯。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>9.3　新手教學的完成率</strong>
+        <p>某手遊的新手教學長期完成率 $p = 0.7$。本週新註冊玩家 $n = 525$ 人。</p>
+        <ul>
+            <li>a. 樣本完成率 $\hat{p}$ 的平均數與標準誤？</li>
+            <li>b. 求 $P(\hat{p} > 0.73)$。</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> $\mu_{\hat{p}} = 0.7$；$\sigma_{\hat{p}} = \sqrt{0.7 \times 0.3 / 525} = \sqrt{0.0004} = 0.02$。（$np = 367.5$、$n(1-p) = 157.5$，常態近似成立。）</p>
+            <p><strong>b.</strong> $Z = (0.73 - 0.7)/0.02 = 1.5$；$P(\hat{p} > 0.73) = 1 - 0.9332 = 0.0668$。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>9.4　常態近似的門檻</strong>
+        <p>某產品線的長期瑕疵率 $p = 0.1$。</p>
+        <ul>
+            <li>a. 抽 $n = 30$ 件，可以用常態近似計算 $\hat{p}$ 的機率嗎？</li>
+            <li>b. 抽 $n = 100$ 件呢？若可以，求 $P(\hat{p} > 0.13)$。</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> $np = 3 < 5$ → <strong>不可</strong>。樣本中的瑕疵數太少，$\hat{p}$ 的分配仍呈離散的右偏，用常態會失真（此時應直接用二項分配計算）。</p>
+            <p><strong>b.</strong> $np = 10 \geq 5$、$n(1-p) = 90 \geq 5$ → 可以。$\sigma_{\hat{p}} = \sqrt{0.1 \times 0.9/100} = 0.03$；$Z = (0.13-0.1)/0.03 = 1$；$P(\hat{p} > 0.13) = 0.1587$。</p>
+        </div>
+        </details>
+    </li>
+
+    <li>
+        <strong>9.5　客服中心的宣稱可信嗎？（推論的前奏）</strong>
+        <p>某電信客服中心宣稱顧客滿意率 $p = 0.8$。消費者團體獨立抽訪 $n = 256$ 位顧客，只有 $189.44 \approx 74\%$ 表示滿意（$\hat{p} = 0.74$）。</p>
+        <ul>
+            <li>a. 若宣稱屬實，$\hat{p}$ 的標準誤是多少？</li>
+            <li>b. 若宣稱屬實，觀察到 $\hat{p} \leq 0.74$ 的機率是多少？</li>
+            <li>c. 這個結果對「宣稱 80% 滿意」意味著什麼？</li>
+        </ul>
+        <details><summary>▶ 點此展開解答</summary>
+        <div>
+            <p><strong>a.</strong> $\sigma_{\hat{p}} = \sqrt{0.8 \times 0.2/256} = \sqrt{0.000625} = 0.025$。</p>
+            <p><strong>b.</strong> $Z = (0.74 - 0.8)/0.025 = -2.4$；$P(\hat{p} \leq 0.74) = P(Z \leq -2.4) = 0.0082$。</p>
+            <p><strong>c.</strong> 若宣稱屬實，這麼低的樣本滿意率發生的機率不到 1%——「宣稱為真但我們運氣極差」與「宣稱有灌水」兩種解釋中，後者顯然更合理。這種「在假設之下計算觀察結果有多罕見」的推理，正是第 11 章假設檢定的完整雛形。</p>
+        </div>
+        </details>
+    </li>
+
+</ol>
+
+<hr>
+
+<!-- ══ Summary ══ -->
+<div class="summary" id="summary">
+<h2>📌 Chapter Summary</h2>
+<ul>
+    <li><strong>抽樣分配</strong>：統計量本身是隨機變數，有自己的分配。$\bar{X}$ 的抽樣分配：$\mu_{\bar{X}} = \mu$、標準誤 $\sigma_{\bar{X}} = \sigma/\sqrt{n}$——平均數的擺盪比個別值小，且隨 $n$ 以 $\sqrt{n}$ 的速度收窄。</li>
+    <li><strong>CLT</strong>：母體常態 → $\bar{X}$ 任何 $n$ 都常態；母體非常態 → $n \geq 30$ 時近似常態。CLT 不會把母體變常態——個別 $X$ 的機率仍取決於母體形狀。</li>
+    <li><strong>標準化</strong>：$Z = (\bar{X} - \mu)/(\sigma/\sqrt{n})$——分母記得用標準誤。</li>
+    <li><strong>樣本比例</strong>：$np \geq 5$ 且 $n(1-p) \geq 5$ 時，$\hat{p}$ 近似 $N\!\left(p,\ p(1-p)/n\right)$；$Z = (\hat{p}-p)/\sqrt{p(1-p)/n}$。</li>
+    <li><strong>邏輯地圖</strong>：機率分配（參數→個體）→ 抽樣分配（參數→統計量）→ 統計推論（統計量→參數，ch10 起方向反轉）。標準誤是信賴區間與假設檢定的核心零件。</li>
+</ul>
+</div>
+
+<!-- ══ Scripts ══ -->
+<script>
+// ── Quiz ──
+function checkQ(qid, correct, msg) {
+    const selected = document.querySelector(`input[name="${qid}"]:checked`);
+    const fb = document.getElementById(`${qid}-fb`);
+    if (!selected) { fb.style.display='block'; fb.className='quiz-feedback wrong'; fb.textContent='請先選擇一個答案。'; return; }
+    fb.style.display = 'block';
+    if (selected.value === correct) {
+        fb.className = 'quiz-feedback correct';
+        fb.innerHTML = msg;
+    } else {
+        fb.className = 'quiz-feedback wrong';
+        fb.innerHTML = '❌ 不正確，請再想想。提示：' + msg;
+    }
+}
+
+function normCDF(z) {
+    const t = 1 / (1 + 0.2316419 * Math.abs(z));
+    const poly = t * (0.319381530 + t * (-0.356563782 + t * (1.781477937 + t * (-1.821255978 + t * 1.330274429))));
+    const pdf = Math.exp(-0.5 * z * z) / Math.sqrt(2 * Math.PI);
+    const cdf = 1 - pdf * poly;
+    return z >= 0 ? cdf : 1 - cdf;
+}
+
+// ── X vs X̄ 對比圖（範例 9.2）──
+function drawXvsXbar() {
+    const cv = document.getElementById('xVsXbar');
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    const pL = 40, pR = 20, pT = 30, pB = 40;
+    const pW = W - pL - pR, pH = H - pT - pB;
+    const mu = 700;
+    const xMin = 640, xMax = 760;
+    const yMax = 1 / (5 * Math.sqrt(2 * Math.PI)) * 1.1;
+    const axisY = pT + pH;
+    function px(x) { return pL + (x - xMin) / (xMax - xMin) * pW; }
+    function py(v) { return pT + pH - v / yMax * pH; }
+    function pdf(x, s) { return Math.exp(-0.5 * ((x - mu) / s) ** 2) / (s * Math.sqrt(2 * Math.PI)); }
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 13px "Noto Sans TC", sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('圖 9.1　個別值 X（藍，σ=20）vs 16 杯平均 X̄（綠，標準誤=5）：超過 710 的面積', W / 2, 18);
+    // X 曲線 + 著色
+    ctx.fillStyle = 'rgba(46,108,184,0.20)';
+    ctx.beginPath(); ctx.moveTo(px(710), axisY);
+    for (let i = 0; i <= 150; i++) { const x = 710 + (xMax - 710) * i / 150; ctx.lineTo(px(x), py(pdf(x, 20))); }
+    ctx.lineTo(px(xMax), axisY); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.strokeStyle = '#2e6cb8'; ctx.lineWidth = 2;
+    for (let i = 0; i <= 300; i++) { const x = xMin + (xMax - xMin) * i / 300; const v = pdf(x, 20); i === 0 ? ctx.moveTo(px(x), py(v)) : ctx.lineTo(px(x), py(v)); }
+    ctx.stroke();
+    // X̄ 曲線 + 著色
+    ctx.fillStyle = 'rgba(39,174,96,0.25)';
+    ctx.beginPath(); ctx.moveTo(px(710), axisY);
+    for (let i = 0; i <= 150; i++) { const x = 710 + (xMax - 710) * i / 150; ctx.lineTo(px(x), py(pdf(x, 5))); }
+    ctx.lineTo(px(xMax), axisY); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.strokeStyle = '#27ae60'; ctx.lineWidth = 2;
+    for (let i = 0; i <= 300; i++) { const x = xMin + (xMax - xMin) * i / 300; const v = pdf(x, 5); i === 0 ? ctx.moveTo(px(x), py(v)) : ctx.lineTo(px(x), py(v)); }
+    ctx.stroke();
+    // 邊界
+    ctx.beginPath(); ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 2; ctx.setLineDash([4, 3]);
+    ctx.moveTo(px(710), axisY); ctx.lineTo(px(710), pT + 8); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = '#c0392b'; ctx.font = 'bold 12px sans-serif';
+    ctx.fillText('710', px(710), pT + 4);
+    // 軸
+    ctx.strokeStyle = '#999'; ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(pL, axisY); ctx.lineTo(W - pR, axisY); ctx.stroke();
+    ctx.fillStyle = '#555'; ctx.font = '11px sans-serif';
+    [650, 675, 700, 725, 750].forEach(x => {
+        ctx.beginPath(); ctx.strokeStyle = '#bbb'; ctx.moveTo(px(x), axisY); ctx.lineTo(px(x), axisY + 4); ctx.stroke();
+        ctx.fillText(x, px(x), axisY + 16);
+    });
+    ctx.fillText('填充量（mL）', pL + pW / 2, H - 6);
+    ctx.textAlign = 'left'; ctx.font = '12px "Noto Sans TC", sans-serif';
+    ctx.fillStyle = '#2e6cb8'; ctx.fillText('X：P = 0.3085', px(722), py(pdf(715, 20)) - 16);
+    ctx.fillStyle = '#27ae60'; ctx.fillText('X̄：P = 0.0228', px(713), py(pdf(708, 5)));
+}
+
+// ── CLT 模擬器 ──
+(function () {
+    let seed = 12345;
+    function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+    // 母體定義：draw()、理論 mu/sigma、名稱、密度概形（供左圖）
+    const POPS = {
+        skew: {
+            name: '右偏母體', mu: 10, sigma: 10,
+            draw: () => -Math.log(1 - rnd()) * 10,
+            range: [0, 40]
+        },
+        unif: {
+            name: '均勻母體 U(0, 20)', mu: 10, sigma: 20 / Math.sqrt(12),
+            draw: () => rnd() * 20,
+            range: [0, 20]
+        },
+        bimodal: {
+            name: '雙峰母體（兩群體混合）', mu: 10, sigma: Math.sqrt(38.25),
+            draw: () => {
+                const u1 = rnd(), u2 = rnd();
+                const z = Math.sqrt(-2 * Math.log(Math.max(u1, 1e-12))) * Math.cos(2 * Math.PI * u2);
+                return (rnd() < 0.5 ? 4 : 16) + z * 1.5;
+            },
+            range: [-1, 21]
+        }
+    };
+
+    function drawPopSketch(key) {
+        const cv = document.getElementById('cltPopChart');
+        if (!cv) return;
+        const ctx = cv.getContext('2d');
+        const W = cv.width, H = cv.height;
+        ctx.clearRect(0, 0, W, H);
+        ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+        const pop = POPS[key];
+        // 用大量抽樣畫母體直方圖概形
+        const draws = [];
+        for (let i = 0; i < 8000; i++) draws.push(pop.draw());
+        const lo = pop.range[0], hi = pop.range[1];
+        const bins = 40, counts = new Array(bins).fill(0);
+        draws.forEach(v => {
+            if (v >= lo && v < hi) counts[Math.floor((v - lo) / (hi - lo) * bins)]++;
+        });
+        const maxC = Math.max(...counts);
+        const pL = 36, pR = 14, pT = 24, pB = 20;
+        const pW = W - pL - pR, pH = H - pT - pB;
+        ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 12px "Noto Sans TC", sans-serif'; ctx.textAlign = 'left';
+        ctx.fillText('母體：' + pop.name + '　（μ = ' + pop.mu + '、σ = ' + pop.sigma.toFixed(2) + '）', pL, 15);
+        for (let i = 0; i < bins; i++) {
+            const h = counts[i] / maxC * pH;
+            ctx.fillStyle = 'rgba(122,138,160,0.75)';
+            ctx.fillRect(pL + i * pW / bins, pT + pH - h, pW / bins - 1, h);
+        }
+        ctx.strokeStyle = '#999';
+        ctx.beginPath(); ctx.moveTo(pL, pT + pH); ctx.lineTo(W - pR, pT + pH); ctx.stroke();
+    }
+
+    window.cltRun = function () {
+        const key = document.getElementById('cltPop').value;
+        const n = parseInt(document.getElementById('cltN').value);
+        const pop = POPS[key];
+        drawPopSketch(key);
+        // 模擬 2000 個樣本平均
+        const means = [];
+        for (let k = 0; k < 2000; k++) {
+            let s = 0;
+            for (let i = 0; i < n; i++) s += pop.draw();
+            means.push(s / n);
+        }
+        // 直方圖
+        const se = pop.sigma / Math.sqrt(n);
+        const lo = pop.mu - 4.2 * Math.max(se, pop.sigma / 6);
+        const hi = pop.mu + 4.2 * Math.max(se, pop.sigma / 6);
+        const loFix = Math.min(lo, pop.range[0]);
+        const hiFix = Math.max(hi, n === 1 ? pop.range[1] : hi);
+        const bins = 60, counts = new Array(bins).fill(0);
+        means.forEach(v => {
+            if (v >= loFix && v < hiFix) counts[Math.floor((v - loFix) / (hiFix - loFix) * bins)]++;
+        });
+        const binW = (hiFix - loFix) / bins;
+        const cv = document.getElementById('cltChart');
+        const ctx = cv.getContext('2d');
+        const W = cv.width, H = cv.height;
+        const pL = 36, pR = 14, pT = 26, pB = 36;
+        const pW = W - pL - pR, pH = H - pT - pB;
+        const axisY = pT + pH;
+        // 理論常態密度（換算成「每 bin 期望次數」尺度）
+        function normPdf(x) { return Math.exp(-0.5 * ((x - pop.mu) / se) ** 2) / (se * Math.sqrt(2 * Math.PI)); }
+        const maxTheory = normPdf(pop.mu) * 2000 * binW;
+        const maxC = Math.max(Math.max(...counts), maxTheory) * 1.08;
+        function px(x) { return pL + (x - loFix) / (hiFix - loFix) * pW; }
+        ctx.clearRect(0, 0, W, H);
+        ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+        ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 12.5px "Noto Sans TC", sans-serif'; ctx.textAlign = 'left';
+        ctx.fillText('X̄ 的抽樣分配（2,000 個樣本平均，n = ' + n + '）　紅線 = CLT 預測 N(' + pop.mu + ', (' + pop.sigma.toFixed(2) + '/√' + n + ')²)', pL, 16);
+        for (let i = 0; i < bins; i++) {
+            const h = counts[i] / maxC * pH;
+            ctx.fillStyle = 'rgba(46,108,184,0.72)';
+            ctx.fillRect(pL + i * pW / bins, axisY - h, pW / bins - 1, h);
+        }
+        // 理論曲線
+        ctx.beginPath(); ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 2.2;
+        for (let i = 0; i <= 300; i++) {
+            const x = loFix + (hiFix - loFix) * i / 300;
+            const v = normPdf(x) * 2000 * binW;
+            const y = axisY - v / maxC * pH;
+            i === 0 ? ctx.moveTo(px(x), y) : ctx.lineTo(px(x), y);
+        }
+        ctx.stroke();
+        // 軸
+        ctx.strokeStyle = '#999'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(pL, axisY); ctx.lineTo(W - pR, axisY); ctx.stroke();
+        ctx.fillStyle = '#555'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
+        const stepA = (hiFix - loFix) / 8;
+        for (let i = 0; i <= 8; i++) {
+            const x = loFix + stepA * i;
+            ctx.fillText(x.toFixed(1), px(x), axisY + 15);
+        }
+        // 模擬 vs 理論
+        const simMean = means.reduce((a, b) => a + b, 0) / means.length;
+        const simSd = Math.sqrt(means.reduce((a, b) => a + (b - simMean) ** 2, 0) / (means.length - 1));
+        document.getElementById('cltResult').textContent =
+'理論預測：μ_X̄ = ' + pop.mu.toFixed(3) + '　　標準誤 σ/√n = ' + se.toFixed(3) + '\n' +
+'模擬結果：平均 = ' + simMean.toFixed(3) + '　　標準差 = ' + simSd.toFixed(3) + '\n' +
+(n < 30 && key !== 'unif' ? '試著把 n 拉大到 30 以上，看直方圖如何貼上紅色常態曲線。' :
+ '直方圖與紅色常態曲線幾乎重合——這就是中央極限定理。');
+    };
+
+    document.addEventListener('DOMContentLoaded', function () {
+        drawPopSketch('skew');
+        cltRun();
+    });
+})();
+
+document.addEventListener('DOMContentLoaded', function () {
+    drawXvsXbar();
+});
+</script>
+
+</body>
+</html>
