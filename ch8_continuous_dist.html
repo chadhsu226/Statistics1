@@ -292,6 +292,22 @@
 <div class="note">✅ 均勻分配是「完全無知」的模型——除了範圍之外，對 $X$ 落在哪裡毫無線索。多數真實變數（如身高、誤差）反而會向中央集中，這就輪到常態分配登場。</div>
 </div>
 
+<div class="calc-box">
+<h3>🎛️ 互動圖表：均勻分配 U(a, b)</h3>
+<p style="font-size:0.93em; color:var(--muted);">輸入分配的下界 $a$、上界 $b$，即時畫出機率密度函數；再輸入 $x_1$、$x_2$，著色區域就是 $P(x_1 < X < x_2)$。預設為範例 8.1(b)。觀察重點：<strong>區間 $[a, b]$ 越寬，矩形越矮</strong>——因為總面積永遠是 1。</p>
+<div class="inputs-row">
+    <label>下界 a<input type="number" id="ufA" value="0" step="any" oninput="ufInput()"></label>
+    <label>上界 b<input type="number" id="ufB" value="12" step="any" oninput="ufInput()"></label>
+    <label>x₁（著色起點）<input type="number" id="ufX1" value="8" step="any" oninput="ufInput()"></label>
+    <label>x₂（著色終點）<input type="number" id="ufX2" value="12" step="any" oninput="ufInput()"></label>
+</div>
+<button onclick="ufPreset(0,12,8,12)" style="background:#7a8aa0;">範例 8.1(b)　P(X &gt; 8)</button>
+<button onclick="ufPreset(0,12,2,5)" style="background:#7a8aa0;">範例 8.1(c)　P(2 &lt; X &lt; 5)</button>
+<button onclick="ufPlayWiden()">▶ 播放：區間由 6 拉寬到 24</button>
+<canvas id="ufCanvas" class="chart" width="680" height="260"></canvas>
+<div class="calc-result" id="ufStatus" style="display:block;"></div>
+</div>
+
 <hr>
 
 <!-- ══════════════════════════════════════════
@@ -797,6 +813,180 @@ function drawUniform() {
     ctx.fillText('面積 = 4 × 1/12 = 1/3', px(10), yTop + (axisY - yTop) / 2);
 }
 
+// ── 互動圖表：均勻分配 U(a, b)（範例 8.1）──
+(function () {
+    let cur = { a: 0, b: 12, x1: 8, x2: 12 };
+    let view = null;          // 座標範圍；動畫期間固定，才看得出矩形變高或變矮
+    let animId = null;
+
+    function fmt(v) { return String(Math.round(v * 10000) / 10000); }
+    function makeView(states) {
+        let lo = Infinity, hi = -Infinity, hMax = 0;
+        states.forEach(s => {
+            lo = Math.min(lo, s.a, s.x1); hi = Math.max(hi, s.b, s.x2);
+            hMax = Math.max(hMax, 1 / (s.b - s.a));
+        });
+        const pad = (hi - lo) * 0.08 || 1;
+        return { xMin: lo - pad, xMax: hi + pad, yMax: hMax * 1.4 };
+    }
+    function niceStep(range) {
+        const raw = range / 8, p = Math.pow(10, Math.floor(Math.log10(raw))), m = raw / p;
+        return (m < 1.5 ? 1 : m < 3.5 ? 2 : m < 7.5 ? 5 : 10) * p;
+    }
+
+    function ufDraw() {
+        const cv = document.getElementById('ufCanvas');
+        if (!cv) return;
+        const ctx = cv.getContext('2d');
+        const W = cv.width, H = cv.height;
+        const pL = 64, pR = 20, pT = 34, pB = 42;
+        const pW = W - pL - pR, pH = H - pT - pB;
+        const { a, b, x1, x2 } = cur;
+        const h = 1 / (b - a);
+        const v = view || makeView([cur]);
+        const axisY = pT + pH;
+        function px(x) { return pL + (x - v.xMin) / (v.xMax - v.xMin) * pW; }
+        function py(y) { return axisY - y / v.yMax * pH; }
+
+        ctx.clearRect(0, 0, W, H);
+        ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
+
+        // 整個矩形（總面積 = 1）淡底色
+        ctx.fillStyle = 'rgba(46,108,184,0.10)';
+        ctx.fillRect(px(a), py(h), px(b) - px(a), axisY - py(h));
+
+        // 著色 P(x1 < X < x2)：只有與 [a, b] 重疊的部分有面積
+        const lo = Math.max(Math.min(x1, x2), a), hi = Math.min(Math.max(x1, x2), b);
+        const prob = hi > lo ? (hi - lo) * h : 0;
+        if (hi > lo) {
+            ctx.fillStyle = 'rgba(192,57,43,0.32)';
+            ctx.fillRect(px(lo), py(h), px(hi) - px(lo), axisY - py(h));
+        }
+
+        // 密度函數：區間外 f(x) = 0，區間內 f(x) = h
+        ctx.strokeStyle = '#1a3a6b'; ctx.lineWidth = 2.4;
+        ctx.beginPath(); ctx.moveTo(px(v.xMin), axisY); ctx.lineTo(px(a), axisY); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(px(a), py(h)); ctx.lineTo(px(b), py(h)); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(px(b), axisY); ctx.lineTo(px(v.xMax), axisY); ctx.stroke();
+        ctx.setLineDash([4, 3]); ctx.strokeStyle = '#8aa8cc'; ctx.lineWidth = 1.2;
+        [a, b].forEach(x => { ctx.beginPath(); ctx.moveTo(px(x), py(h)); ctx.lineTo(px(x), axisY); ctx.stroke(); });
+        ctx.setLineDash([]);
+        // 端點：實心點在高度 h，空心點在 0
+        [a, b].forEach(x => {
+            ctx.fillStyle = '#1a3a6b'; ctx.beginPath(); ctx.arc(px(x), py(h), 3.6, 0, 2 * Math.PI); ctx.fill();
+            ctx.fillStyle = '#fff'; ctx.strokeStyle = '#1a3a6b'; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.arc(px(x), axisY, 3.6, 0, 2 * Math.PI); ctx.fill(); ctx.stroke();
+        });
+
+        // y 軸與高度 h
+        ctx.strokeStyle = '#999'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(pL, pT); ctx.lineTo(pL, axisY); ctx.stroke();
+        ctx.setLineDash([2, 3]); ctx.strokeStyle = 'rgba(26,58,107,0.45)';
+        ctx.beginPath(); ctx.moveTo(pL, py(h)); ctx.lineTo(px(a), py(h)); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 11.5px sans-serif'; ctx.textAlign = 'right';
+        ctx.fillText(fmt(h), pL - 6, py(h) + 4);
+        ctx.fillStyle = '#555'; ctx.font = '11px sans-serif'; ctx.fillText('0', pL - 6, axisY + 4);
+        ctx.save(); ctx.translate(14, pT + pH / 2); ctx.rotate(-Math.PI / 2);
+        ctx.textAlign = 'center'; ctx.fillText('f(x)', 0, 0); ctx.restore();
+
+        // x 軸
+        ctx.strokeStyle = '#999'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(pL, axisY); ctx.lineTo(W - pR, axisY); ctx.stroke();
+        const step = niceStep(v.xMax - v.xMin);
+        ctx.fillStyle = '#555'; ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
+        for (let x = Math.ceil(v.xMin / step) * step; x <= v.xMax + 1e-9; x += step) {
+            ctx.beginPath(); ctx.strokeStyle = '#bbb'; ctx.moveTo(px(x), axisY); ctx.lineTo(px(x), axisY + 4); ctx.stroke();
+            ctx.fillText(fmt(x), px(x), axisY + 16);
+        }
+        ctx.fillText('x', pL + pW / 2, H - 4);
+
+        // E(X) 標記
+        const m = (a + b) / 2;
+        ctx.strokeStyle = '#27ae60'; ctx.lineWidth = 1.6; ctx.setLineDash([5, 3]);
+        ctx.beginPath(); ctx.moveTo(px(m), py(h) - 14); ctx.lineTo(px(m), axisY); ctx.stroke(); ctx.setLineDash([]);
+        ctx.fillStyle = '#27ae60'; ctx.font = 'bold 11.5px sans-serif';
+        ctx.fillText('E(X) = ' + fmt(m), px(m), py(h) - 18);
+
+        // 面積標籤
+        if (hi > lo) {
+            ctx.fillStyle = '#c0392b'; ctx.font = 'bold 12.5px sans-serif';
+            const lab = '面積 = ' + fmt(prob);
+            const cx = (px(lo) + px(hi)) / 2, cy = (py(h) + axisY) / 2 + 4;
+            const tw = ctx.measureText(lab).width;
+            if (px(hi) - px(lo) > tw + 6) ctx.fillText(lab, cx, cy);
+            else ctx.fillText(lab, cx, py(h) - 36);
+        }
+
+        // 標題
+        ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 13px "Noto Sans TC", sans-serif'; ctx.textAlign = 'left';
+        ctx.fillText('X ~ U(' + fmt(a) + ', ' + fmt(b) + ')：矩形寬 ' + fmt(b - a) + ' × 高 ' + fmt(h) + ' = 總面積 1', pL, 18);
+
+        // 文字說明
+        const el = document.getElementById('ufStatus');
+        if (!el) return;
+        const xl = Math.min(x1, x2), xr = Math.max(x1, x2);
+        let txt =
+'X ~ U(' + fmt(a) + ', ' + fmt(b) + ')　f(x) = 1/(b − a) = 1/' + fmt(b - a) + ' = ' + fmt(h) + '，' + fmt(a) + ' ≤ x ≤ ' + fmt(b) + '\n' +
+'E(X) = (a + b)/2 = (' + fmt(a) + ' + ' + fmt(b) + ')/2 = ' + fmt(m) + '\n';
+        if (xl === xr) {
+            txt += 'P(X = ' + fmt(xl) + ') = 0　（連續變數單點機率為零）';
+        } else if (hi > lo) {
+            txt += 'P(' + fmt(xl) + ' < X < ' + fmt(xr) + ') = (' + fmt(hi) + ' − ' + fmt(lo) + ') × 1/' + fmt(b - a) + ' = ' + fmt(prob);
+            if (lo !== xl || hi !== xr) txt += '\n（[' + fmt(xl) + ', ' + fmt(xr) + '] 超出 [a, b] 的部分密度為 0，只算重疊的 ' + fmt(lo) + ' ~ ' + fmt(hi) + '）';
+        } else {
+            txt += 'P(' + fmt(xl) + ' < X < ' + fmt(xr) + ') = 0　（區間完全落在 [a, b] 之外，密度為 0）';
+        }
+        el.textContent = txt;
+    }
+
+    function animateTo(target, dur, done) {
+        if (animId) cancelAnimationFrame(animId);
+        const from = Object.assign({}, cur), t0 = performance.now();
+        view = makeView([from, target]);
+        function frame(now) {
+            const t = Math.min(1, (now - t0) / dur);
+            const e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+            ['a', 'b', 'x1', 'x2'].forEach(k => { cur[k] = from[k] + (target[k] - from[k]) * e; });
+            ufDraw();
+            if (t < 1) { animId = requestAnimationFrame(frame); }
+            else { cur = Object.assign({}, target); animId = null; ufDraw(); if (done) done(); }
+        }
+        animId = requestAnimationFrame(frame);
+    }
+    function setInputs(s) {
+        document.getElementById('ufA').value = s.a;
+        document.getElementById('ufB').value = s.b;
+        document.getElementById('ufX1').value = s.x1;
+        document.getElementById('ufX2').value = s.x2;
+    }
+
+    window.ufInput = function () {
+        const s = {
+            a: parseFloat(document.getElementById('ufA').value),
+            b: parseFloat(document.getElementById('ufB').value),
+            x1: parseFloat(document.getElementById('ufX1').value),
+            x2: parseFloat(document.getElementById('ufX2').value)
+        };
+        const el = document.getElementById('ufStatus');
+        if ([s.a, s.b, s.x1, s.x2].some(isNaN)) { el.textContent = '請輸入完整的數值。'; return; }
+        if (!(s.b > s.a)) { el.textContent = '⚠ 上界 b 必須大於下界 a，才能構成均勻分配。'; return; }
+        animateTo(s, 450);
+    };
+    window.ufPreset = function (a, b, x1, x2) {
+        const s = { a: a, b: b, x1: x1, x2: x2 };
+        setInputs(s); animateTo(s, 600);
+    };
+    window.ufPlayWiden = function () {
+        const s0 = { a: 0, b: 6, x1: 2, x2: 5 }, s1 = { a: 0, b: 24, x1: 2, x2: 5 };
+        if (animId) cancelAnimationFrame(animId);
+        cur = Object.assign({}, s0); setInputs(s0);
+        view = makeView([s0, s1]); ufDraw();
+        setTimeout(() => animateTo(s1, 3000, () => setInputs(s1)), 500);
+    };
+
+    document.addEventListener('DOMContentLoaded', ufDraw);
+})();
+
 // ── 常態家族圖（μ、σ 的影響）──
 function drawFamily() {
     const cv = document.getElementById('normFamily');
@@ -892,11 +1082,12 @@ P(X > ${xin}) = 1 − P(Z < ${z.toFixed(2)}) = ${(1 - pLt).toFixed(4)}`;
     let phase = 0;          // 0 = 原始, 1 = 平移完成, 2 = 伸縮完成
     let animTarget = 0, animId = null;
 
+    // 動畫進度 p (0~2) 對應的曲線參數與邊界位置
     function curveAt(p) {
         if (p <= 1) {
             return { m: mu * (1 - p), s: sigma, b: xb - mu * p };
         }
-        const k = 1 + (1 / sigma - 1) * (p - 1);
+        const k = 1 + (1 / sigma - 1) * (p - 1);   // 尺度 1 → 1/σ
         return { m: 0, s: sigma * k, b: (xb - mu) * k };
     }
 
@@ -919,6 +1110,7 @@ P(X > ${xin}) = 1 − P(Z < ${z.toFixed(2)}) = ${(1 - pLt).toFixed(4)}`;
         ctx.clearRect(0, 0, W, H);
         ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
 
+        // 目標：標準常態（灰虛線）
         ctx.beginPath(); ctx.strokeStyle = '#b8c4d4'; ctx.lineWidth = 1.4; ctx.setLineDash([5, 4]);
         for (let i = 0; i <= 300; i++) {
             const x = xMin + (xMax - xMin) * i / 300;
@@ -927,6 +1119,7 @@ P(X > ${xin}) = 1 − P(Z < ${z.toFixed(2)}) = ${(1 - pLt).toFixed(4)}`;
         }
         ctx.stroke(); ctx.setLineDash([]);
 
+        // 目前曲線與著色（右尾）
         const c = curveAt(phase);
         ctx.fillStyle = 'rgba(192,57,43,0.30)';
         ctx.beginPath(); ctx.moveTo(px(c.b), axisY);
@@ -944,11 +1137,13 @@ P(X > ${xin}) = 1 − P(Z < ${z.toFixed(2)}) = ${(1 - pLt).toFixed(4)}`;
         }
         ctx.stroke();
 
+        // 邊界線
         ctx.beginPath(); ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 2; ctx.setLineDash([4, 3]);
         ctx.moveTo(px(c.b), axisY); ctx.lineTo(px(c.b), pT + 6); ctx.stroke(); ctx.setLineDash([]);
         ctx.fillStyle = '#c0392b'; ctx.font = 'bold 12.5px sans-serif'; ctx.textAlign = 'center';
         ctx.fillText('邊界 = ' + c.b.toFixed(2), px(c.b), pT);
 
+        // 軸
         ctx.strokeStyle = '#999'; ctx.lineWidth = 1;
         ctx.beginPath(); ctx.moveTo(pL, axisY); ctx.lineTo(W - pR, axisY); ctx.stroke();
         ctx.fillStyle = '#555'; ctx.font = '11px sans-serif';
@@ -958,9 +1153,11 @@ P(X > ${xin}) = 1 − P(Z < ${z.toFixed(2)}) = ${(1 - pLt).toFixed(4)}`;
             ctx.moveTo(px(x), axisY); ctx.lineTo(px(x), axisY + 4); ctx.stroke();
             ctx.fillText(x, px(x), axisY + 16);
         }
+        // 0 位置輔助線
         ctx.beginPath(); ctx.strokeStyle = 'rgba(120,140,170,0.5)'; ctx.setLineDash([2, 3]);
         ctx.moveTo(px(0), axisY); ctx.lineTo(px(0), pT + 6); ctx.stroke(); ctx.setLineDash([]);
 
+        // 階段標題
         let stageTxt;
         if (phase < 0.02) stageTxt = '原始分配 X ~ N(' + mu + ', ' + sigma + '²)';
         else if (phase < 1) stageTxt = '① 平移中：全體減去 μ = ' + mu + ' ⋯';
