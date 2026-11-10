@@ -156,12 +156,12 @@ table.dir td:first-child{white-space:nowrap}
 
   <h2>§8.1 均勻分配 $U(a,b)$</h2>
   <div class="cols">
-    <div style="flex:0 0 255px"><svg viewBox="0 0 250 120" width="250" height="120" class="sk"><rect x="61.7" y="34" width="47.5" height="58" fill="#fff27a" opacity=".9"/><line x1="10" y1="92" x2="242" y2="92" stroke="#444" stroke-width="1.3"/><line x1="18" y1="92" x2="18" y2="14" stroke="#444" stroke-width="1.3"/><path d="M30,92 L30,34 L220,34 L220,92" fill="none" stroke="#22408a" stroke-width="2.2"/><line x1="15" y1="34" x2="21" y2="34" stroke="#444"/><text x="21" y="26" font-size="12" fill="#d6312b" text-anchor="start">高 = 1/(b−a)</text><text x="30.0" y="107" font-size="13" text-anchor="middle" fill="#333">a</text><text x="61.7" y="107" font-size="13" text-anchor="middle" fill="#333">x₁</text><text x="109.2" y="107" font-size="13" text-anchor="middle" fill="#333">x₂</text><text x="220.0" y="107" font-size="13" text-anchor="middle" fill="#333">b</text><text x="85.4" y="68.0" font-size="12" text-anchor="middle" fill="#d6312b">面積=機率</text><text x="179.6" y="26" font-size="12" text-anchor="middle" fill="#22408a">高度處處相同</text></svg></div>
+    <div style="flex:0 0 255px"><svg viewBox="0 0 250 120" width="250" height="120" class="sk"><rect x="61.7" y="34" width="47.5" height="58" fill="#fff27a" opacity=".9"/><line x1="10" y1="92" x2="242" y2="92" stroke="#444" stroke-width="1.3"/><line x1="18" y1="92" x2="18" y2="14" stroke="#444" stroke-width="1.3"/><path d="M30,92 L30,34 L220,34 L220,92" fill="none" stroke="#22408a" stroke-width="2.2"/><line x1="15" y1="34" x2="21" y2="34" stroke="#444"/><text x="21" y="26" font-size="12" fill="#d6312b" text-anchor="start">高 = 1/(b−a)</text><text x="30.0" y="107" font-size="13" text-anchor="middle" fill="#333">a</text><text x="61.7" y="107" font-size="13" text-anchor="middle" fill="#333">x₁</text><text x="109.2" y="107" font-size="13" text-anchor="middle" fill="#333">x₂</text><text x="220.0" y="107" font-size="13" text-anchor="middle" fill="#333">b</text><text x="85.4" y="68.0" font-size="12" text-anchor="middle" fill="#d6312b">面積=機率</text><text x="179.6" y="26" font-size="12" text-anchor="middle" fill="#22408a">高度處處相同</text></svg>
+      <p class="side">口訣：<b class="b">「均勻就是長方形，<br>底乘高就搞定」</b></p></div>
     <div>
-      <div class="formula">$f(x)=\dfrac{1}{b-a},\ a\le x\le b \qquad E(X)=\dfrac{a+b}{2}$</div>
-      <p>📌 形狀是<span class="hy">一個矩形</span>，所以</p>
-      <div class="box" style="text-align:center"><b class="r">機率 ＝ 底 × 高 ＝ $(x_2-x_1)\times\dfrac{1}{b-a}$</b></div>
-      <p class="side">口訣：<b class="b">「均勻就是長方形，底乘高就搞定」</b></p>
+      <div class="formula" style="text-align:left;margin:3px 0"><span class="tag blue">① PDF</span> $f(x)=\dfrac{1}{b-a},\ a\le x\le b$</div>
+      <div class="formula" style="text-align:left;margin:3px 0"><span class="tag">② 機率</span> 底×高：$(x_2-x_1)\times\dfrac{1}{b-a}$</div>
+      <div class="formula" style="text-align:left;margin:3px 0"><span class="tag green">③ 平均・變異</span> $E(X)=\dfrac{a+b}{2}\quad V(X)=\dfrac{(b-a)^2}{12}$</div>
     </div>
   </div>
 
@@ -169,18 +169,20 @@ table.dir td:first-child{white-space:nowrap}
     <div class="q">8.1　捷運每 12 分鐘一班，小葉隨機到站，等候時間 $X\sim U(0,12)$。</div>
     <div class="cols">
       <div>
-        a. $f(x)=\frac{1}{12}$，平均等 $\frac{0+12}{2}=$ <span class="circ">6 分鐘</span><br>
-        b. $P(X\gt 8)=(12-8)\times\frac{1}{12}=$ <span class="hy">0.333</span>
+        a. PDF：$f(x)=\frac{1}{12-0}=\frac{1}{12}$，$0\le x\le 12$<br>
+        b. $P(X\gt 8)=(12-8)\times\frac{1}{12}=$ <span class="hy">0.333</span><br>
+        c. $P(2\lt X\lt 5)=(5-2)\times\frac{1}{12}=$ <span class="hy">0.25</span>
       </div>
       <div>
-        c. $P(2\lt X\lt 5)=(5-2)\times\frac{1}{12}=$ <span class="hy">0.25</span><br>
-        d. $P(X=6)=$ <span class="r"><b>0</b></span> ← 陷阱 #1 又出現了
+        d. $P(X=6)=$ <span class="r"><b>0</b></span> ← 陷阱 #1 又出現了<br>
+        e. 平均 $E(X)=\frac{0+12}{2}=$ <span class="circ">6 分鐘</span><br>
+        　 $V(X)=\frac{(12-0)^2}{12}=12$，$\sigma=\sqrt{12}\approx3.46$ 分
       </div>
     </div>
   </div>
 
   <div class="trap">
-    <b class="t">⚠ 陷阱 #2｜高度不是機率</b>　$f(x)=\frac{1}{12}$ 是「密度」(高度)，不是機率。區間越寬，矩形就越矮（因為總面積永遠 = 1）。
+    <b class="t">⚠ 陷阱 #2｜高度不是機率</b>　$f(x)=\frac{1}{12}$ 是「密度」，不是機率；區間越寬矩形越矮（總面積 = 1）。
   </div>
   <div class="pno">— 1 —</div>
 </div>
@@ -346,20 +348,20 @@ table.dir td:first-child{white-space:nowrap}
 
   <h2>隨堂小練習</h2>
   <div class="ex" style="border-style:dashed">
-    <p><b>1.</b>（星夜客運）夜班車每 20 分鐘一班，隨機到站，等候時間 $X\sim U(0,20)$。求 $P(X\gt 14)$ 與平均等候時間。</p>
+    <p><b>1.</b>（星夜客運）夜班車每 20 分鐘一班，隨機到站，等候時間 $X\sim U(0,20)$。求 $P(X\gt 14)$、平均等候時間與變異數。</p>
     <p><b>2.</b>（日光咖啡）外帶取餐時間 $X\sim N(6,\,1.5^2)$ 分鐘。求 (a) $P(X\lt 9)$　(b) $P(X\gt 4.5)$　(c) $P(3.6\lt X\lt 7.2)$。</p>
     <p><b>3.</b>（沐茶）店員每小時出杯數 $\sim N(80,\,10^2)$。(a) 前 5% 頒「手速王」，門檻至少幾杯？ (b) 最低 2.5% 需回訓，標準線是幾杯？</p>
     <p><b>4.</b>（是非）$X$ 為連續變數，則 $P(X\le 3)\gt P(X\lt 3)$。</p>
   </div>
 
-  <div class="box dash" style="height:46mm;position:relative"><span class="side">✍️ 計算區（記得每題先畫小鐘圖）</span></div>
+  <div class="box dash" style="height:39mm;position:relative"><span class="side">✍️ 計算區（記得每題先畫小鐘圖）</span></div>
   <h3>考前一分鐘 Checklist</h3>
-  <div class="chips"><span>會寫 PDF 兩條件</span><span>均勻 = 底 × 高</span><span>標準化公式 $z=\frac{x-\mu}{\sigma}$</span><span>左尾／右尾／區間三招</span><span>五兄弟 $z_A$ 背熟</span><span>反標準化 $x=\mu+z\sigma$</span><span>每題都有畫小鐘圖</span></div>
+  <div class="chips"><span>會寫 PDF 兩條件</span><span>均勻：PDF → 底×高 → $E$、$V$</span><span>標準化公式 $z=\frac{x-\mu}{\sigma}$</span><span>左尾／右尾／區間三招</span><span>五兄弟 $z_A$ 背熟</span><span>反標準化 $x=\mu+z\sigma$</span><span>每題都有畫小鐘圖</span></div>
   <div class="sticky" style="transform:rotate(.6deg)">
     <b>✔ 答案（先自己寫再看！）</b>
     <div class="ans cols" style="gap:8px">
       <div>
-        1. $(20-14)\times\frac{1}{20}=0.30$；$E(X)=10$ 分<br>
+        1. $(20-14)\times\frac{1}{20}=0.30$；$E(X)=10$ 分；$V(X)\approx33.3$<br>
         2(a) $z=2$ → 0.9772<br>
         2(b) $z=-1$ → $1-0.1587=0.8413$<br>
         2(c) $z_1=-1.6,\ z_2=0.8$ → $0.7881-0.0548=0.7333$

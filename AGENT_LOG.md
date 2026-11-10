@@ -10,6 +10,20 @@
 
 ---
 
+## 2026-11-10 — Claude — ch8 圖 8.2 改為互動圖＋新增引例
+- 做了什麼：在常態分配性質之後新增「📝 引例　三群同學的通勤時間」：A 住附近搭公車 N(35, 6²)、B 外縣市搭客運 N(60, 6²)、C 外縣市騎機車 N(60, 12²)，說明 A vs B 只改 μ（平移）、B vs C 只改 σ（矮胖）。原靜態圖 8.2 改為「🎛️ 互動圖 8.2」：μ（10–90）、σ（3–20）滑桿與數字輸入、A/B/C 快捷鍵、可切換對照曲線、μ±σ 著色、μ 與 σ 標記、橫軸刻度（通勤時間），下方顯示最高點高度與 68%／95% 範圍；縱軸固定，才看得出 σ 改變時的高矮變化。drawFamily() 改寫，沿用原 canvas id 與呼叫點。
+- 為什麼：Sean 希望圖 8.2 能自選 μ、σ，並在圖上方有例子對應 35、60、6²、12² 這些數字。
+- 動到的檔案：ch8_continuous_dist.html
+- 驗證：</html> 結尾、<script> 4 組、最後 script 通過 node --check；Playwright 實測滑桿、輸入框、A/B/C 按鈕皆正常、無 JS 錯誤。
+- 已部署：2026-11-10 由 My Github Project 推送
+
+## 2026-11-10 — Claude — ch8 均勻分配改為「PDF → 機率計算 → 平均數與變異數」順序
+- 做了什麼：依 Sean 的教學順序調整均勻分配。講義：公式卡拆成 ① PDF ② 機率計算 ③ 平均數與變異數（新增 V(X)=(b−a)²/12、σ=(b−a)/√12）；範例 8.1 的 a 只寫 PDF，平均移到新增的 e（E=6、V=12、σ≈3.46）；習題 8.1 拆出 d（E=7、V=3、σ≈1.73）；Learning Objectives 與 Chapter Summary 同步。筆記：ch8 重點筆記均勻分配區改為三步驟、範例 8.1 加 e、隨堂練習 1 加問變異數、checklist 同步。
+- 為什麼：Sean 上課先教 PDF，再教機率計算，最後才講平均數、變異數（標準差）。
+- 動到的檔案：ch8_continuous_dist.html、筆記/ch8_重點筆記.html（及 PDF）
+- 驗證：講義 </html> 結尾、<script> 4 組、最後 script 通過 node --check，Playwright 實測無 JS 錯誤；筆記仍為 4 頁 A4、無溢頁。
+- 已部署：2026-11-10 由 My Github Project 推送（講義 + notes/ch8_notes.html）
+
 ## 2026-11-10 — Claude — 目錄頁 ch8~10 新增「隨堂筆記」按鈕
 - 做了什麼：上傳 Sean 製作的 ch8、ch9、ch10 重點筆記為 notes/ch8_notes.html、notes/ch9_notes.html、notes/ch10_notes.html；index.html 中 ch8~10 卡片改為 div（整張卡片仍連到講義），在「📖 講義」右側新增「📝 隨堂筆記」按鈕；手機版只顯示筆記按鈕。
 - 為什麼：Sean 希望學生能從目錄頁直接開啟隨堂筆記。

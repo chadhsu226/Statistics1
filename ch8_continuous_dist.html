@@ -222,7 +222,7 @@
 <h3>🎯 Learning Objectives</h3>
 <ul>
     <li>理解<strong>機率密度函數</strong>的兩個條件，以及「機率＝面積」「單點機率為零」的意義。</li>
-    <li>能計算<strong>均勻分配</strong>的機率。</li>
+    <li>能寫出<strong>均勻分配</strong>的機率密度函數、計算機率，並求其平均數與變異數。</li>
     <li>掌握<strong>常態分配</strong>的性質，能以 $z = (x-\mu)/\sigma$ <strong>標準化</strong>並查表計算機率。</li>
     <li>能<strong>反向查表</strong>：由給定的機率求出 $z_A$ 與對應的原始值 $x$。</li>
     <li>認識<strong>指數分配</strong>與其應用場景（選讀）。</li>
@@ -271,10 +271,14 @@
 <h3>二、均勻分配 (Uniform Distribution)</h3>
 
 <div class="formula-card">
-<h3>📐 均勻分配</h3>
-<div class="math-block">$$f(x) = \frac{1}{b-a}, \quad a \leq x \leq b \qquad\qquad E(X) = \frac{a+b}{2}$$</div>
-<p>密度是水平直線（矩形分配），區間內每一段等寬範圍的機率都相同。機率計算就是矩形面積：</p>
+<h3>📐 均勻分配 $X \sim U(a, b)$</h3>
+<p><strong>① 機率密度函數</strong>：密度是水平直線（矩形分配），區間內處處等高：</p>
+<div class="math-block">$$f(x) = \frac{1}{b-a}, \quad a \leq x \leq b$$</div>
+<p><strong>② 機率計算</strong>：區間內每一段等寬範圍的機率都相同，機率就是矩形面積（底 × 高）：</p>
 <div class="math-block">$$P(x_1 < X < x_2) = (x_2 - x_1) \times \frac{1}{b-a}$$</div>
+<p><strong>③ 平均數與變異數</strong>：</p>
+<div class="math-block">$$E(X) = \frac{a+b}{2} \qquad\qquad V(X) = \frac{(b-a)^2}{12} \qquad\qquad \sigma = \frac{b-a}{\sqrt{12}}$$</div>
+<p class="note">平均數就在區間正中央（矩形的對稱點）；區間越寬，變異數越大。</p>
 </div>
 
 <div class="example-block">
@@ -282,13 +286,15 @@
 <div class="scenario">
 <strong>情境：</strong>離峰時段捷運每 <strong>12 分鐘</strong>一班。小葉不看時刻表、隨機抵達月台，因此她的等候時間 $X$ 服從 $U(0, 12)$ 的均勻分配。
 </div>
-<p><strong>a. 機率密度函數</strong>：$f(x) = \dfrac{1}{12}$，$0 \leq x \leq 12$；平均等候 $E(X) = \dfrac{0+12}{2} = 6$ 分鐘。</p>
+<p><strong>a. 機率密度函數</strong>：$f(x) = \dfrac{1}{12 - 0} = \dfrac{1}{12}$，$0 \leq x \leq 12$。</p>
 <p><strong>b. 等超過 8 分鐘的機率</strong>：</p>
 <div class="math-block">$$P(X > 8) = (12 - 8) \times \frac{1}{12} = \frac{4}{12} = 0.333$$</div>
 <p><strong>c. 等 2 到 5 分鐘的機率</strong>：</p>
 <div class="math-block">$$P(2 < X < 5) = (5 - 2) \times \frac{1}{12} = 0.25$$</div>
 <p><strong>d. 恰好等 6 分鐘的機率</strong>：$P(X = 6) = 0$（連續變數單點機率為零）。</p>
 <canvas id="unifChart" class="chart" width="560" height="200"></canvas>
+<p><strong>e. 平均等候時間與標準差</strong>：</p>
+<div class="math-block">$$E(X) = \frac{0+12}{2} = 6 \text{ 分鐘} \qquad V(X) = \frac{(12-0)^2}{12} = 12 \qquad \sigma = \sqrt{12} \approx 3.46 \text{ 分鐘}$$</div>
 <div class="note">✅ 均勻分配是「完全無知」的模型——除了範圍之外，對 $X$ 落在哪裡毫無線索。多數真實變數（如身高、誤差）反而會向中央集中，這就輪到常態分配登場。</div>
 </div>
 
@@ -327,7 +333,38 @@
 </ul>
 </div>
 
-<canvas id="normFamily" class="chart" width="680" height="240"></canvas>
+<div class="example-block">
+<h3>📝 引例　三群同學的通勤時間（搭配圖 8.2）</h3>
+<div class="scenario">
+<strong>情境：</strong>統計學課堂調查同學每天到校的單程通勤時間（分鐘），依住處與交通方式分成三群，各群的通勤時間都近似常態分配：
+</div>
+<table>
+<tr><th>群組</th><th>住處與交通方式</th><th>分配</th><th>平均 $\mu$</th><th>標準差 $\sigma$</th></tr>
+<tr><td style="color:#2e6cb8;"><strong>A</strong></td><td>住學校附近，搭公車</td><td>$N(35,\ 6^2)$</td><td>35 分鐘</td><td>6 分鐘</td></tr>
+<tr><td style="color:#27ae60;"><strong>B</strong></td><td>住外縣市，搭固定班次的客運</td><td>$N(60,\ 6^2)$</td><td>60 分鐘</td><td>6 分鐘</td></tr>
+<tr><td style="color:#c0392b;"><strong>C</strong></td><td>住外縣市，自己騎機車（路況變化大）</td><td>$N(60,\ 12^2)$</td><td>60 分鐘</td><td>12 分鐘</td></tr>
+</table>
+<p><strong>A vs B（只改 $\mu$）：</strong>B 平均多花 25 分鐘，但每天的「起伏」一樣大（$\sigma$ 都是 6）→ 曲線<strong>形狀相同、整條往右平移</strong> 25。</p>
+<p><strong>B vs C（只改 $\sigma$）：</strong>平均都是 60 分鐘，但騎機車今天 45 分、明天 80 分，起伏較大（$\sigma = 12$）→ 曲線<strong>中心不動、變得矮胖</strong>（總面積仍是 1，攤得越開就越矮）。</p>
+<div class="note">✅ 一句話：<strong>$\mu$ 決定曲線站在哪裡，$\sigma$ 決定曲線長得多胖。</strong>下面的互動圖可以自己拉 $\mu$、$\sigma$ 驗證。</div>
+</div>
+
+<div class="calc-box">
+<h3>🎛️ 互動圖 8.2：自己調 μ 與 σ</h3>
+<p style="font-size:0.93em; color:var(--muted);">拖曳滑桿（或直接輸入數字）改變平均數 $\mu$ 與標準差 $\sigma$，粗線是你設定的 $N(\mu, \sigma^2)$，淺色區域是 $\mu \pm \sigma$（約 68%）。細線是引例的 A、B、C 三群，可當作對照；點按鈕可直接套用。</p>
+<div class="inputs-row">
+    <label>平均數 μ：<span id="nfMuV">60</span><input type="range" id="nfMu" min="10" max="90" step="1" value="60" oninput="nfSync('range')"></label>
+    <label>標準差 σ：<span id="nfSdV">12</span><input type="range" id="nfSd" min="3" max="20" step="0.5" value="12" oninput="nfSync('range')"></label>
+    <label>μ（輸入）<input type="number" id="nfMuN" value="60" min="10" max="90" step="any" oninput="nfSync('num')"></label>
+    <label>σ（輸入）<input type="number" id="nfSdN" value="12" min="3" max="20" step="any" oninput="nfSync('num')"></label>
+</div>
+<button onclick="nfPreset(35,6)" style="background:#2e6cb8;">A　N(35, 6²)</button>
+<button onclick="nfPreset(60,6)" style="background:#27ae60;">B　N(60, 6²)</button>
+<button onclick="nfPreset(60,12)" style="background:#c0392b;">C　N(60, 12²)</button>
+<label style="margin-left:12px; font-size:0.9em; color:var(--muted);"><input type="checkbox" id="nfRef" checked onchange="drawFamily()"> 顯示 A、B、C 對照曲線</label>
+<canvas id="normFamily" class="chart" width="680" height="280"></canvas>
+<div class="calc-result" id="nfStatus" style="display:block;"></div>
+</div>
 
 <h3 id="s82-2">二、標準化與查表（正查）</h3>
 
@@ -568,15 +605,17 @@
         <strong>8.1　自動洗車機的服務時間</strong>
         <p>某自動洗車機的單次洗車時間 $X$（分鐘）服從 $U(4, 10)$。</p>
         <ul>
-            <li>a. 寫出 $f(x)$ 並求平均服務時間。</li>
+            <li>a. 寫出 $f(x)$。</li>
             <li>b. 求 $P(X < 6)$。</li>
             <li>c. 求 $P(5 < X < 8)$。</li>
+            <li>d. 求平均服務時間、變異數與標準差。</li>
         </ul>
         <details><summary>▶ 點此展開解答</summary>
         <div>
-            <p><strong>a.</strong> $f(x) = \dfrac{1}{10-4} = \dfrac{1}{6}$，$4 \leq x \leq 10$；$E(X) = (4+10)/2 = 7$ 分鐘。</p>
+            <p><strong>a.</strong> $f(x) = \dfrac{1}{10-4} = \dfrac{1}{6}$，$4 \leq x \leq 10$。</p>
             <p><strong>b.</strong> $P(X < 6) = (6-4) \times \dfrac{1}{6} = \dfrac{2}{6} = 0.333$</p>
             <p><strong>c.</strong> $P(5 < X < 8) = (8-5) \times \dfrac{1}{6} = 0.5$</p>
+            <p><strong>d.</strong> $E(X) = (4+10)/2 = 7$ 分鐘；$V(X) = (10-4)^2/12 = 3$；$\sigma = \sqrt{3} \approx 1.73$ 分鐘。</p>
         </div>
         </details>
     </li>
@@ -664,7 +703,7 @@
 <h2>📌 Chapter Summary</h2>
 <ul>
     <li><strong>連續變數</strong>：機率＝密度曲線下的面積；$f(x) \geq 0$、總面積 1；單點機率為零，故 $<$ 與 $\leq$ 等價。</li>
-    <li><strong>均勻分配</strong> $U(a,b)$：$f(x) = 1/(b-a)$，機率＝矩形面積；$E(X) = (a+b)/2$。</li>
+    <li><strong>均勻分配</strong> $U(a,b)$：PDF $f(x) = 1/(b-a)$ → 機率＝矩形面積（底 × 高）→ $E(X) = (a+b)/2$、$V(X) = (b-a)^2/12$。</li>
     <li><strong>常態分配</strong> $N(\mu, \sigma^2)$：對稱鐘形；$\mu$ 管位置、$\sigma$ 管胖瘦；經驗法則是其精確性質。</li>
     <li><strong>正查</strong>：標準化 $z = (x-\mu)/\sigma$ → 畫圖著色 → 查表組合（右尾用 $1-$、區間用相減）。</li>
     <li><strong>反查</strong>：由機率找 $z_A$（$z_{0.10}=1.28$、$z_{0.05}=1.645$、$z_{0.025}=1.96$、$z_{0.01}=2.33$、$z_{0.005}=2.575$），再反標準化 $x = \mu + z\sigma$；先確認方向（左尾／右尾／中央）。</li>
@@ -987,47 +1026,98 @@ function drawUniform() {
     document.addEventListener('DOMContentLoaded', ufDraw);
 })();
 
-// ── 常態家族圖（μ、σ 的影響）──
+// ── 互動圖 8.2：常態家族（μ、σ 的影響）──
+function nfSync(src) {
+    const g = id => document.getElementById(id);
+    if (src === 'num') {
+        let m = parseFloat(g('nfMuN').value), s = parseFloat(g('nfSdN').value);
+        if (isFinite(m)) g('nfMu').value = Math.min(90, Math.max(10, m));
+        if (isFinite(s) && s > 0) g('nfSd').value = Math.min(20, Math.max(3, s));
+    } else {
+        g('nfMuN').value = g('nfMu').value; g('nfSdN').value = g('nfSd').value;
+    }
+    drawFamily();
+}
+function nfPreset(m, s) {
+    document.getElementById('nfMu').value = m; document.getElementById('nfSd').value = s;
+    nfSync('range');
+}
 function drawFamily() {
     const cv = document.getElementById('normFamily');
     if (!cv) return;
+    const g = id => document.getElementById(id);
+    let mu = parseFloat(g('nfMuN').value), sd = parseFloat(g('nfSdN').value);
+    const st = g('nfStatus');
+    if (!isFinite(mu) || !isFinite(sd) || sd <= 0) { st.textContent = '⚠ 請輸入有效的 μ 與 σ（σ 必須大於 0）。'; return; }
+    mu = Math.min(90, Math.max(10, mu)); sd = Math.min(20, Math.max(3, sd));
+    g('nfMuV').textContent = mu; g('nfSdV').textContent = sd;
     const ctx = cv.getContext('2d');
     const W = cv.width, H = cv.height;
-    const pL = 30, pR = 20, pT = 30, pB = 36;
+    const pL = 30, pR = 20, pT = 30, pB = 44;
     const pW = W - pL - pR, pH = H - pT - pB;
-    const xMin = 10, xMax = 90;
-    function px(x) { return pL + (x - xMin) / (xMax - xMin) * pW; }
-    const yMax = 1 / (6 * Math.sqrt(2 * Math.PI));
-    function py(v) { return pT + pH - v / (yMax * 1.1) * pH; }
+    const xMin = 0, xMax = 100;
+    const px = x => pL + (x - xMin) / (xMax - xMin) * pW;
+    const yMax = 1 / (3 * Math.sqrt(2 * Math.PI));        // 固定縱軸（σ = 3 時的高峰），才看得出高矮變化
+    const py = v => pT + pH - v / (yMax * 1.05) * pH;
+    const dens = (x, m, s) => Math.exp(-0.5 * ((x - m) / s) ** 2) / (s * Math.sqrt(2 * Math.PI));
     const axisY = pT + pH;
     ctx.clearRect(0, 0, W, H);
     ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
     ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 13px "Noto Sans TC", sans-serif'; ctx.textAlign = 'center';
     ctx.fillText('圖 8.2　μ 控制位置、σ 控制胖瘦（面積都是 1）', W / 2, 18);
-    const curves = [
-        { mu: 35, s: 6, col: '#2e6cb8', label: 'N(35, 6²)' },
-        { mu: 60, s: 6, col: '#27ae60', label: 'N(60, 6²)：μ 較大 → 右移' },
-        { mu: 60, s: 12, col: '#c0392b', label: 'N(60, 12²)：σ 較大 → 矮胖' }
+    // μ ± σ 著色
+    ctx.beginPath(); ctx.moveTo(px(mu - sd), axisY);
+    for (let i = 0; i <= 120; i++) { const x = mu - sd + 2 * sd * i / 120; ctx.lineTo(px(x), py(dens(x, mu, sd))); }
+    ctx.lineTo(px(mu + sd), axisY); ctx.closePath();
+    ctx.fillStyle = 'rgba(46,108,184,0.16)'; ctx.fill();
+    // 對照曲線
+    const refs = [
+        { mu: 35, s: 6, col: '#2e6cb8', label: 'A　N(35, 6²)' },
+        { mu: 60, s: 6, col: '#27ae60', label: 'B　N(60, 6²)' },
+        { mu: 60, s: 12, col: '#c0392b', label: 'C　N(60, 12²)' }
     ];
-    curves.forEach(c => {
-        ctx.beginPath(); ctx.strokeStyle = c.col; ctx.lineWidth = 2;
-        for (let i = 0; i <= 300; i++) {
-            const x = xMin + (xMax - xMin) * i / 300;
-            const v = Math.exp(-0.5 * ((x - c.mu) / c.s) ** 2) / (c.s * Math.sqrt(2 * Math.PI));
-            i === 0 ? ctx.moveTo(px(x), py(v)) : ctx.lineTo(px(x), py(v));
+    const showRef = g('nfRef').checked;
+    function curve(m, s, col, lw, dash) {
+        ctx.beginPath(); ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.setLineDash(dash || []);
+        for (let i = 0; i <= 400; i++) {
+            const x = xMin + (xMax - xMin) * i / 400;
+            const yy = py(dens(x, m, s));
+            i === 0 ? ctx.moveTo(px(x), yy) : ctx.lineTo(px(x), yy);
         }
-        ctx.stroke();
-    });
-    ctx.strokeStyle = '#999'; ctx.beginPath(); ctx.moveTo(pL, axisY); ctx.lineTo(W - pR, axisY); ctx.stroke();
+        ctx.stroke(); ctx.setLineDash([]);
+    }
+    if (showRef) refs.forEach(r => { ctx.globalAlpha = 0.45; curve(r.mu, r.s, r.col, 1.5, [5, 4]); ctx.globalAlpha = 1; });
+    curve(mu, sd, '#1a3a6b', 3);
+    // 橫軸與刻度
+    ctx.strokeStyle = '#999'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(pL, axisY); ctx.lineTo(W - pR, axisY); ctx.stroke();
+    ctx.fillStyle = '#555'; ctx.font = '11px "Noto Sans TC", sans-serif'; ctx.textAlign = 'center';
+    for (let x = 0; x <= 100; x += 10) {
+        ctx.beginPath(); ctx.moveTo(px(x), axisY); ctx.lineTo(px(x), axisY + 4); ctx.stroke();
+        ctx.fillText(x, px(x), axisY + 16);
+    }
+    ctx.fillText('通勤時間（分鐘）', W / 2, axisY + 34);
+    // μ 標記與 σ 箭頭
+    const peakY = py(dens(mu, mu, sd));
+    ctx.strokeStyle = '#c0392b'; ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(px(mu), axisY); ctx.lineTo(px(mu), peakY); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = '#c0392b'; ctx.font = 'bold 12px "Noto Sans TC", sans-serif';
+    ctx.fillText('μ = ' + mu, px(mu), Math.max(peakY - 8, pT + 4));
+    const ay = py(dens(mu + sd, mu, sd)) - 6;
+    ctx.strokeStyle = '#1a3a6b'; ctx.beginPath(); ctx.moveTo(px(mu), ay); ctx.lineTo(px(mu + sd), ay); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(px(mu + sd), ay); ctx.lineTo(px(mu + sd) - 6, ay - 4); ctx.lineTo(px(mu + sd) - 6, ay + 4); ctx.closePath(); ctx.fillStyle = '#1a3a6b'; ctx.fill();
+    ctx.textAlign = 'left'; ctx.fillText('σ = ' + sd, px(mu + sd) + 4, ay + 4);
     // 圖例
-    ctx.font = '12px "Noto Sans TC", sans-serif'; ctx.textAlign = 'left';
-    let ly = 40;
-    curves.forEach(c => {
-        ctx.fillStyle = c.col;
-        ctx.fillRect(W - 265, ly - 9, 14, 4);
-        ctx.fillText(c.label, W - 245, ly - 3);
-        ly += 20;
-    });
+    if (showRef) {
+        ctx.font = '12px "Noto Sans TC", sans-serif'; let ly = 42;
+        refs.forEach(r => { ctx.fillStyle = r.col; ctx.fillRect(W - 150, ly - 7, 14, 3); ctx.fillText(r.label, W - 130, ly - 2); ly += 18; });
+        ctx.fillStyle = '#1a3a6b'; ctx.fillRect(W - 150, ly - 8, 14, 4); ctx.fillText('你的 N(' + mu + ', ' + sd + '²)', W - 130, ly - 2);
+    }
+    const peak = 1 / (sd * Math.sqrt(2 * Math.PI));
+    let msg = '目前分配：X ~ N(' + mu + ', ' + sd + '²)\n' +
+        '中心（平均數＝中位數＝眾數）在 ' + mu + '；曲線最高點高度 = 1/(σ√2π) = ' + peak.toFixed(4) + '\n' +
+        '約 68% 落在 μ ± σ = [' + (mu - sd) + ', ' + (mu + sd) + ']；約 95% 落在 μ ± 2σ = [' + (mu - 2 * sd) + ', ' + (mu + 2 * sd) + ']';
+    const hit = refs.find(r => r.mu === mu && r.s === sd);
+    if (hit) msg += '\n👉 這就是引例的 ' + hit.label.charAt(0) + ' 群。';
+    st.textContent = msg;
 }
 
 // ── 計算機 ──
