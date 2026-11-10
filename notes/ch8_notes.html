@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ch8 連續機率分配｜重點筆記</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{
+  --ink:#22408a; --red:#d6312b; --green:#1f7a3a; --pencil:#555;
+  --hl-y:#fff27a; --hl-p:#ffc2d1; --hl-g:#c3f2b4; --hl-b:#bfe3ff;
+  --paper:#fffefa; --grid:#dbe7f5;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#e9e6df}
+body{font-family:"LXGW WenKai TC","Klee One","KaiTi","DFKai-SB","標楷體",serif;color:#262626;font-size:15.5px;line-height:1.6}
+.page{
+  width:210mm;min-height:297mm;margin:14px auto;padding:11mm 13mm 11mm 18mm;position:relative;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:6mm 6mm;box-shadow:0 2px 10px rgba(0,0,0,.18);
+}
+.page::before{content:"";position:absolute;left:11mm;top:0;bottom:0;border-left:2px solid #f2a7a7}
+.pno{position:absolute;bottom:6mm;right:13mm;color:var(--pencil);font-size:12px}
+.hdr{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.5px solid var(--ink);padding-bottom:3px;margin-bottom:8px}
+.hdr h1{margin:0;font-size:27px;color:var(--ink);letter-spacing:1px}
+.hdr .who{font-size:13px;color:var(--pencil);text-align:right}
+h2{font-size:20px;margin:9px 0 5px;color:#fff;display:inline-block;background:var(--ink);padding:1px 12px 1px 10px;border-radius:3px 14px 14px 3px}
+h3{font-size:17px;margin:9px 0 4px;color:var(--ink)}
+h3::before{content:"✎ ";color:var(--red)}
+p{margin:4px 0}
+ul,ol{margin:3px 0;padding-left:22px}
+li{margin:2px 0}
+.hy{background:linear-gradient(transparent 45%,var(--hl-y) 45%)}
+.hp{background:linear-gradient(transparent 45%,var(--hl-p) 45%)}
+.hg{background:linear-gradient(transparent 45%,var(--hl-g) 45%)}
+.hb{background:linear-gradient(transparent 45%,var(--hl-b) 45%)}
+.r{color:var(--red)} .b{color:var(--ink)} .g{color:var(--green)}
+.circ{border:2px solid var(--red);border-radius:50%;padding:0 6px}
+.wavy{text-decoration:underline wavy var(--red);text-underline-offset:4px}
+.box{border:2px solid var(--ink);border-radius:6px;padding:6px 10px;margin:7px 0;background:rgba(255,255,255,.75)}
+.box.red{border-color:var(--red)}
+.box.dash{border-style:dashed}
+.formula{border:2.5px double var(--red);background:#fff;padding:5px 10px;margin:6px 0;text-align:center;border-radius:4px}
+.tag{display:inline-block;font-size:12px;padding:0 7px;border-radius:9px;color:#fff;background:var(--red);margin-right:4px;vertical-align:2px}
+.tag.blue{background:var(--ink)} .tag.green{background:var(--green)}
+.stamp{position:absolute;border:3px solid var(--red);color:var(--red);font-weight:700;padding:1px 8px;border-radius:5px;transform:rotate(-12deg);font-size:17px;opacity:.85;background:rgba(255,255,255,.6)}
+.sticky{background:#fff6a8;padding:6px 11px;box-shadow:2px 3px 6px rgba(0,0,0,.18);transform:rotate(-1.3deg);margin:8px 2px;border-top:14px solid rgba(255,236,120,.95)}
+.sticky.pink{background:#ffdbe5;border-top-color:#ffc0d0;transform:rotate(1deg)}
+.sticky.green{background:#ddf7d2;border-top-color:#c4eeb3;transform:rotate(-.6deg)}
+.trap{border-left:5px solid var(--red);background:rgba(255,231,231,.8);padding:5px 10px;margin:6px 0}
+.trap b.t{color:var(--red)}
+.cols{display:flex;gap:12px;align-items:flex-start}
+.cols>*{flex:1;min-width:0}
+.c3{display:flex;gap:6px;justify-content:space-between;text-align:center}
+.c3>div{flex:1}
+.c3 .cap{font-size:13.5px}
+.sk text{font-family:"LXGW WenKai TC","KaiTi",serif}
+.ex{border:1.8px solid #777;border-radius:6px;padding:5px 10px;margin:7px 0;background:rgba(255,255,255,.8)}
+.ex .q{font-weight:700;color:var(--ink)}
+.ex .q::before{content:"例 ";color:var(--red)}
+.steps{counter-reset:s;list-style:none;padding-left:4px}
+.steps li{counter-increment:s;margin:3px 0}
+.steps li::before{content:counter(s);display:inline-block;width:20px;height:20px;line-height:20px;text-align:center;border-radius:50%;background:var(--red);color:#fff;font-size:12px;margin-right:6px}
+.arrow{color:var(--red);font-weight:700}
+table.zt{border-collapse:collapse;margin:4px auto;font-size:15px}
+table.zt td,table.zt th{border:1.5px solid var(--ink);padding:2px 10px;text-align:center}
+table.zt th{background:var(--hl-b)}
+table.dir{border-collapse:collapse;width:100%;font-size:14.5px;margin:4px 0}
+table.dir td,table.dir th{border:1.5px solid #888;padding:3px 7px;text-align:center}
+table.dir th{background:#f3efe2}
+table.dir td:first-child{white-space:nowrap}
+.svgc{text-align:center;margin:2px 0}
+.two{columns:2;column-gap:26px}
+.chips{display:flex;flex-wrap:wrap;gap:4px 16px;padding-left:4px;margin:2px 0}
+.chips>span::before{content:"☐ ";color:var(--red)}
+.map{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:14.5px;margin:4px 0}
+.map .n{border:2px solid var(--ink);border-radius:16px;padding:1px 10px;background:#fff}
+.map .n.main{border-color:var(--red);color:var(--red);font-weight:700}
+.side{font-size:13px;color:var(--pencil)}
+.ans{font-size:14px}
+.blank{display:inline-block;min-width:70px;border-bottom:1.5px solid #555}
+.katex{font-size:1.02em}
+.check li{list-style:none;margin-left:-18px}
+.check li::before{content:"☐ ";color:var(--red)}
+@page{size:A4;margin:0}
+@media print{
+  html,body{background:none}
+  .page{margin:0;box-shadow:none;page-break-after:always;break-after:page;height:297mm;overflow:hidden}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+@media screen and (max-width:820px){
+  .page{width:auto;min-height:0;margin:8px;padding:16px 16px 30px 26px}
+  .page::before{left:14px}
+  .cols,.c3{flex-direction:column}
+  .stamp{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ================= PAGE 1 ================= -->
+<div class="page">
+  <div class="hdr">
+    <h1>Ch8 連續機率分配 ✏️ 重點筆記</h1>
+    <div class="who">統計學(一)｜許老師上課筆記<br>姓名：<span class="blank"></span> 學號：<span class="blank"></span></div>
+  </div>
+
+  <div class="map">
+    <span class="side">本章地圖 ▸</span>
+    <span class="n">連續變數 = 量出來的</span><span class="arrow">→</span>
+    <span class="n">機率 = 面積</span><span class="arrow">→</span>
+    <span class="n">均勻分配（矩形）</span><span class="arrow">→</span>
+    <span class="n main">常態分配 ★★★</span><span class="arrow">→</span>
+    <span class="n">正查 / 反查</span><span class="arrow">→</span>
+    <span class="n">Ch9、Ch10 推論</span>
+  </div>
+
+  <div class="sticky">
+    <b>老師碎碎念：</b>這章是期末考的<span class="hp">分數提款機</span>。題型很固定——<b>標準化 → 畫圖 → 查表</b>，練熟就穩拿。
+    第 10 章信賴區間、假設檢定全部要用到這章的 $z$ 值，<span class="wavy">現在不會，後面會一路痛</span>。
+  </div>
+
+  <h2>§8.1 機率密度函數（PDF）</h2>
+  <div class="cols">
+    <div>
+      <h3>離散 vs 連續（先分清楚！）</h3>
+      <table class="dir">
+        <tr><th></th><th>離散（Ch7）</th><th>連續（Ch8）</th></tr>
+        <tr><td>怎麼來</td><td>「數」出來的</td><td>「量」出來的</td></tr>
+        <tr><td>例子</td><td>來電次數、人數</td><td>時間、重量、金額</td></tr>
+        <tr><td>機率</td><td>$P(X=x)$ 查表加總</td><td class="r"><b>曲線下面積</b></td></tr>
+        <tr><td>單點</td><td>可以 &gt; 0</td><td class="r"><b>一定 = 0</b></td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>PDF 兩大條件 <span class="tag">必背</span></h3>
+      <ol>
+        <li><span class="hy">非負</span>：$f(x)\ge 0$</li>
+        <li><span class="hy">總面積 = 1</span></li>
+      </ol>
+      <p>⇒ 機率就是面積：</p>
+      <div class="formula">$P(x_1\lt X\lt x_2)=$ 曲線在 $x_1$～$x_2$ 之間的面積</div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b class="t">⚠ 陷阱 #1｜單點機率 = 0</b>　單點沒有寬度 → 面積 = 0，所以 $P(X=6)=0$。<br>
+    推論：<span class="hp">連續變數的 $\lt $ 和 $\le$ 一樣</span>，$P(X\lt 5)=P(X\le 5)$。考選擇題最愛考！<br>
+    <span class="side">（注意：機率 0 ≠ 不可能發生，只是「恰好等於某個值」在連續世界裡量不到。）</span>
+  </div>
+
+  <h2>§8.1 均勻分配 $U(a,b)$</h2>
+  <div class="cols">
+    <div style="flex:0 0 255px"><svg viewBox="0 0 250 120" width="250" height="120" class="sk"><rect x="61.7" y="34" width="47.5" height="58" fill="#fff27a" opacity=".9"/><line x1="10" y1="92" x2="242" y2="92" stroke="#444" stroke-width="1.3"/><line x1="18" y1="92" x2="18" y2="14" stroke="#444" stroke-width="1.3"/><path d="M30,92 L30,34 L220,34 L220,92" fill="none" stroke="#22408a" stroke-width="2.2"/><line x1="15" y1="34" x2="21" y2="34" stroke="#444"/><text x="21" y="26" font-size="12" fill="#d6312b" text-anchor="start">高 = 1/(b−a)</text><text x="30.0" y="107" font-size="13" text-anchor="middle" fill="#333">a</text><text x="61.7" y="107" font-size="13" text-anchor="middle" fill="#333">x₁</text><text x="109.2" y="107" font-size="13" text-anchor="middle" fill="#333">x₂</text><text x="220.0" y="107" font-size="13" text-anchor="middle" fill="#333">b</text><text x="85.4" y="68.0" font-size="12" text-anchor="middle" fill="#d6312b">面積=機率</text><text x="179.6" y="26" font-size="12" text-anchor="middle" fill="#22408a">高度處處相同</text></svg></div>
+    <div>
+      <div class="formula">$f(x)=\dfrac{1}{b-a},\ a\le x\le b \qquad E(X)=\dfrac{a+b}{2}$</div>
+      <p>📌 形狀是<span class="hy">一個矩形</span>，所以</p>
+      <div class="box" style="text-align:center"><b class="r">機率 ＝ 底 × 高 ＝ $(x_2-x_1)\times\dfrac{1}{b-a}$</b></div>
+      <p class="side">口訣：<b class="b">「均勻就是長方形，底乘高就搞定」</b></p>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="q">8.1　捷運每 12 分鐘一班，小葉隨機到站，等候時間 $X\sim U(0,12)$。</div>
+    <div class="cols">
+      <div>
+        a. $f(x)=\frac{1}{12}$，平均等 $\frac{0+12}{2}=$ <span class="circ">6 分鐘</span><br>
+        b. $P(X\gt 8)=(12-8)\times\frac{1}{12}=$ <span class="hy">0.333</span>
+      </div>
+      <div>
+        c. $P(2\lt X\lt 5)=(5-2)\times\frac{1}{12}=$ <span class="hy">0.25</span><br>
+        d. $P(X=6)=$ <span class="r"><b>0</b></span> ← 陷阱 #1 又出現了
+      </div>
+    </div>
+  </div>
+
+  <div class="trap">
+    <b class="t">⚠ 陷阱 #2｜高度不是機率</b>　$f(x)=\frac{1}{12}$ 是「密度」(高度)，不是機率。區間越寬，矩形就越矮（因為總面積永遠 = 1）。
+  </div>
+  <div class="pno">— 1 —</div>
+</div>
+
+<!-- ================= PAGE 2 ================= -->
+<div class="page">
+  <h2>§8.2 常態分配 $X\sim N(\mu,\sigma^2)$</h2>
+  <span class="stamp" style="right:16mm;top:12mm">必考 ★★★</span>
+  <div class="cols">
+    <div>
+      <h3>五個性質（背起來）</h3>
+      <ol>
+        <li>兩個參數：<span class="hb">$\mu$ 管位置</span>（中心在哪）、<span class="hp">$\sigma$ 管胖瘦</span></li>
+        <li>對稱鐘形：<span class="hy">平均數 = 中位數 = 眾數</span> = $\mu$</li>
+        <li>兩尾無限延伸，貼近橫軸但<b>永遠不碰到</b></li>
+        <li>總面積 = 1，中心左右<b>各 0.5</b></li>
+        <li>$\sigma$ 變大 → <b>變矮變寬</b>（總面積不變嘛！）</li>
+      </ol>
+    </div>
+    <div style="flex:0 0 300px">
+      <svg viewBox="0 0 300 115" width="300" height="115" class="sk"><path d="M24.7,93 L24.7,92.1 L28.9,91.8 L33.1,91.4 L37.2,90.9 L41.4,90.2 L45.6,89.4 L49.8,88.5 L53.9,87.2 L58.1,85.8 L62.3,84.1 L66.5,82.0 L70.6,79.7 L74.8,77.0 L79.0,73.9 L83.2,70.5 L87.4,66.7 L91.5,62.6 L95.7,58.2 L99.9,53.6 L104.1,48.8 L108.2,43.9 L112.4,39.0 L116.6,34.2 L120.8,29.6 L124.9,25.3 L129.1,21.5 L133.3,18.2 L137.5,15.6 L141.6,13.6 L145.8,12.4 L150.0,12.0 L154.2,12.4 L158.4,13.6 L162.5,15.6 L166.7,18.2 L170.9,21.5 L175.1,25.3 L179.2,29.6 L183.4,34.2 L187.6,39.0 L191.8,43.9 L195.9,48.8 L200.1,53.6 L204.3,58.2 L208.5,62.6 L212.6,66.7 L216.8,70.5 L221.0,73.9 L225.2,77.0 L229.4,79.7 L233.5,82.0 L237.7,84.1 L241.9,85.8 L246.1,87.2 L250.2,88.5 L254.4,89.4 L258.6,90.2 L262.8,90.9 L266.9,91.4 L271.1,91.8 L275.3,92.1 L275.3,93 Z" fill="#a9d8ff" opacity=".75"/><path d="M66.5,93 L66.5,82.0 L69.3,80.5 L72.0,78.8 L74.8,77.0 L77.6,75.0 L80.4,72.8 L83.2,70.5 L86.0,68.0 L88.7,65.4 L91.5,62.6 L94.3,59.7 L97.1,56.7 L99.9,53.6 L102.7,50.4 L105.5,47.1 L108.2,43.9 L111.0,40.6 L113.8,37.4 L116.6,34.2 L119.4,31.1 L122.2,28.1 L124.9,25.3 L127.7,22.7 L130.5,20.4 L133.3,18.2 L136.1,16.4 L138.9,14.8 L141.6,13.6 L144.4,12.7 L147.2,12.2 L150.0,12.0 L152.8,12.2 L155.6,12.7 L158.4,13.6 L161.1,14.8 L163.9,16.4 L166.7,18.2 L169.5,20.4 L172.3,22.7 L175.1,25.3 L177.8,28.1 L180.6,31.1 L183.4,34.2 L186.2,37.4 L189.0,40.6 L191.8,43.9 L194.5,47.1 L197.3,50.4 L200.1,53.6 L202.9,56.7 L205.7,59.7 L208.5,62.6 L211.3,65.4 L214.0,68.0 L216.8,70.5 L219.6,72.8 L222.4,75.0 L225.2,77.0 L228.0,78.8 L230.7,80.5 L233.5,82.0 L233.5,93 Z" fill="#b9f0a8" opacity=".75"/><path d="M108.2,93 L108.2,43.9 L109.6,42.2 L111.0,40.6 L112.4,39.0 L113.8,37.4 L115.2,35.8 L116.6,34.2 L118.0,32.6 L119.4,31.1 L120.8,29.6 L122.2,28.1 L123.5,26.7 L124.9,25.3 L126.3,24.0 L127.7,22.7 L129.1,21.5 L130.5,20.4 L131.9,19.3 L133.3,18.2 L134.7,17.3 L136.1,16.4 L137.5,15.6 L138.9,14.8 L140.3,14.2 L141.6,13.6 L143.0,13.1 L144.4,12.7 L145.8,12.4 L147.2,12.2 L148.6,12.0 L150.0,12.0 L151.4,12.0 L152.8,12.2 L154.2,12.4 L155.6,12.7 L157.0,13.1 L158.4,13.6 L159.7,14.2 L161.1,14.8 L162.5,15.6 L163.9,16.4 L165.3,17.3 L166.7,18.2 L168.1,19.3 L169.5,20.4 L170.9,21.5 L172.3,22.7 L173.7,24.0 L175.1,25.3 L176.5,26.7 L177.8,28.1 L179.2,29.6 L180.6,31.1 L182.0,32.6 L183.4,34.2 L184.8,35.8 L186.2,37.4 L187.6,39.0 L189.0,40.6 L190.4,42.2 L191.8,43.9 L191.8,93 Z" fill="#fff27a" opacity=".75"/><line x1="4" y1="93" x2="296" y2="93" stroke="#444" stroke-width="1.3"/><path d="M8.0,92.7 L10.4,92.7 L12.7,92.6 L15.1,92.6 L17.5,92.5 L19.8,92.4 L22.2,92.2 L24.6,92.1 L26.9,91.9 L29.3,91.8 L31.7,91.5 L34.0,91.3 L36.4,91.0 L38.8,90.7 L41.1,90.3 L43.5,89.9 L45.9,89.4 L48.2,88.8 L50.6,88.2 L53.0,87.6 L55.3,86.8 L57.7,86.0 L60.1,85.0 L62.4,84.0 L64.8,82.9 L67.2,81.7 L69.5,80.3 L71.9,78.9 L74.3,77.4 L76.6,75.7 L79.0,73.9 L81.4,72.0 L83.7,70.0 L86.1,67.9 L88.5,65.6 L90.8,63.3 L93.2,60.9 L95.6,58.4 L97.9,55.8 L100.3,53.1 L102.7,50.4 L105.0,47.6 L107.4,44.9 L109.8,42.1 L112.1,39.3 L114.5,36.6 L116.9,33.9 L119.2,31.2 L121.6,28.7 L124.0,26.3 L126.3,24.0 L128.7,21.9 L131.1,19.9 L133.4,18.1 L135.8,16.5 L138.2,15.2 L140.5,14.1 L142.9,13.2 L145.3,12.5 L147.6,12.1 L150.0,12.0 L152.4,12.1 L154.7,12.5 L157.1,13.2 L159.5,14.1 L161.8,15.2 L164.2,16.5 L166.6,18.1 L168.9,19.9 L171.3,21.9 L173.7,24.0 L176.0,26.3 L178.4,28.7 L180.8,31.2 L183.1,33.9 L185.5,36.6 L187.9,39.3 L190.2,42.1 L192.6,44.9 L195.0,47.6 L197.3,50.4 L199.7,53.1 L202.1,55.8 L204.4,58.4 L206.8,60.9 L209.2,63.3 L211.5,65.6 L213.9,67.9 L216.3,70.0 L218.6,72.0 L221.0,73.9 L223.4,75.7 L225.7,77.4 L228.1,78.9 L230.5,80.3 L232.8,81.7 L235.2,82.9 L237.6,84.0 L239.9,85.0 L242.3,86.0 L244.7,86.8 L247.0,87.6 L249.4,88.2 L251.8,88.8 L254.1,89.4 L256.5,89.9 L258.9,90.3 L261.2,90.7 L263.6,91.0 L266.0,91.3 L268.3,91.5 L270.7,91.8 L273.1,91.9 L275.4,92.1 L277.8,92.2 L280.2,92.4 L282.5,92.5 L284.9,92.6 L287.3,92.6 L289.6,92.7 L292.0,92.7" fill="none" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><line x1="24.7" y1="89" x2="24.7" y2="97" stroke="#555" stroke-width="1.5"/><text x="24.7" y="109" text-anchor="middle" fill="#555" font-size="12">μ−3σ</text><line x1="66.5" y1="89" x2="66.5" y2="97" stroke="#555" stroke-width="1.5"/><text x="66.5" y="109" text-anchor="middle" fill="#555" font-size="12">μ−2σ</text><line x1="108.2" y1="89" x2="108.2" y2="97" stroke="#555" stroke-width="1.5"/><text x="108.2" y="109" text-anchor="middle" fill="#555" font-size="12">μ−σ</text><line x1="150.0" y1="89" x2="150.0" y2="97" stroke="#22408a" stroke-width="1.5"/><text x="150.0" y="109" text-anchor="middle" fill="#22408a" font-size="12">μ</text><line x1="191.8" y1="89" x2="191.8" y2="97" stroke="#555" stroke-width="1.5"/><text x="191.8" y="109" text-anchor="middle" fill="#555" font-size="12">μ+σ</text><line x1="233.5" y1="89" x2="233.5" y2="97" stroke="#555" stroke-width="1.5"/><text x="233.5" y="109" text-anchor="middle" fill="#555" font-size="12">μ+2σ</text><line x1="275.3" y1="89" x2="275.3" y2="97" stroke="#555" stroke-width="1.5"/><text x="275.3" y="109" text-anchor="middle" fill="#555" font-size="12">μ+3σ</text><text x="150.0" y="70" text-anchor="middle" fill="#d6312b" font-size="12">68%</text></svg>
+      <p class="side" style="text-align:center;margin-top:-2px">經驗法則 <span class="hy">68</span>–<span class="hg">95</span>–<span class="hb">99.7</span>＝常態的性質</p>
+    </div>
+  </div>
+
+  <h2>標準化：把所有常態都變成 $Z$</h2>
+  <div class="cols">
+    <div>
+      <div class="formula" style="font-size:1.15em">$Z=\dfrac{X-\mu}{\sigma}\sim N(0,1)$</div>
+      <p><b>$z$ 的意義</b>：<span class="hy">$x$ 離平均數「幾個標準差」</span></p>
+      <p class="side">$z=1.6$：多 1.6 個 σ；$z=-0.4$：少 0.4 個 σ</p>
+    </div>
+    <div>
+      <div class="sticky green" style="margin-top:2px">
+        <b>為什麼一張 Z 表通吃？</b><br>
+        $-\mu$ 平移到 0，$\div\sigma$ 胖瘦變 1；<br>塗色面積（機率）<span class="hp">從頭到尾不變</span>！
+      </div>
+    </div>
+  </div>
+
+  <h2>正查 SOP（給 $x$ 求機率）</h2>
+  <ol class="steps">
+    <li><b>標準化</b>：算 $z=\dfrac{x-\mu}{\sigma}$（算到小數第 2 位）</li>
+    <li><b>畫圖塗色</b>：畫一個小鐘，把題目要的面積塗起來 <span class="r">← 不畫圖 = 送分給老師扣</span></li>
+    <li><b>查表組合</b>：Z 表給的永遠是<span class="hy">「左邊的面積」$P(Z\lt z)$</span>，再依下面三招組合</li>
+  </ol>
+
+  <div class="c3">
+    <div><svg viewBox="0 0 165 82" width="165" height="82" class="sk"><path d="M8.0,60 L8.0,59.9 L9.5,59.8 L11.1,59.8 L12.6,59.7 L14.1,59.6 L15.7,59.5 L17.2,59.4 L18.7,59.3 L20.3,59.1 L21.8,59.0 L23.3,58.7 L24.9,58.5 L26.4,58.2 L27.9,57.8 L29.5,57.4 L31.0,57.0 L32.5,56.4 L34.1,55.8 L35.6,55.1 L37.1,54.4 L38.7,53.5 L40.2,52.5 L41.7,51.5 L43.3,50.3 L44.8,49.1 L46.3,47.7 L47.9,46.2 L49.4,44.6 L50.9,43.0 L52.5,41.2 L54.0,39.4 L55.5,37.5 L57.1,35.5 L58.6,33.5 L60.2,31.5 L61.7,29.4 L63.2,27.4 L64.8,25.4 L66.3,23.5 L67.8,21.7 L69.4,19.9 L70.9,18.3 L72.4,16.8 L74.0,15.5 L75.5,14.4 L77.0,13.5 L78.6,12.8 L80.1,12.3 L81.6,12.0 L83.2,12.0 L84.7,12.2 L86.2,12.7 L87.8,13.4 L89.3,14.3 L90.8,15.3 L92.4,16.6 L93.9,18.1 L95.4,19.7 L97.0,21.4 L98.5,23.2 L100.0,25.1 L100.0,60 Z" fill="#fff27a" opacity=".75"/><line x1="4" y1="60" x2="161" y2="60" stroke="#444" stroke-width="1.3"/><path d="M8.0,59.9 L9.2,59.8 L10.5,59.8 L11.7,59.7 L13.0,59.7 L14.2,59.6 L15.4,59.6 L16.7,59.5 L17.9,59.4 L19.2,59.3 L20.4,59.1 L21.7,59.0 L22.9,58.8 L24.1,58.6 L25.4,58.4 L26.6,58.1 L27.9,57.9 L29.1,57.5 L30.3,57.2 L31.6,56.8 L32.8,56.3 L34.1,55.8 L35.3,55.3 L36.6,54.7 L37.8,54.0 L39.0,53.3 L40.3,52.5 L41.5,51.6 L42.8,50.7 L44.0,49.7 L45.2,48.7 L46.5,47.6 L47.7,46.4 L49.0,45.1 L50.2,43.8 L51.5,42.4 L52.7,41.0 L53.9,39.5 L55.2,37.9 L56.4,36.4 L57.7,34.7 L58.9,33.1 L60.1,31.5 L61.4,29.8 L62.6,28.2 L63.9,26.6 L65.1,25.0 L66.4,23.4 L67.6,21.9 L68.8,20.5 L70.1,19.1 L71.3,17.9 L72.6,16.7 L73.8,15.6 L75.0,14.7 L76.3,13.9 L77.5,13.2 L78.8,12.7 L80.0,12.3 L81.3,12.1 L82.5,12.0 L83.7,12.1 L85.0,12.3 L86.2,12.7 L87.5,13.2 L88.7,13.9 L90.0,14.7 L91.2,15.6 L92.4,16.7 L93.7,17.9 L94.9,19.1 L96.2,20.5 L97.4,21.9 L98.6,23.4 L99.9,25.0 L101.1,26.6 L102.4,28.2 L103.6,29.8 L104.9,31.5 L106.1,33.1 L107.3,34.7 L108.6,36.4 L109.8,37.9 L111.1,39.5 L112.3,41.0 L113.5,42.4 L114.8,43.8 L116.0,45.1 L117.3,46.4 L118.5,47.6 L119.8,48.7 L121.0,49.7 L122.2,50.7 L123.5,51.6 L124.7,52.5 L126.0,53.3 L127.2,54.0 L128.4,54.7 L129.7,55.3 L130.9,55.8 L132.2,56.3 L133.4,56.8 L134.7,57.2 L135.9,57.5 L137.1,57.9 L138.4,58.1 L139.6,58.4 L140.9,58.6 L142.1,58.8 L143.3,59.0 L144.6,59.1 L145.8,59.3 L147.1,59.4 L148.3,59.5 L149.5,59.6 L150.8,59.6 L152.0,59.7 L153.3,59.7 L154.5,59.8 L155.8,59.8 L157.0,59.9" fill="none" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><line x1="100.0" y1="56" x2="100.0" y2="64" stroke="#d6312b" stroke-width="1.5"/><text x="100.0" y="76" text-anchor="middle" fill="#d6312b" font-size="12">z</text><text x="62.8" y="50" text-anchor="middle" fill="#d6312b" font-size="12">直接查</text></svg><div class="cap"><span class="tag blue">左尾</span>$P(Z\lt z)$<br>= <b>直接查表</b></div></div>
+    <div><svg viewBox="0 0 165 82" width="165" height="82" class="sk"><path d="M100.0,60 L100.0,25.1 L101.0,26.4 L101.9,27.6 L102.9,28.9 L103.8,30.1 L104.8,31.4 L105.7,32.6 L106.7,33.9 L107.6,35.1 L108.6,36.4 L109.5,37.6 L110.5,38.8 L111.4,39.9 L112.4,41.0 L113.3,42.2 L114.3,43.2 L115.2,44.3 L116.2,45.3 L117.1,46.2 L118.1,47.1 L119.0,48.0 L120.0,48.9 L120.9,49.7 L121.9,50.4 L122.8,51.2 L123.8,51.9 L124.7,52.5 L125.7,53.1 L126.6,53.7 L127.6,54.2 L128.5,54.7 L129.5,55.2 L130.4,55.6 L131.4,56.0 L132.3,56.4 L133.3,56.7 L134.2,57.0 L135.2,57.3 L136.1,57.6 L137.1,57.8 L138.0,58.1 L139.0,58.3 L139.9,58.4 L140.9,58.6 L141.8,58.8 L142.8,58.9 L143.7,59.0 L144.7,59.1 L145.6,59.2 L146.6,59.3 L147.5,59.4 L148.5,59.5 L149.4,59.5 L150.4,59.6 L151.3,59.7 L152.3,59.7 L153.2,59.7 L154.2,59.8 L155.1,59.8 L156.1,59.8 L157.0,59.9 L157.0,60 Z" fill="#ffb3c7" opacity=".75"/><line x1="4" y1="60" x2="161" y2="60" stroke="#444" stroke-width="1.3"/><path d="M8.0,59.9 L9.2,59.8 L10.5,59.8 L11.7,59.7 L13.0,59.7 L14.2,59.6 L15.4,59.6 L16.7,59.5 L17.9,59.4 L19.2,59.3 L20.4,59.1 L21.7,59.0 L22.9,58.8 L24.1,58.6 L25.4,58.4 L26.6,58.1 L27.9,57.9 L29.1,57.5 L30.3,57.2 L31.6,56.8 L32.8,56.3 L34.1,55.8 L35.3,55.3 L36.6,54.7 L37.8,54.0 L39.0,53.3 L40.3,52.5 L41.5,51.6 L42.8,50.7 L44.0,49.7 L45.2,48.7 L46.5,47.6 L47.7,46.4 L49.0,45.1 L50.2,43.8 L51.5,42.4 L52.7,41.0 L53.9,39.5 L55.2,37.9 L56.4,36.4 L57.7,34.7 L58.9,33.1 L60.1,31.5 L61.4,29.8 L62.6,28.2 L63.9,26.6 L65.1,25.0 L66.4,23.4 L67.6,21.9 L68.8,20.5 L70.1,19.1 L71.3,17.9 L72.6,16.7 L73.8,15.6 L75.0,14.7 L76.3,13.9 L77.5,13.2 L78.8,12.7 L80.0,12.3 L81.3,12.1 L82.5,12.0 L83.7,12.1 L85.0,12.3 L86.2,12.7 L87.5,13.2 L88.7,13.9 L90.0,14.7 L91.2,15.6 L92.4,16.7 L93.7,17.9 L94.9,19.1 L96.2,20.5 L97.4,21.9 L98.6,23.4 L99.9,25.0 L101.1,26.6 L102.4,28.2 L103.6,29.8 L104.9,31.5 L106.1,33.1 L107.3,34.7 L108.6,36.4 L109.8,37.9 L111.1,39.5 L112.3,41.0 L113.5,42.4 L114.8,43.8 L116.0,45.1 L117.3,46.4 L118.5,47.6 L119.8,48.7 L121.0,49.7 L122.2,50.7 L123.5,51.6 L124.7,52.5 L126.0,53.3 L127.2,54.0 L128.4,54.7 L129.7,55.3 L130.9,55.8 L132.2,56.3 L133.4,56.8 L134.7,57.2 L135.9,57.5 L137.1,57.9 L138.4,58.1 L139.6,58.4 L140.9,58.6 L142.1,58.8 L143.3,59.0 L144.6,59.1 L145.8,59.3 L147.1,59.4 L148.3,59.5 L149.5,59.6 L150.8,59.6 L152.0,59.7 L153.3,59.7 L154.5,59.8 L155.8,59.8 L157.0,59.9" fill="none" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><line x1="100.0" y1="56" x2="100.0" y2="64" stroke="#d6312b" stroke-width="1.5"/><text x="100.0" y="76" text-anchor="middle" fill="#d6312b" font-size="12">z</text><text x="130.7" y="40" text-anchor="middle" fill="#d6312b" font-size="12">1 − 查表</text></svg><div class="cap"><span class="tag">右尾</span>$P(Z\gt z)$<br>= <b class="r">1 − 查表</b></div></div>
+    <div><svg viewBox="0 0 165 82" width="165" height="82" class="sk"><path d="M56.2,60 L56.2,36.6 L56.9,35.7 L57.7,34.7 L58.4,33.8 L59.1,32.8 L59.9,31.9 L60.6,30.9 L61.3,29.9 L62.0,28.9 L62.8,28.0 L63.5,27.0 L64.2,26.1 L65.0,25.1 L65.7,24.2 L66.4,23.3 L67.2,22.4 L67.9,21.6 L68.6,20.7 L69.4,19.9 L70.1,19.1 L70.8,18.4 L71.5,17.6 L72.3,17.0 L73.0,16.3 L73.7,15.7 L74.5,15.1 L75.2,14.6 L75.9,14.1 L76.7,13.7 L77.4,13.3 L78.1,13.0 L78.8,12.7 L79.6,12.4 L80.3,12.2 L81.0,12.1 L81.8,12.0 L82.5,12.0 L83.2,12.0 L84.0,12.1 L84.7,12.2 L85.4,12.4 L86.2,12.7 L86.9,13.0 L87.6,13.3 L88.3,13.7 L89.1,14.1 L89.8,14.6 L90.5,15.1 L91.3,15.7 L92.0,16.3 L92.7,17.0 L93.5,17.6 L94.2,18.4 L94.9,19.1 L95.6,19.9 L96.4,20.7 L97.1,21.6 L97.8,22.4 L98.6,23.3 L99.3,24.2 L100.0,25.1 L100.0,60 Z" fill="#b9f0a8" opacity=".75"/><line x1="4" y1="60" x2="161" y2="60" stroke="#444" stroke-width="1.3"/><path d="M8.0,59.9 L9.2,59.8 L10.5,59.8 L11.7,59.7 L13.0,59.7 L14.2,59.6 L15.4,59.6 L16.7,59.5 L17.9,59.4 L19.2,59.3 L20.4,59.1 L21.7,59.0 L22.9,58.8 L24.1,58.6 L25.4,58.4 L26.6,58.1 L27.9,57.9 L29.1,57.5 L30.3,57.2 L31.6,56.8 L32.8,56.3 L34.1,55.8 L35.3,55.3 L36.6,54.7 L37.8,54.0 L39.0,53.3 L40.3,52.5 L41.5,51.6 L42.8,50.7 L44.0,49.7 L45.2,48.7 L46.5,47.6 L47.7,46.4 L49.0,45.1 L50.2,43.8 L51.5,42.4 L52.7,41.0 L53.9,39.5 L55.2,37.9 L56.4,36.4 L57.7,34.7 L58.9,33.1 L60.1,31.5 L61.4,29.8 L62.6,28.2 L63.9,26.6 L65.1,25.0 L66.4,23.4 L67.6,21.9 L68.8,20.5 L70.1,19.1 L71.3,17.9 L72.6,16.7 L73.8,15.6 L75.0,14.7 L76.3,13.9 L77.5,13.2 L78.8,12.7 L80.0,12.3 L81.3,12.1 L82.5,12.0 L83.7,12.1 L85.0,12.3 L86.2,12.7 L87.5,13.2 L88.7,13.9 L90.0,14.7 L91.2,15.6 L92.4,16.7 L93.7,17.9 L94.9,19.1 L96.2,20.5 L97.4,21.9 L98.6,23.4 L99.9,25.0 L101.1,26.6 L102.4,28.2 L103.6,29.8 L104.9,31.5 L106.1,33.1 L107.3,34.7 L108.6,36.4 L109.8,37.9 L111.1,39.5 L112.3,41.0 L113.5,42.4 L114.8,43.8 L116.0,45.1 L117.3,46.4 L118.5,47.6 L119.8,48.7 L121.0,49.7 L122.2,50.7 L123.5,51.6 L124.7,52.5 L126.0,53.3 L127.2,54.0 L128.4,54.7 L129.7,55.3 L130.9,55.8 L132.2,56.3 L133.4,56.8 L134.7,57.2 L135.9,57.5 L137.1,57.9 L138.4,58.1 L139.6,58.4 L140.9,58.6 L142.1,58.8 L143.3,59.0 L144.6,59.1 L145.8,59.3 L147.1,59.4 L148.3,59.5 L149.5,59.6 L150.8,59.6 L152.0,59.7 L153.3,59.7 L154.5,59.8 L155.8,59.8 L157.0,59.9" fill="none" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><line x1="56.2" y1="56" x2="56.2" y2="64" stroke="#d6312b" stroke-width="1.5"/><text x="56.2" y="76" text-anchor="middle" fill="#d6312b" font-size="12">z₁</text><line x1="100.0" y1="56" x2="100.0" y2="64" stroke="#d6312b" stroke-width="1.5"/><text x="100.0" y="76" text-anchor="middle" fill="#d6312b" font-size="12">z₂</text><text x="78.1" y="48" text-anchor="middle" fill="#d6312b" font-size="12">大−小</text></svg><div class="cap"><span class="tag green">區間</span>$P(z_1\lt Z\lt z_2)$<br>= <b>查 $z_2$ − 查 $z_1$</b></div></div>
+  </div>
+
+  <div class="sticky pink">
+    <b>口訣：「左尾直接查，右尾一減它，中間大減小」</b><br>
+    <span class="side">對稱小技巧：$P(Z\gt -a)=P(Z\lt a)$、$P(Z\lt -a)=P(Z\gt a)$。負的 $z$ 查不到時用這招翻過去。</span>
+  </div>
+
+  <h2>正查實戰｜範例 8.2 外送時間</h2>
+  <div class="ex">
+    <div class="q">外送時間 $X\sim N(32,\,5^2)$ 分鐘。求下列三種機率。</div>
+    <div class="c3" style="text-align:left">
+      <div>
+        <b>a. 40 分內送達</b> <svg viewBox="0 0 165 78" width="165" height="78" class="sk"><path d="M8.0,56 L8.0,55.9 L9.8,55.8 L11.7,55.8 L13.5,55.7 L15.3,55.6 L17.1,55.5 L19.0,55.3 L20.8,55.2 L22.6,55.0 L24.4,54.7 L26.3,54.4 L28.1,54.0 L29.9,53.5 L31.7,53.0 L33.6,52.4 L35.4,51.6 L37.2,50.8 L39.0,49.8 L40.9,48.8 L42.7,47.6 L44.5,46.2 L46.3,44.7 L48.2,43.1 L50.0,41.4 L51.8,39.5 L53.6,37.5 L55.5,35.4 L57.3,33.3 L59.1,31.1 L61.0,28.9 L62.8,26.7 L64.6,24.5 L66.4,22.4 L68.3,20.4 L70.1,18.5 L71.9,16.9 L73.7,15.4 L75.6,14.2 L77.4,13.2 L79.2,12.5 L81.0,12.1 L82.9,12.0 L84.7,12.2 L86.5,12.7 L88.3,13.5 L90.2,14.6 L92.0,15.9 L93.8,17.5 L95.6,19.2 L97.5,21.2 L99.3,23.2 L101.1,25.3 L103.0,27.5 L104.8,29.8 L106.6,32.0 L108.4,34.2 L110.3,36.3 L112.1,38.3 L113.9,40.2 L115.7,42.1 L117.6,43.8 L117.6,56 Z" fill="#fff27a" opacity=".75"/><line x1="4" y1="56" x2="161" y2="56" stroke="#444" stroke-width="1.3"/><path d="M8.0,55.9 L9.2,55.8 L10.5,55.8 L11.7,55.8 L13.0,55.7 L14.2,55.7 L15.4,55.6 L16.7,55.5 L17.9,55.4 L19.2,55.3 L20.4,55.2 L21.7,55.1 L22.9,54.9 L24.1,54.7 L25.4,54.5 L26.6,54.3 L27.9,54.0 L29.1,53.7 L30.3,53.4 L31.6,53.0 L32.8,52.6 L34.1,52.2 L35.3,51.7 L36.6,51.1 L37.8,50.5 L39.0,49.8 L40.3,49.1 L41.5,48.3 L42.8,47.5 L44.0,46.6 L45.2,45.6 L46.5,44.6 L47.7,43.5 L49.0,42.3 L50.2,41.1 L51.5,39.9 L52.7,38.5 L53.9,37.2 L55.2,35.8 L56.4,34.3 L57.7,32.9 L58.9,31.4 L60.1,29.8 L61.4,28.3 L62.6,26.8 L63.9,25.3 L65.1,23.9 L66.4,22.5 L67.6,21.1 L68.8,19.8 L70.1,18.5 L71.3,17.4 L72.6,16.3 L73.8,15.3 L75.0,14.5 L76.3,13.7 L77.5,13.1 L78.8,12.6 L80.0,12.3 L81.3,12.1 L82.5,12.0 L83.7,12.1 L85.0,12.3 L86.2,12.6 L87.5,13.1 L88.7,13.7 L90.0,14.5 L91.2,15.3 L92.4,16.3 L93.7,17.4 L94.9,18.5 L96.2,19.8 L97.4,21.1 L98.6,22.5 L99.9,23.9 L101.1,25.3 L102.4,26.8 L103.6,28.3 L104.9,29.8 L106.1,31.4 L107.3,32.9 L108.6,34.3 L109.8,35.8 L111.1,37.2 L112.3,38.5 L113.5,39.9 L114.8,41.1 L116.0,42.3 L117.3,43.5 L118.5,44.6 L119.8,45.6 L121.0,46.6 L122.2,47.5 L123.5,48.3 L124.7,49.1 L126.0,49.8 L127.2,50.5 L128.4,51.1 L129.7,51.7 L130.9,52.2 L132.2,52.6 L133.4,53.0 L134.7,53.4 L135.9,53.7 L137.1,54.0 L138.4,54.3 L139.6,54.5 L140.9,54.7 L142.1,54.9 L143.3,55.1 L144.6,55.2 L145.8,55.3 L147.1,55.4 L148.3,55.5 L149.5,55.6 L150.8,55.7 L152.0,55.7 L153.3,55.8 L154.5,55.8 L155.8,55.8 L157.0,55.9" fill="none" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><line x1="82.5" y1="52" x2="82.5" y2="60" stroke="#555" stroke-width="1.5"/><text x="82.5" y="72" text-anchor="middle" fill="#555" font-size="12">32</text><line x1="117.6" y1="52" x2="117.6" y2="60" stroke="#d6312b" stroke-width="1.5"/><text x="117.6" y="72" text-anchor="middle" fill="#d6312b" font-size="12">40</text></svg><br>
+        $z=\frac{40-32}{5}=1.6$<br>
+        $P(Z\lt 1.6)=$ <span class="hy">0.9452</span>
+        <div class="side">左尾 → 直接查</div>
+      </div>
+      <div>
+        <b>b. 超過 30 分</b> <svg viewBox="0 0 165 78" width="165" height="78" class="sk"><path d="M73.7,56 L73.7,15.4 L75.1,14.4 L76.5,13.6 L77.9,13.0 L79.3,12.5 L80.7,12.2 L82.1,12.0 L83.4,12.0 L84.8,12.2 L86.2,12.6 L87.6,13.2 L89.0,13.9 L90.4,14.8 L91.8,15.8 L93.2,16.9 L94.6,18.2 L95.9,19.5 L97.3,21.0 L98.7,22.5 L100.1,24.1 L101.5,25.8 L102.9,27.4 L104.3,29.1 L105.7,30.8 L107.0,32.5 L108.4,34.2 L109.8,35.8 L111.2,37.3 L112.6,38.9 L114.0,40.3 L115.4,41.7 L116.8,43.0 L118.1,44.3 L119.5,45.4 L120.9,46.5 L122.3,47.6 L123.7,48.5 L125.1,49.3 L126.5,50.1 L127.9,50.8 L129.2,51.5 L130.6,52.1 L132.0,52.6 L133.4,53.0 L134.8,53.4 L136.2,53.8 L137.6,54.1 L139.0,54.4 L140.3,54.7 L141.7,54.9 L143.1,55.0 L144.5,55.2 L145.9,55.3 L147.3,55.4 L148.7,55.5 L150.1,55.6 L151.4,55.7 L152.8,55.7 L154.2,55.8 L155.6,55.8 L157.0,55.9 L157.0,56 Z" fill="#ffb3c7" opacity=".75"/><line x1="4" y1="56" x2="161" y2="56" stroke="#444" stroke-width="1.3"/><path d="M8.0,55.9 L9.2,55.8 L10.5,55.8 L11.7,55.8 L13.0,55.7 L14.2,55.7 L15.4,55.6 L16.7,55.5 L17.9,55.4 L19.2,55.3 L20.4,55.2 L21.7,55.1 L22.9,54.9 L24.1,54.7 L25.4,54.5 L26.6,54.3 L27.9,54.0 L29.1,53.7 L30.3,53.4 L31.6,53.0 L32.8,52.6 L34.1,52.2 L35.3,51.7 L36.6,51.1 L37.8,50.5 L39.0,49.8 L40.3,49.1 L41.5,48.3 L42.8,47.5 L44.0,46.6 L45.2,45.6 L46.5,44.6 L47.7,43.5 L49.0,42.3 L50.2,41.1 L51.5,39.9 L52.7,38.5 L53.9,37.2 L55.2,35.8 L56.4,34.3 L57.7,32.9 L58.9,31.4 L60.1,29.8 L61.4,28.3 L62.6,26.8 L63.9,25.3 L65.1,23.9 L66.4,22.5 L67.6,21.1 L68.8,19.8 L70.1,18.5 L71.3,17.4 L72.6,16.3 L73.8,15.3 L75.0,14.5 L76.3,13.7 L77.5,13.1 L78.8,12.6 L80.0,12.3 L81.3,12.1 L82.5,12.0 L83.7,12.1 L85.0,12.3 L86.2,12.6 L87.5,13.1 L88.7,13.7 L90.0,14.5 L91.2,15.3 L92.4,16.3 L93.7,17.4 L94.9,18.5 L96.2,19.8 L97.4,21.1 L98.6,22.5 L99.9,23.9 L101.1,25.3 L102.4,26.8 L103.6,28.3 L104.9,29.8 L106.1,31.4 L107.3,32.9 L108.6,34.3 L109.8,35.8 L111.1,37.2 L112.3,38.5 L113.5,39.9 L114.8,41.1 L116.0,42.3 L117.3,43.5 L118.5,44.6 L119.8,45.6 L121.0,46.6 L122.2,47.5 L123.5,48.3 L124.7,49.1 L126.0,49.8 L127.2,50.5 L128.4,51.1 L129.7,51.7 L130.9,52.2 L132.2,52.6 L133.4,53.0 L134.7,53.4 L135.9,53.7 L137.1,54.0 L138.4,54.3 L139.6,54.5 L140.9,54.7 L142.1,54.9 L143.3,55.1 L144.6,55.2 L145.8,55.3 L147.1,55.4 L148.3,55.5 L149.5,55.6 L150.8,55.7 L152.0,55.7 L153.3,55.8 L154.5,55.8 L155.8,55.8 L157.0,55.9" fill="none" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><line x1="73.7" y1="52" x2="73.7" y2="60" stroke="#d6312b" stroke-width="1.5"/><text x="73.7" y="72" text-anchor="middle" fill="#d6312b" font-size="12">30</text><line x1="82.5" y1="52" x2="82.5" y2="60" stroke="#555" stroke-width="1.5"/><text x="82.5" y="72" text-anchor="middle" fill="#555" font-size="12"></text></svg><br>
+        $z=\frac{30-32}{5}=-0.4$<br>
+        $1-0.3446=$ <span class="hy">0.6554</span>
+        <div class="side">右尾 → 1 − 查表</div>
+      </div>
+      <div>
+        <b>c. 25～35 分</b> <svg viewBox="0 0 165 78" width="165" height="78" class="sk"><path d="M51.8,56 L51.8,39.5 L52.6,38.7 L53.3,37.9 L54.0,37.1 L54.7,36.3 L55.5,35.4 L56.2,34.6 L56.9,33.7 L57.7,32.9 L58.4,32.0 L59.1,31.1 L59.9,30.2 L60.6,29.3 L61.3,28.4 L62.0,27.5 L62.8,26.7 L63.5,25.8 L64.2,24.9 L65.0,24.0 L65.7,23.2 L66.4,22.4 L67.2,21.6 L67.9,20.8 L68.6,20.0 L69.4,19.2 L70.1,18.5 L70.8,17.8 L71.5,17.2 L72.3,16.5 L73.0,15.9 L73.7,15.4 L74.5,14.9 L75.2,14.4 L75.9,13.9 L76.7,13.5 L77.4,13.2 L78.1,12.9 L78.8,12.6 L79.6,12.4 L80.3,12.2 L81.0,12.1 L81.8,12.0 L82.5,12.0 L83.2,12.0 L84.0,12.1 L84.7,12.2 L85.4,12.4 L86.2,12.6 L86.9,12.9 L87.6,13.2 L88.3,13.5 L89.1,13.9 L89.8,14.4 L90.5,14.9 L91.3,15.4 L92.0,15.9 L92.7,16.5 L93.5,17.2 L94.2,17.8 L94.9,18.5 L95.6,19.2 L95.6,56 Z" fill="#b9f0a8" opacity=".75"/><line x1="4" y1="56" x2="161" y2="56" stroke="#444" stroke-width="1.3"/><path d="M8.0,55.9 L9.2,55.8 L10.5,55.8 L11.7,55.8 L13.0,55.7 L14.2,55.7 L15.4,55.6 L16.7,55.5 L17.9,55.4 L19.2,55.3 L20.4,55.2 L21.7,55.1 L22.9,54.9 L24.1,54.7 L25.4,54.5 L26.6,54.3 L27.9,54.0 L29.1,53.7 L30.3,53.4 L31.6,53.0 L32.8,52.6 L34.1,52.2 L35.3,51.7 L36.6,51.1 L37.8,50.5 L39.0,49.8 L40.3,49.1 L41.5,48.3 L42.8,47.5 L44.0,46.6 L45.2,45.6 L46.5,44.6 L47.7,43.5 L49.0,42.3 L50.2,41.1 L51.5,39.9 L52.7,38.5 L53.9,37.2 L55.2,35.8 L56.4,34.3 L57.7,32.9 L58.9,31.4 L60.1,29.8 L61.4,28.3 L62.6,26.8 L63.9,25.3 L65.1,23.9 L66.4,22.5 L67.6,21.1 L68.8,19.8 L70.1,18.5 L71.3,17.4 L72.6,16.3 L73.8,15.3 L75.0,14.5 L76.3,13.7 L77.5,13.1 L78.8,12.6 L80.0,12.3 L81.3,12.1 L82.5,12.0 L83.7,12.1 L85.0,12.3 L86.2,12.6 L87.5,13.1 L88.7,13.7 L90.0,14.5 L91.2,15.3 L92.4,16.3 L93.7,17.4 L94.9,18.5 L96.2,19.8 L97.4,21.1 L98.6,22.5 L99.9,23.9 L101.1,25.3 L102.4,26.8 L103.6,28.3 L104.9,29.8 L106.1,31.4 L107.3,32.9 L108.6,34.3 L109.8,35.8 L111.1,37.2 L112.3,38.5 L113.5,39.9 L114.8,41.1 L116.0,42.3 L117.3,43.5 L118.5,44.6 L119.8,45.6 L121.0,46.6 L122.2,47.5 L123.5,48.3 L124.7,49.1 L126.0,49.8 L127.2,50.5 L128.4,51.1 L129.7,51.7 L130.9,52.2 L132.2,52.6 L133.4,53.0 L134.7,53.4 L135.9,53.7 L137.1,54.0 L138.4,54.3 L139.6,54.5 L140.9,54.7 L142.1,54.9 L143.3,55.1 L144.6,55.2 L145.8,55.3 L147.1,55.4 L148.3,55.5 L149.5,55.6 L150.8,55.7 L152.0,55.7 L153.3,55.8 L154.5,55.8 L155.8,55.8 L157.0,55.9" fill="none" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><line x1="51.8" y1="52" x2="51.8" y2="60" stroke="#d6312b" stroke-width="1.5"/><text x="51.8" y="72" text-anchor="middle" fill="#d6312b" font-size="12">25</text><line x1="95.6" y1="52" x2="95.6" y2="60" stroke="#d6312b" stroke-width="1.5"/><text x="95.6" y="72" text-anchor="middle" fill="#d6312b" font-size="12">35</text></svg><br>
+        $z_1=-1.4,\ z_2=0.6$<br>
+        $0.7257-0.0808=$ <span class="hy">0.6449</span>
+        <div class="side">區間 → 大 − 小</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="pno">— 2 —</div>
+</div>
+
+<!-- ================= PAGE 3 ================= -->
+<div class="page">
+  <h2>反查（給機率求 $x$）</h2>
+  <div class="cols">
+    <div>
+      <h3>$z_A$ 是什麼？</h3>
+      <p><span class="hy">$z_A$ = 右尾面積剛好是 $A$ 的那個 $z$</span>，即 $P(Z\gt z_A)=A$。</p>
+      <p>查法：在<b>表身</b>找 <span class="r">$1-A$</span>，往回讀 $z$。</p>
+      <p class="side">例：$z_{0.05}$ → 表身找 0.95 → 1.64 與 1.65 中間 → 1.645</p>
+    </div>
+    <div style="flex:0 0 235px"><svg viewBox="0 0 230 105" width="230" height="105" class="sk"><path d="M166.8,83 L166.8,64.6 L167.7,65.5 L168.6,66.4 L169.5,67.2 L170.5,68.0 L171.4,68.7 L172.3,69.5 L173.2,70.2 L174.1,70.8 L175.1,71.5 L176.0,72.1 L176.9,72.7 L177.8,73.3 L178.7,73.9 L179.7,74.4 L180.6,74.9 L181.5,75.4 L182.4,75.8 L183.3,76.3 L184.3,76.7 L185.2,77.1 L186.1,77.5 L187.0,77.8 L187.9,78.2 L188.9,78.5 L189.8,78.8 L190.7,79.1 L191.6,79.3 L192.5,79.6 L193.5,79.8 L194.4,80.1 L195.3,80.3 L196.2,80.5 L197.1,80.6 L198.1,80.8 L199.0,81.0 L199.9,81.1 L200.8,81.3 L201.7,81.4 L202.7,81.5 L203.6,81.6 L204.5,81.8 L205.4,81.9 L206.4,81.9 L207.3,82.0 L208.2,82.1 L209.1,82.2 L210.0,82.3 L211.0,82.3 L211.9,82.4 L212.8,82.4 L213.7,82.5 L214.6,82.5 L215.6,82.6 L216.5,82.6 L217.4,82.6 L218.3,82.7 L219.2,82.7 L220.2,82.7 L221.1,82.8 L222.0,82.8 L222.0,83 Z" fill="#ffb3c7" opacity=".75"/><line x1="4" y1="83" x2="226" y2="83" stroke="#444" stroke-width="1.3"/><path d="M8.0,82.8 L9.8,82.7 L11.6,82.7 L13.3,82.6 L15.1,82.5 L16.9,82.4 L18.7,82.3 L20.5,82.2 L22.3,82.1 L24.1,81.9 L25.8,81.7 L27.6,81.5 L29.4,81.2 L31.2,81.0 L33.0,80.6 L34.8,80.3 L36.5,79.8 L38.3,79.4 L40.1,78.8 L41.9,78.2 L43.7,77.6 L45.4,76.8 L47.2,76.0 L49.0,75.1 L50.8,74.1 L52.6,73.1 L54.4,71.9 L56.1,70.6 L57.9,69.3 L59.7,67.8 L61.5,66.3 L63.3,64.6 L65.1,62.8 L66.8,61.0 L68.6,59.0 L70.4,57.0 L72.2,54.8 L74.0,52.6 L75.8,50.4 L77.5,48.0 L79.3,45.6 L81.1,43.2 L82.9,40.8 L84.7,38.4 L86.5,35.9 L88.2,33.5 L90.0,31.2 L91.8,28.9 L93.6,26.7 L95.4,24.5 L97.2,22.5 L99.0,20.7 L100.7,18.9 L102.5,17.4 L104.3,16.0 L106.1,14.8 L107.9,13.8 L109.6,13.0 L111.4,12.5 L113.2,12.1 L115.0,12.0 L116.8,12.1 L118.6,12.5 L120.4,13.0 L122.1,13.8 L123.9,14.8 L125.7,16.0 L127.5,17.4 L129.3,18.9 L131.1,20.7 L132.8,22.5 L134.6,24.5 L136.4,26.7 L138.2,28.9 L140.0,31.2 L141.8,33.5 L143.5,35.9 L145.3,38.4 L147.1,40.8 L148.9,43.2 L150.7,45.6 L152.5,48.0 L154.2,50.4 L156.0,52.6 L157.8,54.8 L159.6,57.0 L161.4,59.0 L163.2,61.0 L164.9,62.8 L166.7,64.6 L168.5,66.3 L170.3,67.8 L172.1,69.3 L173.8,70.6 L175.6,71.9 L177.4,73.1 L179.2,74.1 L181.0,75.1 L182.8,76.0 L184.5,76.8 L186.3,77.6 L188.1,78.2 L189.9,78.8 L191.7,79.4 L193.5,79.8 L195.2,80.3 L197.0,80.6 L198.8,81.0 L200.6,81.2 L202.4,81.5 L204.2,81.7 L206.0,81.9 L207.7,82.1 L209.5,82.2 L211.3,82.3 L213.1,82.4 L214.9,82.5 L216.7,82.6 L218.4,82.7 L220.2,82.7 L222.0,82.8" fill="none" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><line x1="115.0" y1="79" x2="115.0" y2="87" stroke="#555" stroke-width="1.5"/><text x="115.0" y="99" text-anchor="middle" fill="#555" font-size="12">0</text><line x1="166.8" y1="79" x2="166.8" y2="87" stroke="#d6312b" stroke-width="1.5"/><text x="166.8" y="99" text-anchor="middle" fill="#d6312b" font-size="12">z<tspan font-size="9" dy="3">A</tspan></text><text x="195.2" y="52" text-anchor="middle" fill="#d6312b" font-size="12">面積 A</text><text x="102.4" y="66" text-anchor="middle" fill="#22408a" font-size="12">1 − A</text></svg></div>
+  </div>
+
+  <div class="box red">
+    <b class="r">★ 五兄弟 $z$ 值（第 10 章天天見，現在就背）</b>
+    <table class="zt">
+      <tr><th>右尾 $A$</th><td>0.10</td><td>0.05</td><td>0.025</td><td>0.01</td><td>0.005</td></tr>
+      <tr><th>$z_A$</th><td><b>1.28</b></td><td><b>1.645</b></td><td><b class="r">1.96</b></td><td><b>2.33</b></td><td><b>2.575</b></td></tr>
+    </table>
+    <p class="side" style="text-align:center">記法：「<b class="b">一二八、一六四五、一九六、二三三、二五七五</b>」——$1.96$ 最常考（95% 信賴區間）。</p>
+  </div>
+
+  <h3>反查 SOP</h3>
+  <ol class="steps">
+    <li><b>判斷方向</b>：要找的 $x$ 在左尾、右尾，還是中央？（看下表）</li>
+    <li><b>找 $z$</b>：查五兄弟或查表，<span class="r">左尾要加負號</span></li>
+    <li><b>反標準化</b>：<span class="formula" style="display:inline-block;margin:0 4px;padding:1px 10px">$x=\mu+z\,\sigma$</span></li>
+  </ol>
+  <table class="dir">
+    <tr><th>題目說…</th><th>位置</th><th>$z$ 的號</th><th>例（$A=10\%$）</th></tr>
+    <tr><td>「前 10%」「最高 10%」「超過…的機率 10%」</td><td>右尾</td><td class="g"><b>＋</b></td><td>$z=+1.28$</td></tr>
+    <tr><td>「最低 10%」「後 10%」「不足…的機率 10%」</td><td>左尾</td><td class="r"><b>−</b></td><td>$z=-1.28$</td></tr>
+    <tr><td>「90% 的產品<b>超過</b>宣稱值」</td><td>左尾 10%</td><td class="r"><b>−</b></td><td>$z=-1.28$　<span class="r">⚠ 最容易錯</span></td></tr>
+    <tr><td>「中央 90%」「±z 之間 90%」</td><td>兩尾各 5%</td><td><b>±</b></td><td>$z=\pm1.645$</td></tr>
+  </table>
+  <h2>易錯總整理（考前看這格就好）</h2>
+  <div class="box red">
+    <ol class="two">
+      <li><span class="r">$P(X=a)=0$</span>，所以 $\lt $ 與 $\le$ 不用分。</li>
+      <li>均勻分配的<b>高度</b> $\frac{1}{b-a}$ 不是機率，<b>面積</b>才是。</li>
+      <li>Z 表給的是<span class="hy">左邊面積</span>；右尾要 <b>1 −</b>。</li>
+      <li>$x\lt \mu$ → $z\lt 0$ → 面積 &lt; 0.5。算出 0.7 就是錯了。</li>
+      <li>反查先看<b>方向</b>：左尾的 $z$ 要<span class="r">加負號</span>。</li>
+      <li>「90% 超過 $x$」是左尾 10%，<b>不是</b>右尾 10%。</li>
+      <li>取整數時往<b>保守</b>方向（保固取小、門檻取大…依題意）。</li>
+    </ol>
+  </div>
+
+  <div class="sticky green">
+    <b>🔭 偷看第 10 章：</b>常態分配「中央 95%」落在 $\mu\pm1.96\sigma$ 之間——把 $\mu$ 換成樣本平均數，就是<span class="hy">95% 信賴區間</span>的原型。<br>
+    所以 $z_{0.025}=1.96$ 這個數字，下學期之前請<span class="wavy">刻在腦子裡</span>。
+  </div>
+  <div class="pno">— 3 —</div>
+</div>
+
+<!-- ================= PAGE 4 ================= -->
+<div class="page">
+  <h2>反查實戰</h2>
+  <div class="cols">
+    <div class="ex">
+      <div class="q">8.3 白金會員門檻</div>
+      年消費 $\sim N(24000,\,6000^2)$，前 10% 升白金，門檻？
+      <div class="svgc"><svg viewBox="0 0 200 95" width="200" height="95" class="sk"><path d="M134.6,73 L134.6,46.1 L135.6,47.3 L136.5,48.5 L137.5,49.7 L138.5,50.8 L139.4,51.9 L140.4,53.0 L141.3,54.0 L142.3,55.0 L143.2,56.0 L144.2,56.9 L145.2,57.8 L146.1,58.7 L147.1,59.6 L148.0,60.4 L149.0,61.1 L149.9,61.9 L150.9,62.6 L151.8,63.3 L152.8,63.9 L153.8,64.5 L154.7,65.1 L155.7,65.7 L156.6,66.2 L157.6,66.7 L158.5,67.1 L159.5,67.6 L160.4,68.0 L161.4,68.4 L162.4,68.7 L163.3,69.1 L164.3,69.4 L165.2,69.7 L166.2,69.9 L167.1,70.2 L168.1,70.4 L169.1,70.6 L170.0,70.9 L171.0,71.0 L171.9,71.2 L172.9,71.4 L173.8,71.5 L174.8,71.7 L175.7,71.8 L176.7,71.9 L177.7,72.0 L178.6,72.1 L179.6,72.2 L180.5,72.3 L181.5,72.3 L182.4,72.4 L183.4,72.5 L184.4,72.5 L185.3,72.6 L186.3,72.6 L187.2,72.7 L188.2,72.7 L189.1,72.7 L190.1,72.8 L191.0,72.8 L192.0,72.8 L192.0,73 Z" fill="#ffb3c7" opacity=".75"/><line x1="4" y1="73" x2="196" y2="73" stroke="#444" stroke-width="1.3"/><path d="M8.0,72.8 L9.5,72.8 L11.1,72.7 L12.6,72.7 L14.1,72.6 L15.7,72.5 L17.2,72.4 L18.7,72.3 L20.3,72.2 L21.8,72.1 L23.3,71.9 L24.9,71.7 L26.4,71.5 L27.9,71.2 L29.5,71.0 L31.0,70.6 L32.5,70.3 L34.1,69.9 L35.6,69.4 L37.1,68.9 L38.7,68.3 L40.2,67.7 L41.7,67.0 L43.3,66.2 L44.8,65.4 L46.3,64.5 L47.9,63.5 L49.4,62.4 L50.9,61.2 L52.5,60.0 L54.0,58.6 L55.5,57.2 L57.1,55.7 L58.6,54.1 L60.1,52.4 L61.7,50.6 L63.2,48.8 L64.7,46.9 L66.3,45.0 L67.8,43.0 L69.3,40.9 L70.9,38.8 L72.4,36.7 L73.9,34.6 L75.5,32.6 L77.0,30.5 L78.5,28.5 L80.1,26.5 L81.6,24.6 L83.1,22.8 L84.7,21.0 L86.2,19.4 L87.7,18.0 L89.3,16.6 L90.8,15.4 L92.3,14.4 L93.9,13.5 L95.4,12.9 L96.9,12.4 L98.5,12.1 L100.0,12.0 L101.5,12.1 L103.1,12.4 L104.6,12.9 L106.1,13.5 L107.7,14.4 L109.2,15.4 L110.7,16.6 L112.3,18.0 L113.8,19.4 L115.3,21.0 L116.9,22.8 L118.4,24.6 L119.9,26.5 L121.5,28.5 L123.0,30.5 L124.5,32.6 L126.1,34.6 L127.6,36.7 L129.1,38.8 L130.7,40.9 L132.2,43.0 L133.7,45.0 L135.3,46.9 L136.8,48.8 L138.3,50.6 L139.9,52.4 L141.4,54.1 L142.9,55.7 L144.5,57.2 L146.0,58.6 L147.5,60.0 L149.1,61.2 L150.6,62.4 L152.1,63.5 L153.7,64.5 L155.2,65.4 L156.7,66.2 L158.3,67.0 L159.8,67.7 L161.3,68.3 L162.9,68.9 L164.4,69.4 L165.9,69.9 L167.5,70.3 L169.0,70.6 L170.5,71.0 L172.1,71.2 L173.6,71.5 L175.1,71.7 L176.7,71.9 L178.2,72.1 L179.7,72.2 L181.3,72.3 L182.8,72.4 L184.3,72.5 L185.9,72.6 L187.4,72.7 L188.9,72.7 L190.5,72.8 L192.0,72.8" fill="none" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><line x1="100.0" y1="69" x2="100.0" y2="77" stroke="#555" stroke-width="1.5"/><text x="100.0" y="89" text-anchor="middle" fill="#555" font-size="12">24000</text><line x1="134.6" y1="69" x2="134.6" y2="77" stroke="#d6312b" stroke-width="1.5"/><text x="134.6" y="89" text-anchor="middle" fill="#d6312b" font-size="12">x=?</text><text x="164.9" y="48" text-anchor="middle" fill="#d6312b" font-size="12">前10%</text></svg></div>
+      ① 前 10% → 右尾 → $z=+1.28$<br>
+      ② $x=24000+1.28\times6000=$ <span class="hy">31,680 元</span>
+      <div class="side">若改成「最低 10%」：$24000-7680=16{,}320$ 元</div>
+    </div>
+    <div class="ex">
+      <div class="q">8.4 電池保固期</div>
+      壽命 $\sim N(36,\,4^2)$ 月，保固內故障 ≤ 2.5%，保固最長？
+      <div class="svgc"><svg viewBox="0 0 200 95" width="200" height="95" class="sk"><path d="M8.0,73 L8.0,72.8 L8.6,72.8 L9.3,72.8 L9.9,72.8 L10.6,72.7 L11.2,72.7 L11.9,72.7 L12.5,72.7 L13.2,72.6 L13.8,72.6 L14.5,72.6 L15.1,72.6 L15.8,72.5 L16.4,72.5 L17.1,72.4 L17.7,72.4 L18.4,72.4 L19.0,72.3 L19.7,72.3 L20.3,72.2 L21.0,72.1 L21.6,72.1 L22.3,72.0 L22.9,71.9 L23.6,71.9 L24.2,71.8 L24.9,71.7 L25.5,71.6 L26.2,71.5 L26.8,71.4 L27.5,71.3 L28.1,71.2 L28.8,71.1 L29.4,71.0 L30.1,70.8 L30.7,70.7 L31.4,70.6 L32.0,70.4 L32.7,70.2 L33.3,70.1 L34.0,69.9 L34.6,69.7 L35.3,69.5 L35.9,69.3 L36.6,69.1 L37.2,68.9 L37.9,68.6 L38.5,68.4 L39.2,68.1 L39.8,67.9 L40.5,67.6 L41.1,67.3 L41.8,67.0 L42.4,66.7 L43.1,66.3 L43.7,66.0 L44.4,65.6 L45.0,65.3 L45.7,64.9 L46.3,64.5 L47.0,64.1 L47.0,73 Z" fill="#a9d8ff" opacity=".75"/><line x1="4" y1="73" x2="196" y2="73" stroke="#444" stroke-width="1.3"/><path d="M8.0,72.8 L9.5,72.8 L11.1,72.7 L12.6,72.7 L14.1,72.6 L15.7,72.5 L17.2,72.4 L18.7,72.3 L20.3,72.2 L21.8,72.1 L23.3,71.9 L24.9,71.7 L26.4,71.5 L27.9,71.2 L29.5,71.0 L31.0,70.6 L32.5,70.3 L34.1,69.9 L35.6,69.4 L37.1,68.9 L38.7,68.3 L40.2,67.7 L41.7,67.0 L43.3,66.2 L44.8,65.4 L46.3,64.5 L47.9,63.5 L49.4,62.4 L50.9,61.2 L52.5,60.0 L54.0,58.6 L55.5,57.2 L57.1,55.7 L58.6,54.1 L60.1,52.4 L61.7,50.6 L63.2,48.8 L64.7,46.9 L66.3,45.0 L67.8,43.0 L69.3,40.9 L70.9,38.8 L72.4,36.7 L73.9,34.6 L75.5,32.6 L77.0,30.5 L78.5,28.5 L80.1,26.5 L81.6,24.6 L83.1,22.8 L84.7,21.0 L86.2,19.4 L87.7,18.0 L89.3,16.6 L90.8,15.4 L92.3,14.4 L93.9,13.5 L95.4,12.9 L96.9,12.4 L98.5,12.1 L100.0,12.0 L101.5,12.1 L103.1,12.4 L104.6,12.9 L106.1,13.5 L107.7,14.4 L109.2,15.4 L110.7,16.6 L112.3,18.0 L113.8,19.4 L115.3,21.0 L116.9,22.8 L118.4,24.6 L119.9,26.5 L121.5,28.5 L123.0,30.5 L124.5,32.6 L126.1,34.6 L127.6,36.7 L129.1,38.8 L130.7,40.9 L132.2,43.0 L133.7,45.0 L135.3,46.9 L136.8,48.8 L138.3,50.6 L139.9,52.4 L141.4,54.1 L142.9,55.7 L144.5,57.2 L146.0,58.6 L147.5,60.0 L149.1,61.2 L150.6,62.4 L152.1,63.5 L153.7,64.5 L155.2,65.4 L156.7,66.2 L158.3,67.0 L159.8,67.7 L161.3,68.3 L162.9,68.9 L164.4,69.4 L165.9,69.9 L167.5,70.3 L169.0,70.6 L170.5,71.0 L172.1,71.2 L173.6,71.5 L175.1,71.7 L176.7,71.9 L178.2,72.1 L179.7,72.2 L181.3,72.3 L182.8,72.4 L184.3,72.5 L185.9,72.6 L187.4,72.7 L188.9,72.7 L190.5,72.8 L192.0,72.8" fill="none" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><line x1="100.0" y1="69" x2="100.0" y2="77" stroke="#555" stroke-width="1.5"/><text x="100.0" y="89" text-anchor="middle" fill="#555" font-size="12">36</text><line x1="47.0" y1="69" x2="47.0" y2="77" stroke="#d6312b" stroke-width="1.5"/><text x="47.0" y="89" text-anchor="middle" fill="#d6312b" font-size="12">x=?</text><text x="32.4" y="48" text-anchor="middle" fill="#d6312b" font-size="12">2.5%</text></svg></div>
+      ① 故障在左尾 2.5% → $z=-1.96$<br>
+      ② $x=36-1.96\times4=$ <span class="hy">28.16 月</span>
+      <div class="side">取 <b>28 個月</b>（往嚴格的方向取整！）</div>
+    </div>
+  </div>
+
+  <h2>隨堂小練習</h2>
+  <div class="ex" style="border-style:dashed">
+    <p><b>1.</b>（星夜客運）夜班車每 20 分鐘一班，隨機到站，等候時間 $X\sim U(0,20)$。求 $P(X\gt 14)$ 與平均等候時間。</p>
+    <p><b>2.</b>（日光咖啡）外帶取餐時間 $X\sim N(6,\,1.5^2)$ 分鐘。求 (a) $P(X\lt 9)$　(b) $P(X\gt 4.5)$　(c) $P(3.6\lt X\lt 7.2)$。</p>
+    <p><b>3.</b>（沐茶）店員每小時出杯數 $\sim N(80,\,10^2)$。(a) 前 5% 頒「手速王」，門檻至少幾杯？ (b) 最低 2.5% 需回訓，標準線是幾杯？</p>
+    <p><b>4.</b>（是非）$X$ 為連續變數，則 $P(X\le 3)\gt P(X\lt 3)$。</p>
+  </div>
+
+  <div class="box dash" style="height:46mm;position:relative"><span class="side">✍️ 計算區（記得每題先畫小鐘圖）</span></div>
+  <h3>考前一分鐘 Checklist</h3>
+  <div class="chips"><span>會寫 PDF 兩條件</span><span>均勻 = 底 × 高</span><span>標準化公式 $z=\frac{x-\mu}{\sigma}$</span><span>左尾／右尾／區間三招</span><span>五兄弟 $z_A$ 背熟</span><span>反標準化 $x=\mu+z\sigma$</span><span>每題都有畫小鐘圖</span></div>
+  <div class="sticky" style="transform:rotate(.6deg)">
+    <b>✔ 答案（先自己寫再看！）</b>
+    <div class="ans cols" style="gap:8px">
+      <div>
+        1. $(20-14)\times\frac{1}{20}=0.30$；$E(X)=10$ 分<br>
+        2(a) $z=2$ → 0.9772<br>
+        2(b) $z=-1$ → $1-0.1587=0.8413$<br>
+        2(c) $z_1=-1.6,\ z_2=0.8$ → $0.7881-0.0548=0.7333$
+      </div>
+      <div>
+        3(a) 右尾 5%：$80+1.645\times10=96.45$ → <b>97 杯</b><br>
+        3(b) 左尾 2.5%：$80-1.96\times10=60.4$ 杯<br>
+        4. <b class="r">✗</b>，兩者相等（單點機率 = 0）
+      </div>
+    </div>
+  </div>
+
+  <div class="pno">— 4 —</div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+  renderMathInElement(document.body,{
+    delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}],
+    throwOnError:false,strict:"ignore"
+  });
+});
+</script>
+</body>
+</html>

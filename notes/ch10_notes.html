@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ch10 估計的介紹｜重點筆記</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{
+  --ink:#22408a; --red:#d6312b; --green:#1f7a3a; --pencil:#555;
+  --hl-y:#fff27a; --hl-p:#ffc2d1; --hl-g:#c3f2b4; --hl-b:#bfe3ff;
+  --paper:#fffefa; --grid:#dbe7f5;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#e9e6df}
+body{font-family:"LXGW WenKai TC","Klee One","KaiTi","DFKai-SB","標楷體",serif;color:#262626;font-size:15.5px;line-height:1.6}
+.page{
+  width:210mm;min-height:297mm;margin:14px auto;padding:11mm 13mm 11mm 18mm;position:relative;
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:6mm 6mm;box-shadow:0 2px 10px rgba(0,0,0,.18);
+}
+.page::before{content:"";position:absolute;left:11mm;top:0;bottom:0;border-left:2px solid #f2a7a7}
+.pno{position:absolute;bottom:6mm;right:13mm;color:var(--pencil);font-size:12px}
+.hdr{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2.5px solid var(--ink);padding-bottom:3px;margin-bottom:8px}
+.hdr h1{margin:0;font-size:27px;color:var(--ink);letter-spacing:1px}
+.hdr .who{font-size:13px;color:var(--pencil);text-align:right}
+h2{font-size:20px;margin:9px 0 5px;color:#fff;display:inline-block;background:var(--ink);padding:1px 12px 1px 10px;border-radius:3px 14px 14px 3px}
+h3{font-size:17px;margin:9px 0 4px;color:var(--ink)}
+h3::before{content:"✎ ";color:var(--red)}
+p{margin:4px 0}
+ul,ol{margin:3px 0;padding-left:22px}
+li{margin:2px 0}
+.hy{background:linear-gradient(transparent 45%,var(--hl-y) 45%)}
+.hp{background:linear-gradient(transparent 45%,var(--hl-p) 45%)}
+.hg{background:linear-gradient(transparent 45%,var(--hl-g) 45%)}
+.hb{background:linear-gradient(transparent 45%,var(--hl-b) 45%)}
+.r{color:var(--red)} .b{color:var(--ink)} .g{color:var(--green)}
+.circ{border:2px solid var(--red);border-radius:50%;padding:0 6px}
+.wavy{text-decoration:underline wavy var(--red);text-underline-offset:4px}
+.box{border:2px solid var(--ink);border-radius:6px;padding:6px 10px;margin:7px 0;background:rgba(255,255,255,.75)}
+.box.red{border-color:var(--red)}
+.box.dash{border-style:dashed}
+.formula{border:2.5px double var(--red);background:#fff;padding:5px 10px;margin:6px 0;text-align:center;border-radius:4px}
+.tag{display:inline-block;font-size:12px;padding:0 7px;border-radius:9px;color:#fff;background:var(--red);margin-right:4px;vertical-align:2px}
+.tag.blue{background:var(--ink)} .tag.green{background:var(--green)}
+.stamp{position:absolute;border:3px solid var(--red);color:var(--red);font-weight:700;padding:1px 8px;border-radius:5px;transform:rotate(-12deg);font-size:17px;opacity:.85;background:rgba(255,255,255,.6)}
+.sticky{background:#fff6a8;padding:6px 11px;box-shadow:2px 3px 6px rgba(0,0,0,.18);transform:rotate(-1.3deg);margin:8px 2px;border-top:14px solid rgba(255,236,120,.95)}
+.sticky.pink{background:#ffdbe5;border-top-color:#ffc0d0;transform:rotate(1deg)}
+.sticky.green{background:#ddf7d2;border-top-color:#c4eeb3;transform:rotate(-.6deg)}
+.trap{border-left:5px solid var(--red);background:rgba(255,231,231,.8);padding:5px 10px;margin:6px 0}
+.trap b.t{color:var(--red)}
+.cols{display:flex;gap:12px;align-items:flex-start}
+.cols>*{flex:1;min-width:0}
+.c3{display:flex;gap:6px;justify-content:space-between;text-align:center}
+.c3>div{flex:1}
+.c3 .cap{font-size:13.5px}
+.sk text{font-family:"LXGW WenKai TC","KaiTi",serif}
+.ex{border:1.8px solid #777;border-radius:6px;padding:5px 10px;margin:7px 0;background:rgba(255,255,255,.8)}
+.ex .q{font-weight:700;color:var(--ink)}
+.ex .q::before{content:"例 ";color:var(--red)}
+.steps{counter-reset:s;list-style:none;padding-left:4px}
+.steps li{counter-increment:s;margin:3px 0}
+.steps li::before{content:counter(s);display:inline-block;width:20px;height:20px;line-height:20px;text-align:center;border-radius:50%;background:var(--red);color:#fff;font-size:12px;margin-right:6px}
+.arrow{color:var(--red);font-weight:700}
+table.zt{border-collapse:collapse;margin:4px auto;font-size:15px}
+table.zt td,table.zt th{border:1.5px solid var(--ink);padding:2px 10px;text-align:center}
+table.zt th{background:var(--hl-b)}
+table.dir{border-collapse:collapse;width:100%;font-size:14.5px;margin:4px 0}
+table.dir td,table.dir th{border:1.5px solid #888;padding:3px 7px;text-align:center}
+table.dir th{background:#f3efe2}
+table.dir td:first-child{white-space:nowrap}
+.svgc{text-align:center;margin:2px 0}
+.two{columns:2;column-gap:26px}
+.chips{display:flex;flex-wrap:wrap;gap:4px 16px;padding-left:4px;margin:2px 0}
+.chips>span::before{content:"☐ ";color:var(--red)}
+.map{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:14.5px;margin:4px 0}
+.map .n{border:2px solid var(--ink);border-radius:16px;padding:1px 10px;background:#fff}
+.map .n.main{border-color:var(--red);color:var(--red);font-weight:700}
+.side{font-size:13px;color:var(--pencil)}
+.ans{font-size:14px}
+.blank{display:inline-block;min-width:70px;border-bottom:1.5px solid #555}
+.katex{font-size:1.02em}
+.check li{list-style:none;margin-left:-18px}
+.check li::before{content:"☐ ";color:var(--red)}
+@page{size:A4;margin:0}
+@media print{
+  html,body{background:none}
+  .page{margin:0;box-shadow:none;page-break-after:always;break-after:page;height:297mm;overflow:hidden}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+@media screen and (max-width:820px){
+  .page{width:auto;min-height:0;margin:8px;padding:16px 16px 30px 26px}
+  .page::before{left:14px}
+  .cols,.c3{flex-direction:column}
+  .stamp{display:none}
+}
+</style>
+</head>
+<body>
+<!-- ================= PAGE 1 ================= -->
+<div class="page">
+  <div class="hdr">
+    <h1>Ch10 估計的介紹 ✏️ 重點筆記</h1>
+    <div class="who">統計學(一)｜許老師上課筆記<br>姓名：<span class="blank"></span> 學號：<span class="blank"></span></div>
+  </div>
+
+  <div class="map">
+    <span class="side">本章地圖 ▸</span>
+    <span class="n">點估計 vs 區間估計</span><span class="arrow">→</span>
+    <span class="n">好估計量三特質</span><span class="arrow">→</span>
+    <span class="n main">信賴區間 ★★★</span><span class="arrow">→</span>
+    <span class="n">正確詮釋</span><span class="arrow">→</span>
+    <span class="n">寬度因素</span><span class="arrow">→</span>
+    <span class="n">樣本大小 $n$</span>
+  </div>
+
+  <div class="sticky">
+    <b>老師碎碎念：</b>方向正式<span class="hp">反轉</span>了！Ch7–9 是「知道母體，問樣本」；從這章開始是<b>「拿著樣本，回推母體」</b>。
+    期末必考三件事：<span class="wavy">算區間、講對意思、算 $n$</span>。
+  </div>
+
+  <h2>§10.1 估計的概念</h2>
+  <table class="dir">
+    <tr><th></th><th>點估計</th><th>區間估計</th></tr>
+    <tr><td>長相</td><td>一個數：「$\mu$ 大約 22.6」</td><td>一段範圍＋信心：「95% 信心 $\mu$ 在 20.4～24.8」</td></tr>
+    <tr><td>優點</td><td>簡單</td><td class="r"><b>同時告訴你「多少」和「多準」</b></td></tr>
+    <tr><td>缺點</td><td>幾乎不可能剛好猜中；<br>不知道離多遠；看不出 $n$ 大小</td><td>算起來多一步</td></tr>
+  </table>
+
+  <h3>好估計量的三個特質 <span class="tag">必背</span></h3>
+  <div class="cols">
+    <div class="box" style="text-align:center"><b class="b">① 不偏性</b><br>期望值 = 參數<br>$E(\bar X)=\mu$<br><span class="side">長期不會系統性偏高或偏低</span></div>
+    <div class="box" style="text-align:center"><b class="b">② 一致性</b><br>$n$ 越大越準<br>$\sigma/\sqrt n\to0$<br><span class="side">資料越多，離參數越近</span></div>
+    <div class="box" style="text-align:center"><b class="b">③ 相對有效性</b><br>兩個不偏的比一比<br><span class="hy">變異數小的勝</span><br><span class="side">常態母體下 $\bar X$ 勝過中位數</span></div>
+  </div>
+  <p class="side">口訣：<b class="b">「打得準（不偏）、越打越準（一致）、打得集中（有效）」</b>　　補充：$s^2$ 除以 $n-1$ 就是為了讓它「不偏」。</p>
+
+  <h2>§10.2 信賴區間（$\sigma$ 已知）</h2>
+  <span class="stamp" style="right:16mm;top:178mm">必考 ★★★</span>
+  <div class="formula" style="font-size:1.2em">$\bar x\ \pm\ z_{\alpha/2}\,\dfrac{\sigma}{\sqrt n}$</div>
+  <div class="cols">
+    <div>
+      <ul>
+        <li>$\bar x$：<b>中心</b>（點估計）</li>
+        <li>$\frac{\sigma}{\sqrt n}$：<b>標準誤</b>（Ch9 的老朋友）</li>
+        <li>$B=z_{\alpha/2}\frac{\sigma}{\sqrt n}$：<span class="hy"><b>誤差界限</b></span>，新聞的「±3%」就是它</li>
+        <li>下限 LCL $=\bar x-B$，上限 UCL $=\bar x+B$</li>
+      </ul>
+    </div>
+    <div style="flex:0 0 280px"><svg viewBox="0 0 280 100" width="280" height="100" class="sk"><defs><marker id="ah" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d6312b"/></marker></defs><line x1="10" y1="78" x2="270" y2="78" stroke="#444" stroke-width="1.2"/><line x1="40" y1="50" x2="240" y2="50" stroke="#22408a" stroke-width="4" stroke-linecap="round"/><line x1="40" y1="41" x2="40" y2="59" stroke="#22408a" stroke-width="3"/><line x1="240" y1="41" x2="240" y2="59" stroke="#22408a" stroke-width="3"/><circle cx="140.0" cy="50" r="5" fill="#d6312b"/><text x="140.0" y="72" text-anchor="middle" font-size="13" fill="#d6312b">x̄</text><path d="M44,30 L136.0,30" stroke="#d6312b" stroke-width="1.3" marker-start="url(#ah)" marker-end="url(#ah)"/><text x="90.0" y="25" text-anchor="middle" font-size="13" fill="#d6312b">B</text><path d="M144.0,30 L236,30" stroke="#d6312b" stroke-width="1.3" marker-start="url(#ah)" marker-end="url(#ah)"/><text x="190.0" y="25" text-anchor="middle" font-size="13" fill="#d6312b">B</text><text x="40" y="92" text-anchor="middle" font-size="12" fill="#22408a">LCL = x̄ − B</text><text x="240" y="92" text-anchor="middle" font-size="12" fill="#22408a">UCL = x̄ + B</text></svg></div>
+  </div>
+  <div class="pno">— 1 —</div>
+</div>
+
+<!-- ================= PAGE 2 ================= -->
+<div class="page">
+  <h2>$z_{\alpha/2}$ 怎麼來？</h2>
+  <div class="cols">
+    <div style="flex:0 0 250px"><svg viewBox="0 0 250 112" width="250" height="112" class="sk"><path d="M57.6,90 L57.6,78.6 L59.8,77.0 L62.0,75.4 L64.3,73.5 L66.5,71.6 L68.8,69.5 L71.0,67.2 L73.3,64.8 L75.5,62.2 L77.8,59.6 L80.0,56.8 L82.3,53.9 L84.5,50.9 L86.8,47.9 L89.0,44.8 L91.3,41.7 L93.5,38.7 L95.8,35.6 L98.0,32.6 L100.3,29.8 L102.5,27.0 L104.8,24.4 L107.0,22.0 L109.3,19.7 L111.5,17.8 L113.8,16.1 L116.0,14.6 L118.3,13.5 L120.5,12.7 L122.8,12.2 L125.0,12.0 L127.2,12.2 L129.5,12.7 L131.7,13.5 L134.0,14.6 L136.2,16.1 L138.5,17.8 L140.7,19.7 L143.0,22.0 L145.2,24.4 L147.5,27.0 L149.7,29.8 L152.0,32.6 L154.2,35.6 L156.5,38.7 L158.7,41.7 L161.0,44.8 L163.2,47.9 L165.5,50.9 L167.7,53.9 L170.0,56.8 L172.2,59.6 L174.5,62.2 L176.7,64.8 L179.0,67.2 L181.2,69.5 L183.5,71.6 L185.7,73.5 L188.0,75.4 L190.2,77.0 L192.4,78.6 L192.4,90 Z" fill="#fff27a" opacity=".75"/><path d="M8.0,90 L8.0,89.8 L8.8,89.7 L9.7,89.7 L10.5,89.7 L11.3,89.7 L12.1,89.6 L13.0,89.6 L13.8,89.6 L14.6,89.5 L15.4,89.5 L16.3,89.5 L17.1,89.4 L17.9,89.4 L18.7,89.3 L19.6,89.3 L20.4,89.2 L21.2,89.2 L22.0,89.1 L22.9,89.0 L23.7,89.0 L24.5,88.9 L25.3,88.8 L26.2,88.7 L27.0,88.6 L27.8,88.6 L28.6,88.5 L29.5,88.3 L30.3,88.2 L31.1,88.1 L32.0,88.0 L32.8,87.8 L33.6,87.7 L34.4,87.6 L35.3,87.4 L36.1,87.2 L36.9,87.1 L37.7,86.9 L38.6,86.7 L39.4,86.5 L40.2,86.3 L41.0,86.0 L41.9,85.8 L42.7,85.5 L43.5,85.3 L44.3,85.0 L45.2,84.7 L46.0,84.4 L46.8,84.1 L47.6,83.8 L48.5,83.4 L49.3,83.1 L50.1,82.7 L50.9,82.3 L51.8,81.9 L52.6,81.5 L53.4,81.0 L54.2,80.6 L55.1,80.1 L55.9,79.6 L56.7,79.1 L57.6,78.6 L57.6,90 Z" fill="#ffb3c7" opacity=".75"/><path d="M192.4,90 L192.4,78.6 L193.3,79.1 L194.1,79.6 L194.9,80.1 L195.8,80.6 L196.6,81.0 L197.4,81.5 L198.2,81.9 L199.1,82.3 L199.9,82.7 L200.7,83.1 L201.5,83.4 L202.4,83.8 L203.2,84.1 L204.0,84.4 L204.8,84.7 L205.7,85.0 L206.5,85.3 L207.3,85.5 L208.1,85.8 L209.0,86.0 L209.8,86.3 L210.6,86.5 L211.4,86.7 L212.3,86.9 L213.1,87.1 L213.9,87.2 L214.7,87.4 L215.6,87.6 L216.4,87.7 L217.2,87.8 L218.0,88.0 L218.9,88.1 L219.7,88.2 L220.5,88.3 L221.4,88.5 L222.2,88.6 L223.0,88.6 L223.8,88.7 L224.7,88.8 L225.5,88.9 L226.3,89.0 L227.1,89.0 L228.0,89.1 L228.8,89.2 L229.6,89.2 L230.4,89.3 L231.3,89.3 L232.1,89.4 L232.9,89.4 L233.7,89.5 L234.6,89.5 L235.4,89.5 L236.2,89.6 L237.0,89.6 L237.9,89.6 L238.7,89.7 L239.5,89.7 L240.3,89.7 L241.2,89.7 L242.0,89.8 L242.0,90 Z" fill="#ffb3c7" opacity=".75"/><line x1="4" y1="90" x2="246" y2="90" stroke="#444" stroke-width="1.3"/><path d="M8.0,89.8 L9.9,89.7 L11.9,89.6 L13.8,89.6 L15.8,89.5 L17.7,89.4 L19.7,89.3 L21.6,89.1 L23.6,89.0 L25.6,88.8 L27.5,88.6 L29.5,88.3 L31.4,88.1 L33.4,87.8 L35.3,87.4 L37.3,87.0 L39.2,86.5 L41.1,86.0 L43.1,85.4 L45.0,84.8 L47.0,84.0 L48.9,83.2 L50.9,82.3 L52.8,81.3 L54.8,80.3 L56.8,79.1 L58.7,77.8 L60.6,76.4 L62.6,74.9 L64.5,73.3 L66.5,71.6 L68.4,69.8 L70.4,67.8 L72.4,65.8 L74.3,63.7 L76.2,61.4 L78.2,59.1 L80.2,56.6 L82.1,54.1 L84.0,51.6 L86.0,49.0 L88.0,46.3 L89.9,43.6 L91.8,41.0 L93.8,38.3 L95.8,35.6 L97.7,33.1 L99.7,30.5 L101.6,28.1 L103.5,25.8 L105.5,23.6 L107.5,21.5 L109.4,19.6 L111.3,17.9 L113.3,16.4 L115.3,15.1 L117.2,14.0 L119.1,13.1 L121.1,12.5 L123.1,12.1 L125.0,12.0 L126.9,12.1 L128.9,12.5 L130.9,13.1 L132.8,14.0 L134.8,15.1 L136.7,16.4 L138.7,17.9 L140.6,19.6 L142.5,21.5 L144.5,23.6 L146.4,25.8 L148.4,28.1 L150.4,30.5 L152.3,33.1 L154.2,35.6 L156.2,38.3 L158.2,41.0 L160.1,43.6 L162.0,46.3 L164.0,49.0 L166.0,51.6 L167.9,54.1 L169.8,56.6 L171.8,59.1 L173.8,61.4 L175.7,63.7 L177.7,65.8 L179.6,67.8 L181.5,69.8 L183.5,71.6 L185.4,73.3 L187.4,74.9 L189.3,76.4 L191.3,77.8 L193.3,79.1 L195.2,80.3 L197.2,81.3 L199.1,82.3 L201.0,83.2 L203.0,84.0 L204.9,84.8 L206.9,85.4 L208.9,86.0 L210.8,86.5 L212.8,87.0 L214.7,87.4 L216.7,87.8 L218.6,88.1 L220.5,88.3 L222.5,88.6 L224.5,88.8 L226.4,89.0 L228.3,89.1 L230.3,89.3 L232.2,89.4 L234.2,89.5 L236.2,89.6 L238.1,89.6 L240.1,89.7 L242.0,89.8" fill="none" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><line x1="57.6" y1="86" x2="57.6" y2="94" stroke="#d6312b" stroke-width="1.5"/><text x="57.6" y="106" text-anchor="middle" fill="#d6312b" font-size="12">−z<tspan font-size="9" dy="3">α/2</tspan></text><line x1="125.0" y1="86" x2="125.0" y2="94" stroke="#555" stroke-width="1.5"/><text x="125.0" y="106" text-anchor="middle" fill="#555" font-size="12">0</text><line x1="192.4" y1="86" x2="192.4" y2="94" stroke="#d6312b" stroke-width="1.5"/><text x="192.4" y="106" text-anchor="middle" fill="#d6312b" font-size="12">z<tspan font-size="9" dy="3">α/2</tspan></text><text x="125.0" y="62" text-anchor="middle" fill="#22408a" font-size="12">1 − α</text><text x="30.4" y="58" text-anchor="middle" fill="#d6312b" font-size="12">α/2</text><text x="219.6" y="58" text-anchor="middle" fill="#d6312b" font-size="12">α/2</text></svg></div>
+    <div>
+      <p>信賴水準 $1-\alpha$ 放<b>中間</b>，剩下的 $\alpha$ <span class="hp">兩尾平分</span>，每尾 $\alpha/2$。</p>
+      <table class="zt">
+        <tr><th>信賴水準</th><th>$\alpha$</th><th>$\alpha/2$</th><th>$z_{\alpha/2}$</th></tr>
+        <tr><td>90%</td><td>0.10</td><td>0.05</td><td><b>1.645</b></td></tr>
+        <tr><td>95%</td><td>0.05</td><td>0.025</td><td><b class="r">1.96</b></td></tr>
+        <tr><td>98%</td><td>0.02</td><td>0.01</td><td><b>2.33</b></td></tr>
+        <tr><td>99%</td><td>0.01</td><td>0.005</td><td><b>2.575</b></td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="trap">
+    <b class="t">⚠ 陷阱 #1｜95% 用 1.96，不是 1.645</b>　1.645 是「右尾 5%」；信賴區間是<b>兩尾</b>，95% 要找右尾 <b>2.5%</b> → 1.96。
+    <span class="side">（這就是 Ch8 背的五兄弟！）</span>
+  </div>
+
+  <h3>信賴區間 SOP</h3>
+  <ol class="steps">
+    <li><b>列數字</b>：$\bar x$、$\sigma$、$n$、信賴水準 → 查 $z_{\alpha/2}$</li>
+    <li><b>算標準誤</b>：$\sigma/\sqrt n$ <span class="r">← 最常忘記除 $\sqrt n$</span></li>
+    <li><b>算 $B$</b>：$z_{\alpha/2}\times$ 標準誤</li>
+    <li><b>寫區間</b>：$[\bar x-B,\ \bar x+B]$，再回答題目的決策問題</li>
+  </ol>
+
+  <h2>實戰｜範例 10.1 星夜客運</h2>
+  <div class="ex">
+    <div class="q">抽 $n=45$ 班，$\bar x=22.6$ 人，$\sigma=7.5$ 人。求 $\mu$ 的 95% 信賴區間；平均有沒有達到損益門檻 20 人？</div>
+    <div class="cols">
+      <div>
+        ① $z_{0.025}=1.96$<br>
+        ② 標準誤 $=\frac{7.5}{\sqrt{45}}=1.118$<br>
+        ③ $B=1.96\times1.118=$ <span class="circ">2.19</span><br>
+        ④ $22.6\pm2.19$ → <span class="hy"><b>[20.41, 24.79]</b></span>
+      </div>
+      <div style="flex:0 0 280px"><svg viewBox="0 0 280 92" width="280" height="92" class="sk"><rect x="15.0" y="12" width="62.5" height="50" fill="#ffc2d1" opacity=".55"/><text x="46.2" y="26" text-anchor="middle" font-size="11" fill="#d6312b">虧損區</text><line x1="77.5" y1="8" x2="77.5" y2="66" stroke="#d6312b" stroke-width="1.8" stroke-dasharray="4 3"/><line x1="90.3" y1="40" x2="227.2" y2="40" stroke="#22408a" stroke-width="4" stroke-linecap="round"/><line x1="90.3" y1="32" x2="90.3" y2="48" stroke="#22408a" stroke-width="3"/><line x1="227.2" y1="32" x2="227.2" y2="48" stroke="#22408a" stroke-width="3"/><circle cx="158.8" cy="40" r="5" fill="#d6312b"/><line x1="8" y1="70" x2="272" y2="70" stroke="#444" stroke-width="1.2"/><line x1="15.0" y1="67" x2="15.0" y2="73" stroke="#444"/><text x="15.0" y="86" text-anchor="middle" font-size="11" fill="#555">18</text><line x1="46.2" y1="67" x2="46.2" y2="73" stroke="#444"/><text x="46.2" y="86" text-anchor="middle" font-size="11" fill="#555">19</text><line x1="77.5" y1="67" x2="77.5" y2="73" stroke="#444"/><text x="77.5" y="86" text-anchor="middle" font-size="11" fill="#d6312b">20</text><line x1="108.8" y1="67" x2="108.8" y2="73" stroke="#444"/><text x="108.8" y="86" text-anchor="middle" font-size="11" fill="#555">21</text><line x1="140.0" y1="67" x2="140.0" y2="73" stroke="#444"/><text x="140.0" y="86" text-anchor="middle" font-size="11" fill="#555">22</text><line x1="171.2" y1="67" x2="171.2" y2="73" stroke="#444"/><text x="171.2" y="86" text-anchor="middle" font-size="11" fill="#555">23</text><line x1="202.5" y1="67" x2="202.5" y2="73" stroke="#444"/><text x="202.5" y="86" text-anchor="middle" font-size="11" fill="#555">24</text><line x1="233.8" y1="67" x2="233.8" y2="73" stroke="#444"/><text x="233.8" y="86" text-anchor="middle" font-size="11" fill="#555">25</text><line x1="265.0" y1="67" x2="265.0" y2="73" stroke="#444"/><text x="265.0" y="86" text-anchor="middle" font-size="11" fill="#555">26</text><text x="90.3" y="28" text-anchor="middle" font-size="11" fill="#22408a">20.41</text><text x="227.2" y="28" text-anchor="middle" font-size="11" fill="#22408a">24.79</text></svg></div>
+    </div>
+    <p>✅ <b>整個區間都在 20 之上</b> → 連最保守的下限都過門檻，深夜班次有賺頭。<br>
+    <span class="side">若區間跨過 20（例如 [19.2, 26.0]）→ 結論變成「證據不足，再多試營運一陣子」。</span></p>
+  </div>
+
+  <h2>信賴區間的正確詮釋</h2> <span class="stamp" style="position:relative;display:inline-block;margin-left:16px;transform:rotate(-8deg)">一定考</span>
+  <div class="cols">
+    <div class="trap" style="margin:0">
+      <b class="t">❌ 錯誤說法</b><br>
+      「$\mu$ 有 95% 的機率落在 20.41～24.79 之間。」<br>
+      <span class="side">$\mu$ 是固定常數，不是隨機變數——它要嘛在、要嘛不在，沒有機率可言。</span>
+    </div>
+    <div class="box" style="margin:0;border-color:var(--green);background:rgba(225,247,218,.85)">
+      <b class="g">✅ 正確說法</b><br>
+      「重複抽樣、每次建 95% 區間，<span class="hy">長期約 95% 的區間會涵蓋 $\mu$</span>；我們有 95% 的信心，這次的區間是成功的那些之一。」
+    </div>
+  </div>
+  <div class="pno">— 2 —</div>
+</div>
+
+<!-- ================= PAGE 3 ================= -->
+<div class="page">
+  <div class="cols">
+    <div style="flex:0 0 290px"><svg viewBox="0 0 290 250" width="290" height="250" class="sk"><line x1="97.5" y1="14" x2="181.5" y2="14" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><circle cx="139.5" cy="14" r="2.3" fill="#22408a"/><line x1="113.9" y1="25" x2="197.9" y2="25" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><circle cx="155.9" cy="25" r="2.3" fill="#22408a"/><line x1="98.2" y1="36" x2="182.2" y2="36" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><circle cx="140.2" cy="36" r="2.3" fill="#22408a"/><line x1="96.3" y1="47" x2="180.3" y2="47" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><circle cx="138.3" cy="47" r="2.3" fill="#22408a"/><line x1="83.1" y1="58" x2="167.1" y2="58" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><circle cx="125.1" cy="58" r="2.3" fill="#22408a"/><line x1="98.4" y1="69" x2="182.4" y2="69" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><circle cx="140.4" cy="69" r="2.3" fill="#22408a"/><line x1="126.8" y1="80" x2="210.8" y2="80" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><circle cx="168.8" cy="80" r="2.3" fill="#22408a"/><line x1="112.1" y1="91" x2="196.1" y2="91" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><circle cx="154.1" cy="91" r="2.3" fill="#22408a"/><line x1="125.2" y1="102" x2="209.2" y2="102" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><circle cx="167.2" cy="102" r="2.3" fill="#22408a"/><line x1="108.3" y1="113" x2="192.3" y2="113" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><circle cx="150.3" cy="113" r="2.3" fill="#22408a"/><line x1="111.4" y1="124" x2="195.4" y2="124" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><circle cx="153.4" cy="124" r="2.3" fill="#22408a"/><line x1="107.0" y1="135" x2="191.0" y2="135" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><circle cx="149.0" cy="135" r="2.3" fill="#22408a"/><line x1="67.3" y1="146" x2="151.3" y2="146" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><circle cx="109.3" cy="146" r="2.3" fill="#22408a"/><line x1="155.0" y1="157" x2="239.0" y2="157" stroke="#d6312b" stroke-width="3" stroke-linecap="round"/><circle cx="197.0" cy="157" r="2.3" fill="#d6312b"/><line x1="113.8" y1="168" x2="197.8" y2="168" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><circle cx="155.8" cy="168" r="2.3" fill="#22408a"/><line x1="113.7" y1="179" x2="197.7" y2="179" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><circle cx="155.7" cy="179" r="2.3" fill="#22408a"/><line x1="75.8" y1="190" x2="159.8" y2="190" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><circle cx="117.8" cy="190" r="2.3" fill="#22408a"/><line x1="75.8" y1="201" x2="159.8" y2="201" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><circle cx="117.8" cy="201" r="2.3" fill="#22408a"/><line x1="84.0" y1="212" x2="168.0" y2="212" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><circle cx="126.0" cy="212" r="2.3" fill="#22408a"/><line x1="93.0" y1="223" x2="177.0" y2="223" stroke="#22408a" stroke-width="2" stroke-linecap="round"/><circle cx="135.0" cy="223" r="2.3" fill="#22408a"/><line x1="145.0" y1="6" x2="145.0" y2="228" stroke="#1f7a3a" stroke-width="2" stroke-dasharray="5 3"/><text x="145.0" y="242" text-anchor="middle" font-size="13" fill="#1f7a3a">μ（固定不動）</text><text x="284" y="161" text-anchor="end" font-size="11" fill="#d6312b">落空！</text></svg></div>
+    <div>
+      <div class="sticky green">
+        <b>一張圖看懂「95% 的信心」</b><br>
+        左圖是 20 個樣本各自算出的 95% 區間：<br>
+        • <b>會動的是區間</b>（每個樣本的 $\bar x$ 不同）<br>
+        • <b>不動的是 $\mu$</b>（那條直線）<br>
+        • 大約 19 條抓到 $\mu$、1 條落空（紅色）<br>
+        「95%」是<span class="hp">這套方法的長期成功率</span>，不是 $\mu$ 的機率。
+      </div>
+      <p class="side">口訣：<b class="b">「μ 不動，區間在動；信心給方法，不給 μ」</b></p>
+    </div>
+  </div>
+
+  <h2>影響區間寬度的三個因素</h2>
+  <p>寬度 $=2B=2\times z_{\alpha/2}\times\dfrac{\sigma}{\sqrt n}$ —— 看公式就知道誰變大、誰變小：</p>
+  <table class="dir">
+    <tr><th>因素</th><th>變動</th><th>寬度</th><th>白話</th></tr>
+    <tr><td>信賴水準 $1-\alpha$</td><td>↑（95%→99%）</td><td class="r"><b>變寬</b></td><td>想更有把握，網就得撒更大</td></tr>
+    <tr><td>母體標準差 $\sigma$</td><td>↑</td><td class="r"><b>變寬</b></td><td>母體越亂，估得越不準</td></tr>
+    <tr><td>樣本大小 $n$</td><td>↑</td><td class="g"><b>變窄</b></td><td>資料越多越精確（但 $n\times4$ 寬度才減半）</td></tr>
+  </table>
+  <div class="sticky pink">
+    <b>把握 vs 精確，不可兼得！</b>　同一份資料下，99% 的區間一定比 95% 寬。<br>
+    <span class="hy">唯一能同時「更有把握」又「更窄」的方法：加大樣本 $n$</span>（要花錢）。<br>
+    <span class="side">極端例子：「我 100% 確定 $\mu$ 在 $-\infty$ 到 $\infty$ 之間」——把握十足，毫無用處。</span>
+  </div>
+
+  <h2>§10.3 樣本大小要抽多少？</h2>
+  <div class="cols">
+    <div>
+      <p>先訂好「最多容許誤差」$B$，由 $B=z_{\alpha/2}\frac{\sigma}{\sqrt n}$ 反解：</p>
+      <div class="formula" style="font-size:1.15em">$n=\left(\dfrac{z_{\alpha/2}\ \sigma}{B}\right)^2$</div>
+    </div>
+    <div>
+      <div class="trap" style="margin-top:2px">
+        <b class="t">⚠ 陷阱 #2｜一律無條件進位</b><br>
+        算出 216.09 → 抽 <b class="r">217</b>，不是 216！<br>
+        <span class="side">四捨五入「捨」掉的話，誤差就會超過要求。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="ex">
+    <div class="q">10.2 承 10.1，想把誤差壓到 ±1 人以內（95%），要觀察幾班？</div>
+    $n=\left(\dfrac{1.96\times7.5}{1}\right)^2=(14.7)^2=216.09$ → <span class="hy"><b>217 班</b></span><br>
+    <span class="side">誤差從 2.19 縮到 1（剛好一半多一點），樣本卻從 45 暴增到 217（快 5 倍）——$\sqrt n$ 法則的代價。</span>
+  </div>
+  <div class="pno">— 3 —</div>
+</div>
+
+<!-- ================= PAGE 4 ================= -->
+<div class="page">
+  <h2>易錯總整理（考前看這格就好）</h2>
+  <div class="box red">
+    <ol class="two">
+      <li>標準誤要<span class="hy">除以 $\sqrt n$</span>，別直接用 $\sigma$。</li>
+      <li>95% → <b>1.96</b>（兩尾各 2.5%），不是 1.645。</li>
+      <li>不能說「$\mu$ 有 95% 機率在區間內」。</li>
+      <li>信賴水準↑ → 區間<b>變寬</b>，不是變準。</li>
+      <li>$n$ 放大 4 倍，寬度才<b>減半</b>。</li>
+      <li>樣本數一律<span class="r">無條件進位</span>。</li>
+      <li>決策題：看區間<b>有沒有跨過</b>門檻值。</li>
+    </ol>
+  </div>
+
+  <h2>隨堂小練習</h2>
+  <div class="ex" style="border-style:dashed">
+    <p><b>1.</b>（日光咖啡）外帶等候時間 $\sigma=3$ 分鐘。抽 $n=36$ 單，$\bar x=8.5$ 分。求 $\mu$ 的 (a) 95% (b) 99% 信賴區間。</p>
+    <p><b>2.</b>（星夜客運）$\bar x=40$ 人、$\sigma=10$、$n=25$，求 90% 信賴區間。</p>
+    <p><b>3.</b>（沐茶）想估計門市平均日營業額，$\sigma=2000$ 元。希望 95% 信賴水準下誤差不超過 400 元，要抽幾天？</p>
+    <p><b>4.</b>（是非）95% 信賴區間 [12, 15] 表示「$\mu$ 有 95% 的機率介於 12 與 15 之間」。</p>
+    <p><b>5.</b> 其他不變：(a) $n$ 由 50 變 200，區間寬度變幾倍？ (b) 信賴水準由 90% 改 99%，區間變寬或變窄？</p>
+  </div>
+
+  <div class="box dash" style="height:50mm;position:relative"><span class="side">✍️ 計算區（照 SOP：列數字 → 標準誤 → B → 區間）</span></div>
+
+  <h3>考前一分鐘 Checklist</h3>
+  <div class="chips"><span>好估計量三特質</span><span>$\bar x\pm z_{\alpha/2}\sigma/\sqrt n$</span><span>$z_{\alpha/2}$ 四個值</span><span>正確詮釋講得出來</span><span>寬度三因素</span><span>$n=(z\sigma/B)^2$ 進位</span></div>
+
+  <div class="sticky" style="transform:rotate(.6deg)">
+    <b>✔ 答案（先自己寫再看！）</b>
+    <div class="ans cols" style="gap:8px">
+      <div>
+        1. 標準誤 $=3/6=0.5$<br>
+        　(a) $8.5\pm1.96(0.5)=8.5\pm0.98$ → $[7.52,\ 9.48]$<br>
+        　(b) $8.5\pm2.575(0.5)=8.5\pm1.29$ → $[7.21,\ 9.79]$<br>
+        2. 標準誤 $=10/5=2$；$40\pm1.645(2)=40\pm3.29$ → $[36.71,\ 43.29]$
+      </div>
+      <div>
+        3. $n=\left(\frac{1.96\times2000}{400}\right)^2=9.8^2=96.04$ → <b>97 天</b><br>
+        4. <b class="r">✗</b>，$\mu$ 是常數；95% 是方法的長期成功率<br>
+        5(a) $n\times4$ → 寬度變 <b>1/2</b>　(b) <b>變寬</b>
+      </div>
+    </div>
+  </div>
+  <div class="pno">— 4 —</div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+  renderMathInElement(document.body,{
+    delimiters:[{left:"$$",right:"$$",display:true},{left:"$",right:"$",display:false}],
+    throwOnError:false,strict:"ignore"
+  });
+});
+</script>
+</body>
+</html>
