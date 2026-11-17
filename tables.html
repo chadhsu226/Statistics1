@@ -165,6 +165,15 @@
     position:sticky; left:0; z-index:1;
     border-right:0.5px solid var(--border-light);
   }
+  .mini-wrap { display:flex; flex-direction:column; gap:2px; }
+  .mini-chart {
+    width:300px; max-width:100%; height:120px; display:block;
+    background:var(--bg-primary); border:0.5px solid var(--border-mid);
+    border-radius:var(--radius-md);
+  }
+  .mini-cap { font-size:11px; color:var(--text-tertiary); }
+  .stat-table td[id] { cursor:pointer; }
+  .stat-table td[id]:hover { outline:1.5px solid var(--blue); outline-offset:-2px; }
   .highlight-cell {
     background:var(--amber-light) !important;
     color:var(--amber-dark); font-weight:600;
@@ -354,6 +363,7 @@
     </select>
   </label>
   <span class="lookup-result" id="zLookupResult">P(Z ≤ 1.96) = 0.9750</span>
+  <div class="mini-wrap"><canvas class="mini-chart" id="zMini" width="300" height="120"></canvas><span class="mini-cap">▲ 陰影＝查到的面積（點表格任一格也會同步）</span></div>
 </div>
 
 <div class="tab-row" id="z-tab-row">
@@ -436,6 +446,7 @@
     </select>
   </label>
   <span class="lookup-result" id="tLookupResult">t₀.₀₂₅, ν=10 = 2.228</span>
+  <div class="mini-wrap"><canvas class="mini-chart" id="tMini" width="300" height="120"></canvas><span class="mini-cap">▲ 陰影＝查到的面積（點表格任一格也會同步）</span></div>
 </div>
 
 <div class="tab-row" id="t-tab-row">
@@ -523,6 +534,7 @@
     </select>
   </label>
   <span class="lookup-result" id="chiLookupResult">χ²₀.₀₅, ν=5 = 11.070</span>
+  <div class="mini-wrap"><canvas class="mini-chart" id="chiMini" width="300" height="120"></canvas><span class="mini-cap">▲ 陰影＝查到的面積（點表格任一格也會同步）</span></div>
 </div>
 
 <div class="tab-row" id="chi-tab-row">
@@ -617,6 +629,7 @@
     <input type="number" id="fLookupD2" min="1" max="120" value="10" oninput="highlightF()">
   </label>
   <span class="lookup-result" id="fLookupResult">F₀.₀₅, d₁=5, d₂=10 = 3.33</span>
+  <div class="mini-wrap"><canvas class="mini-chart" id="fMini" width="300" height="120"></canvas><span class="mini-cap">▲ 陰影＝查到的面積（點表格任一格也會同步）</span></div>
 </div>
 
 <div class="tab-row" id="f-tab-row">
@@ -687,6 +700,7 @@ function fpdf(x,d1,d2){
 function fcdf(f,d1,d2){return betacdf((d1*f)/(d1*f+d2),d1/2,d2/2);}
 function finv(p,d1,d2,tol=1e-6){
   let lo=0,hi=100;
+  while(fcdf(hi,d1,d2)<p&&hi<1e8) hi*=2;   // d₂ 很小時臨界值可能超過 100
   for(let i=0;i<120;i++){const mid=(lo+hi)/2;fcdf(mid,d1,d2)<p?(lo=mid):(hi=mid);if(hi-lo<tol)break;}
   return(lo+hi)/2;
 }
@@ -712,7 +726,9 @@ function tcdf(t,df){
   return t>=0?1-ib/2:ib/2;
 }
 function tinv(p,df,tol=1e-7){
-  let lo=-20,hi=20;
+  let hi=20;
+  while(tcdf(hi,df)<Math.max(p,1-p)&&hi<1e6) hi*=2;   // ν 很小時臨界值可能超過 20
+  let lo=-hi;
   for(let i=0;i<120;i++){const m=(lo+hi)/2;tcdf(m,df)<p?(lo=m):(hi=m);if(hi-lo<tol)break;}
   return(lo+hi)/2;
 }
@@ -778,11 +794,13 @@ function buildZTable(){
     for(let v=Math.round(s*10);v<=Math.round(e>0?e*10:0);v++) steps.push(v/10);
     if(e===0 && !steps.includes(0)) steps.push(0);
     steps.forEach(r=>{
-      html+=`<tr><td class="row-head">${r.toFixed(1)}</td>`;
+      const neg=(s<0);
+      html+=`<tr><td class="row-head">${neg&&r===0?'-0.0':r.toFixed(1)}</td>`;
       Z_COLS.forEach(c=>{
-        const z=r>=0 ? r+c : r-c;
+        const z=neg ? -(Math.abs(r)+c) : r+c;
         const val=normCDF(z);
-        html+=`<td id="zt-${z.toFixed(2)}">${val.toFixed(4)}</td>`;
+        const zid=(neg&&Math.abs(z)<1e-9)?'n0.00':z.toFixed(2);
+        html+=`<td id="zt-${zid}">${val.toFixed(4)}</td>`;
       });
       html+='</tr>';
     });
@@ -923,13 +941,14 @@ function drawChi(){
 const CHI_ALPHAS=[0.995,0.990,0.975,0.950,0.050,0.025,0.010,0.005];
 const CHI_LABELS=['0.995','0.990','0.975','0.950','0.050','0.025','0.010','0.005'];
 function chiCrit(df,alpha){return chi2inv(1-alpha,df);}
+function fmtChi(v){return v<0.01?v.toPrecision(3):v.toFixed(3);}   // 很小的臨界值（如 0.0000393）以有效位數顯示
 function buildChiTable(){
   [[1,15,'chiTable1'],[16,30,'chiTable2']].forEach(([s,e,id])=>{
     const t=document.getElementById(id);
     let html='<tr><th>ν \\ α</th>'+CHI_LABELS.map(a=>`<th>${a}</th>`).join('')+'</tr>';
     for(let df=s;df<=e;df++){
       html+=`<tr><td class="row-head">${df}</td>`;
-      CHI_ALPHAS.forEach(a=>html+=`<td id="chi-${df}-${a.toFixed(3)}">${chiCrit(df,a).toFixed(3)}</td>`);
+      CHI_ALPHAS.forEach(a=>html+=`<td id="chi-${df}-${a.toFixed(3)}">${fmtChi(chiCrit(df,a))}</td>`);
       html+='</tr>';
     }
     t.innerHTML=html;
@@ -941,7 +960,7 @@ function highlightChi(){
   const ai=parseInt(document.getElementById('chiLookupAlpha').value);
   const alpha=CHI_ALPHAS[ai];
   const val=chiCrit(df,alpha);
-  document.getElementById('chiLookupResult').textContent=`χ²${CHI_LABELS[ai]}, ν=${df} = ${val.toFixed(3)}`;
+  document.getElementById('chiLookupResult').textContent=`χ²${CHI_LABELS[ai]}, ν=${df} = ${fmtChi(val)}`;
   const cell=document.getElementById(`chi-${df}-${alpha.toFixed(3)}`);
   if(cell){
     cell.classList.add('highlight-cell');
@@ -1024,6 +1043,129 @@ function highlightF(){
     cell.scrollIntoView({block:'nearest'});
   }
 }
+
+
+// ──────────────────────────────────────────────
+//  查表小圖（與查表列同步）＋ 點表格格子連動
+// ──────────────────────────────────────────────
+function cssVar(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+function miniPlot(id,o){
+  // o: {pdf, lo, hi, from, to, col, mark, markLabel, areaLabel, ref, clipFrac}
+  const cv=document.getElementById(id); if(!cv)return;
+  const dpr=window.devicePixelRatio||1, W=300, H=120;
+  if(cv.width!==W*dpr){cv.width=W*dpr;cv.height=H*dpr;}
+  const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,W,H);
+  const pL=10,pR=10,pT=22,pB=22, pW=W-pL-pR, pH=H-pT-pB, axisY=pT+pH;
+  const N=300, xs=[]; for(let i=0;i<=N;i++)xs.push(o.lo+(o.hi-o.lo)*i/N);
+  const ys=xs.map(x=>{const v=o.pdf(x);return isFinite(v)?v:0;});
+  // 縱軸上限：避開 x→0 發散（卡方、F 自由度小時）
+  const skip=Math.floor(N*(o.clipFrac||0));
+  let yMax=0; for(let i=skip;i<=N;i++) yMax=Math.max(yMax,ys[i]);
+  if(o.ref){xs.forEach(x=>{yMax=Math.max(yMax,o.ref(x));});}
+  yMax*=1.08;
+  const px=x=>pL+(x-o.lo)/(o.hi-o.lo)*pW;
+  const py=v=>axisY-Math.min(v/yMax,1.15)*pH;
+  const text=cssVar('--text-secondary')||'#555';
+  // 陰影
+  const a=Math.max(o.from,o.lo), b=Math.min(o.to,o.hi);
+  if(b>a){
+    ctx.beginPath(); ctx.moveTo(px(a),axisY);
+    for(let i=0;i<=160;i++){const x=a+(b-a)*i/160;ctx.lineTo(px(x),py(Math.max(0,o.pdf(x)||0)));}
+    ctx.lineTo(px(b),axisY); ctx.closePath();
+    ctx.globalAlpha=0.35; ctx.fillStyle=o.col; ctx.fill(); ctx.globalAlpha=1;
+  }
+  // 對照曲線（t 表疊標準常態）
+  if(o.ref){
+    ctx.beginPath(); ctx.setLineDash([4,3]); ctx.strokeStyle=cssVar('--text-tertiary')||'#999'; ctx.lineWidth=1;
+    xs.forEach((x,i)=>{const y=py(o.ref(x));i?ctx.lineTo(px(x),y):ctx.moveTo(px(x),y);}); ctx.stroke(); ctx.setLineDash([]);
+  }
+  // 主曲線
+  ctx.save(); ctx.beginPath(); ctx.rect(0,pT-14,W,pH+14); ctx.clip();
+  ctx.beginPath(); ctx.strokeStyle=o.col; ctx.lineWidth=2;
+  xs.forEach((x,i)=>{const y=py(ys[i]);i?ctx.lineTo(px(x),y):ctx.moveTo(px(x),y);}); ctx.stroke(); ctx.restore();
+  // 橫軸
+  ctx.strokeStyle=cssVar('--border-mid')||'#bbb'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(pL,axisY); ctx.lineTo(W-pR,axisY); ctx.stroke();
+  ctx.font='11px system-ui, sans-serif'; ctx.textAlign='center';
+  // 臨界值標記
+  if(o.mark!==undefined){
+    const inView=o.mark>=o.lo&&o.mark<=o.hi;
+    const mx=inView?px(o.mark):(o.mark>o.hi?W-pR-2:pL+2);
+    ctx.strokeStyle=cssVar('--red')||'#E24B4A'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(mx,axisY+3); ctx.lineTo(mx,pT-2); ctx.stroke();
+    ctx.fillStyle=cssVar('--red')||'#E24B4A';
+    ctx.textAlign=mx>W-40?'right':(mx<40?'left':'center');
+    ctx.fillText(inView?o.markLabel:o.markLabel+' →',mx,axisY+15);
+  }
+  // 參考刻度
+  if(o.ticks){ctx.fillStyle=text;ctx.textAlign='center';o.ticks.forEach(t=>{if(t>=o.lo&&t<=o.hi&&(o.mark===undefined||Math.abs(px(t)-px(o.mark))>22))ctx.fillText(t,px(t),axisY+15);});}
+  // 面積標籤
+  ctx.fillStyle=text; ctx.font='bold 12px system-ui, sans-serif';
+  ctx.textAlign=o.labelAlign||'left'; ctx.fillText(o.areaLabel,o.labelAlign==='right'?W-pR:pL,14);
+}
+function zMini(){
+  const raw=parseFloat(document.getElementById('zLookupVal').value)||0;
+  const z=Math.max(-3.49,Math.min(3.49,raw));
+  const left=document.getElementById('zLookupDir').value==='left';
+  const p=left?normCDF(z):1-normCDF(z);
+  miniPlot('zMini',{pdf:normPDF,lo:-3.6,hi:3.6,from:left?-3.6:z,to:left?z:3.6,col:cssVar('--blue')||'#378ADD',
+    mark:z,markLabel:'z = '+z.toFixed(2),ticks:[-3,-2,-1,0,1,2,3],
+    areaLabel:(left?'左尾 ':'右尾 ')+'面積 = '+p.toFixed(4),labelAlign:left?'left':'right'});
+}
+function tMini(){
+  const df=Math.min(Math.max(parseInt(document.getElementById('tLookupDf').value)||10,1),120);
+  const alpha=T_ALPHAS[parseInt(document.getElementById('tLookupAlpha').value)];
+  const c=tCrit(df,alpha);
+  const hi=Math.min(Math.max(4.2,c*1.15),9);
+  miniPlot('tMini',{pdf:x=>tpdf(x,df),ref:normPDF,lo:-hi,hi:hi,from:c,to:hi,col:cssVar('--purple')||'#7F77DD',
+    mark:c,markLabel:'t = '+c.toFixed(3),ticks:[0],
+    areaLabel:'t(ν='+df+')　右尾 α = '+alpha.toFixed(3)+'　（虛線＝Z）',labelAlign:'left'});
+}
+function chiMini(){
+  const df=Math.min(Math.max(parseInt(document.getElementById('chiLookupDf').value)||5,1),30);
+  const alpha=CHI_ALPHAS[parseInt(document.getElementById('chiLookupAlpha').value)];
+  const c=chiCrit(df,alpha);
+  const hi=Math.max(chi2inv(0.999,df),c*1.1);
+  miniPlot('chiMini',{pdf:x=>chi2pdf(x,df),lo:0,hi:hi,from:c,to:hi,col:cssVar('--amber')||'#BA7517',clipFrac:df<=2?0.03:0,
+    mark:c,markLabel:'χ² = '+fmtChi(c),ticks:[0],
+    areaLabel:'χ²(ν='+df+')　右尾 α = '+alpha.toFixed(3),labelAlign:'right'});
+}
+function fMini(){
+  const d1=F_D1_COLS[parseInt(document.getElementById('fLookupD1').value)];
+  const d2=Math.max(parseInt(document.getElementById('fLookupD2').value)||10,1);
+  const alpha=getFAlpha();
+  const c=finv(1-alpha,d1,d2);
+  const hi=Math.min(Math.max(finv(0.995,d1,d2),c*1.15),15);
+  miniPlot('fMini',{pdf:x=>fpdf(x,d1,d2),lo:0,hi:hi,from:c,to:hi,col:cssVar('--green')||'#639922',clipFrac:d1<=2?0.03:0,
+    mark:c,markLabel:'F = '+c.toFixed(2),ticks:[0],
+    areaLabel:'F('+d1+', '+d2+')　右尾 α = '+alpha,labelAlign:'right'});
+}
+// 查表時同步重畫小圖
+[['highlightZ',zMini],['highlightT',tMini],['highlightChi',chiMini],['highlightF',fMini]].forEach(([name,fn])=>{
+  const orig=window[name];
+  window[name]=function(){orig.apply(this,arguments);try{fn();}catch(e){console.error(e);}};
+});
+// 點表格格子 → 填入查表列
+document.addEventListener('click',e=>{
+  const td=e.target.closest&&e.target.closest('td[id]'); if(!td)return;
+  const id=td.id; let m;
+  const setSel=(sel,val)=>{const el=document.getElementById(sel);el.value=val;};
+  if((m=id.match(/^zt-(n?)(-?\d+\.\d{2})$/))){
+    setSel('zLookupVal',m[1]?'-0.00':m[2]); highlightZ();
+  }else if((m=id.match(/^tt-(\d+)-([\d.]+)$/))){
+    const ai=T_ALPHAS.findIndex(a=>a.toFixed(3)===m[2]); if(ai<0)return;
+    setSel('tLookupDf',m[1]); setSel('tLookupAlpha',String(ai)); highlightT();
+  }else if((m=id.match(/^chi-(\d+)-([\d.]+)$/))){
+    const ai=CHI_ALPHAS.findIndex(a=>a.toFixed(3)===m[2]); if(ai<0)return;
+    setSel('chiLookupDf',m[1]); setSel('chiLookupAlpha',String(ai)); highlightChi();
+  }else if((m=id.match(/^f-(\d+)-(\d+)$/))){
+    const di=F_D1_COLS.indexOf(parseInt(m[1])); if(di<0)return;
+    setSel('fLookupD1',String(di)); setSel('fLookupD2',m[2]); highlightF();
+  }else return;
+});
+window.addEventListener('resize',()=>{try{zMini();tMini();chiMini();fMini();}catch(e){}});
+if(window.matchMedia){window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{try{zMini();tMini();chiMini();fMini();}catch(e){}});}
 
 // ──────────────────────────────────────────────
 //  Tabs 
