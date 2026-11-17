@@ -203,6 +203,10 @@
             padding: 12px 16px; border-radius: 0 6px 6px 0;
             font-family: monospace; font-size: 0.93em; white-space: pre-line;
         }
+        .dice-tbl th, .dice-tbl td { padding: 5px 4px; font-size: 0.92em; }
+        .dice-tbl th:first-child, .dice-tbl td:first-child { white-space: nowrap; padding: 5px 8px; }
+        .dice-wrap { overflow-x: auto; }
+        .dice-ctrl label.chk { display: inline-flex; align-items: center; gap: 6px; font-size: 0.9em; color: var(--muted); margin-right: 16px; cursor: pointer; }
         @media (max-width: 640px) {
             .two-col { grid-template-columns: 1fr; }
             body { padding: 20px 14px 60px; }
@@ -220,7 +224,7 @@
 <div class="learning-goals">
 <h3>🎯 Learning Objectives</h3>
 <ul>
-    <li>理解<strong>抽樣分配</strong>的意義：統計量本身也是隨機變數，有自己的分配。</li>
+    <li>理解<strong>抽樣分配</strong>的意義：統計量本身也是隨機變數，有自己的分配；能用擲骰子的例子列出 $\bar{X}$ 的抽樣分配，比較它與母體分配的差異。</li>
     <li>掌握樣本平均數的抽樣分配：$\mu_{\bar{X}} = \mu$、$\sigma_{\bar{X}} = \sigma/\sqrt{n}$（<strong>標準誤</strong>）。</li>
     <li>能敘述並正確使用<strong>中央極限定理（CLT）</strong>，區分「母體常態」與「$n$ 夠大」兩種適用情況。</li>
     <li>掌握樣本比例的抽樣分配：$\mu_{\hat{p}} = p$、$\sigma_{\hat{p}} = \sqrt{p(1-p)/n}$，與常態近似的條件。</li>
@@ -233,7 +237,7 @@
 <ol>
     <li><a href="#s91">§9.1　樣本平均數的抽樣分配</a>
         <ol style="margin-top:4px;">
-            <li><a href="#s91-1">抽樣分配是什麼</a></li>
+            <li><a href="#s91-1">抽樣分配是什麼（從擲骰子開始）</a></li>
             <li><a href="#s91-2">$\bar{X}$ 的平均數與標準誤</a></li>
             <li><a href="#s91-3">中央極限定理</a></li>
         </ol>
@@ -254,10 +258,103 @@
 ══════════════════════════════════════════ -->
 <h2 id="s91">§9.1　樣本平均數的抽樣分配 (Sampling Distribution of the Mean)</h2>
 
-<h3 id="s91-1">一、抽樣分配是什麼</h3>
+<h3 id="s91-1">一、抽樣分配是什麼（從擲骰子開始）</h3>
+
+<p>在給定義之前，先用一個小到可以「全部列出來」的例子，親眼看看「樣本平均數也有分配」是什麼意思。</p>
+
+<div class="example-block">
+<h3>📝 引例　擲骰子：母體分配 vs 樣本平均數的分配</h3>
+<div class="scenario">
+<strong>情境：</strong>擲一顆公正的骰子，點數 $X$ 就是我們的「母體」。把骰子擲 $n$ 次（每次互相獨立），算出這 $n$ 次的平均點數 $\bar{X}$。問：$\bar{X}$ 可能是哪些值？各有多大機率？它的分配和 $X$ 本身的分配有什麼不同？
+</div>
+
+<p><strong>Step 0　母體分配（$n = 1$）</strong>：每個點數機率都是 $1/6$——一個「平的」分配。</p>
+<div class="dice-wrap"><table class="dice-tbl">
+    <thead><tr><th>$x$</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr></thead>
+    <tbody><tr><td>$P(x)$</td><td>$\dfrac{1}{6}$</td><td>$\dfrac{1}{6}$</td><td>$\dfrac{1}{6}$</td><td>$\dfrac{1}{6}$</td><td>$\dfrac{1}{6}$</td><td>$\dfrac{1}{6}$</td></tr></tbody>
+</table></div>
+<div class="math-block">$$\mu = \sum x\,P(x) = 3.5 \qquad \sigma^2 = \sum (x-\mu)^2 P(x) = \frac{35}{12} \approx 2.917 \qquad \sigma \approx 1.708$$</div>
+
+<p><strong>Step 1　擲 2 次（$n = 2$）</strong>：兩次點數的組合共 $6 \times 6 = 36$ 種，每種機率都是 $1/36$。每一種組合都算出一個 $\bar{x}$，例如：</p>
+<ul>
+    <li>$(1,1)$ → $\bar{x} = 1$（只有 1 種組合）</li>
+    <li>$(1,2)$、$(2,1)$ → $\bar{x} = 1.5$（2 種）</li>
+    <li>$(1,6)$、$(6,1)$、$(2,5)$、$(5,2)$、$(3,4)$、$(4,3)$ → $\bar{x} = 3.5$（6 種）</li>
+    <li>$(6,6)$ → $\bar{x} = 6$（1 種）</li>
+</ul>
+<p>把 36 種組合依 $\bar{x}$ 歸類，就得到 $\bar{X}$ 的機率分配——<strong>這就是 $n=2$ 時 $\bar{X}$ 的抽樣分配</strong>：</p>
+<div class="dice-wrap"><table class="dice-tbl">
+    <thead><tr><th>$\bar{x}$</th><th>1</th><th>1.5</th><th>2</th><th>2.5</th><th>3</th><th>3.5</th><th>4</th><th>4.5</th><th>5</th><th>5.5</th><th>6</th></tr></thead>
+    <tbody>
+        <tr><td>組合數</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>5</td><td>4</td><td>3</td><td>2</td><td>1</td></tr>
+        <tr><td>$P(\bar{x})$</td><td>$\dfrac{1}{36}$</td><td>$\dfrac{2}{36}$</td><td>$\dfrac{3}{36}$</td><td>$\dfrac{4}{36}$</td><td>$\dfrac{5}{36}$</td><td>$\dfrac{6}{36}$</td><td>$\dfrac{5}{36}$</td><td>$\dfrac{4}{36}$</td><td>$\dfrac{3}{36}$</td><td>$\dfrac{2}{36}$</td><td>$\dfrac{1}{36}$</td></tr>
+    </tbody>
+</table></div>
+<p>用第 7 章算期望值、變異數的方法，直接對這張表計算：</p>
+<div class="math-block">$$E(\bar{X}) = \sum \bar{x}\,P(\bar{x}) = 3.5 \qquad V(\bar{X}) = \sum (\bar{x}-3.5)^2 P(\bar{x}) = \frac{52.5}{36} \approx 1.458$$</div>
+
+<p><strong>Step 2　擲 3 次（$n = 3$）</strong>：組合共 $6^3 = 216$ 種，$\bar{x}$ 的可能值變成 $1, \tfrac{4}{3}, \tfrac{5}{3}, 2, \ldots, 6$ 共 16 個。依 $\bar{x}$ 歸類 216 種組合，得到 $n=3$ 時 $\bar{X}$ 的抽樣分配：</p>
+<div class="dice-wrap"><table class="dice-tbl">
+    <thead><tr><th>$\bar{x}$</th><th>1</th><th>$\dfrac{4}{3}$</th><th>$\dfrac{5}{3}$</th><th>2</th><th>$\dfrac{7}{3}$</th><th>$\dfrac{8}{3}$</th><th>3</th><th>$\dfrac{10}{3}$</th></tr></thead>
+    <tbody>
+        <tr><td>組合數</td><td>1</td><td>3</td><td>6</td><td>10</td><td>15</td><td>21</td><td>25</td><td>27</td></tr>
+        <tr><td>$P(\bar{x})$</td><td>$\dfrac{1}{216}$</td><td>$\dfrac{3}{216}$</td><td>$\dfrac{6}{216}$</td><td>$\dfrac{10}{216}$</td><td>$\dfrac{15}{216}$</td><td>$\dfrac{21}{216}$</td><td>$\dfrac{25}{216}$</td><td>$\dfrac{27}{216}$</td></tr>
+    </tbody>
+</table>
+<table class="dice-tbl">
+    <thead><tr><th>$\bar{x}$</th><th>$\dfrac{11}{3}$</th><th>4</th><th>$\dfrac{13}{3}$</th><th>$\dfrac{14}{3}$</th><th>5</th><th>$\dfrac{16}{3}$</th><th>$\dfrac{17}{3}$</th><th>6</th></tr></thead>
+    <tbody>
+        <tr><td>組合數</td><td>27</td><td>25</td><td>21</td><td>15</td><td>10</td><td>6</td><td>3</td><td>1</td></tr>
+        <tr><td>$P(\bar{x})$</td><td>$\dfrac{27}{216}$</td><td>$\dfrac{25}{216}$</td><td>$\dfrac{21}{216}$</td><td>$\dfrac{15}{216}$</td><td>$\dfrac{10}{216}$</td><td>$\dfrac{6}{216}$</td><td>$\dfrac{3}{216}$</td><td>$\dfrac{1}{216}$</td></tr>
+    </tbody>
+</table></div>
+<div class="math-block">$$E(\bar{X}) = \sum \bar{x}\,P(\bar{x}) = 3.5 \qquad V(\bar{X}) = \sum (\bar{x}-3.5)^2 P(\bar{x}) = \frac{210}{216} \approx 0.972$$</div>
+
+<p><strong>Step 3　把三個分配放在一起比較</strong>：</p>
+<table>
+    <thead><tr><th></th><th>母體 $X$（$n=1$）</th><th>$\bar{X}$（$n=2$）</th><th>$\bar{X}$（$n=3$）</th></tr></thead>
+    <tbody>
+        <tr><td>可能值個數</td><td>6</td><td>11</td><td>16</td></tr>
+        <tr><td>形狀</td><td>平的</td><td>三角形</td><td>中間隆起，已有鐘形的樣子</td></tr>
+        <tr><td>平均數</td><td>3.5</td><td>3.5</td><td>3.5</td></tr>
+        <tr><td>變異數</td><td>2.917</td><td>1.458 $= 2.917/2$</td><td>0.972 $= 2.917/3$</td></tr>
+        <tr><td>兩端（$\bar{x}=1$ 或 $6$）的機率</td><td>$2/6 \approx 0.333$</td><td>$2/36 \approx 0.056$</td><td>$2/216 \approx 0.009$</td></tr>
+        <tr><td>中間（$3 \le \bar{x} \le 4$）的機率</td><td>$2/6 \approx 0.333$</td><td>$16/36 \approx 0.444$</td><td>$104/216 \approx 0.481$</td></tr>
+    </tbody>
+</table>
+<div class="note">✅ 三個觀察，正好就是本節接下來的三個重點：<br>
+① <strong>中心不變</strong>：不管擲幾次，$\bar{X}$ 的平均都是 3.5，等於母體平均 $\mu$。<br>
+② <strong>越來越集中</strong>：變異數剛好是 $\sigma^2/n$。要每一次都擲出 1（或都擲出 6）越來越難，極端值被「平均」掉了，機率往中間集中。<br>
+③ <strong>形狀改變</strong>：母體明明是平的，$\bar{X}$ 的分配卻從三角形慢慢長成鐘形——這就是中央極限定理的雛形。</div>
+<div class="warn">⚠️ 別把兩件事搞混：<strong>母體分配</strong>描述「擲<strong>一次</strong>的點數 $X$」，永遠是平的、不會因為你擲幾次而改變；<strong>抽樣分配</strong>描述「擲 $n$ 次的<strong>平均</strong> $\bar{X}$」，它的樣子才會隨 $n$ 改變。</div>
+</div>
+
+<div class="calc-box dice-ctrl">
+<h3>🎛️ 互動圖 9.1　骰子平均點數 $\bar{X}$ 的抽樣分配（$n = 1 \sim 10$，精確計算）</h3>
+<p style="font-size:0.93em; color:var(--muted);">拉動 $n$，看 $\bar{X}$ 的分配如何從「平的」變成「鐘形」、而且越來越窄。圖上的機率不是模擬，而是把 $6^n$ 種組合全部算進去的<strong>精確值</strong>。滑鼠移到長條上可看該 $\bar{x}$ 的機率。為了讓不同 $n$ 放在同一把尺上比較，縱軸用「機率 ÷ 長條寬度」（長條面積＝機率），和第 8 章的機率密度同一個意思。</p>
+<div class="slider-row">
+    <span>擲骰次數 n</span>
+    <input type="range" id="diceN" min="1" max="10" value="2" oninput="diceDraw()">
+    <span class="val" id="diceNVal">n = 2</span>
+</div>
+<div style="margin: 8px 0;">
+    <button onclick="diceSet(1)">n = 1（母體）</button>
+    <button onclick="diceSet(2)">n = 2</button>
+    <button onclick="diceSet(3)">n = 3</button>
+    <button onclick="diceAnimate()" id="diceAnimBtn">▶ 動畫 n = 1 → 10</button>
+</div>
+<div style="margin: 6px 0;">
+    <label class="chk"><input type="checkbox" id="dicePop" checked onchange="diceDraw()"> 顯示母體分配（灰框）</label>
+    <label class="chk"><input type="checkbox" id="diceNorm" onchange="diceDraw()"> 疊上常態曲線 $N(3.5,\ \sigma^2/n)$（紅虛線）</label>
+</div>
+<canvas id="diceChart" class="chart" width="660" height="290"></canvas>
+<div id="diceHint" style="text-align:center; font-size:0.9em; color:var(--navy); min-height:1.6em; font-family:monospace;">（滑鼠移到長條上，這裡會顯示該 x̄ 的機率）</div>
+<div class="calc-result" id="diceResult" style="display:block;"></div>
+</div>
 
 <div class="formula-card">
 <h3>📐 定義</h3>
+<p>剛才的 $n=2$、$n=3$ 兩張表，就是「抽樣分配」。一般化：</p>
 <p><strong>抽樣分配 (Sampling Distribution)</strong>：想像從母體<strong>重複抽取</strong>大小為 $n$ 的樣本無限多次，每次都計算統計量（如 $\bar{X}$）——這些統計量形成的機率分配，就是該統計量的抽樣分配。</p>
 <p class="note">關鍵的觀念轉換：$\bar{X}$ 在抽樣前是<strong>隨機變數</strong>（值取決於抽到誰），所以它有自己的平均數、自己的標準差、自己的分配形狀。「統計量也有分配」是本章唯一真正的新想法，其餘都是計算。</p>
 </div>
@@ -271,10 +368,9 @@
 <ul>
     <li>$\bar{X}$ 的期望值＝母體平均數（$\bar{X}$ 不偏不倚地瞄準 $\mu$）。</li>
     <li>$\sigma_{\bar{X}}$ 稱為<strong>平均數的標準誤 (Standard Error)</strong>——衡量 $\bar{X}$ 圍繞 $\mu$ 的擺盪幅度。</li>
-    <li>標準化公式因此變成：
-        <div class="math-block">$$Z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$$</div></li>
 </ul>
 <p class="note"><strong>標準差 vs 標準誤</strong>：$\sigma$ 描述「個別觀測值」的分散；$\sigma_{\bar{X}} = \sigma/\sqrt{n}$ 描述「樣本平均數」的分散。平均會抵銷極端值，所以 $\bar{X}$ 的擺盪永遠比個別值小——且 $n$ 越大越小。注意分母是 $\sqrt{n}$：樣本擴大 4 倍，標準誤只縮小一半。</p>
+<p class="note"><strong>回頭驗證骰子</strong>：$\sigma^2 = 35/12 \approx 2.917$。$n=2$：$\sigma^2_{\bar{X}} = 2.917/2 \approx 1.458$、$\sigma_{\bar{X}} = 1.708/\sqrt{2} \approx 1.208$；$n=3$：$\sigma^2_{\bar{X}} = 2.917/3 \approx 0.972$、$\sigma_{\bar{X}} = 1.708/\sqrt{3} \approx 0.986$——和引例中逐一列舉算出來的結果完全一樣。公式只是把「列 36 種、216 種組合」的工作省掉了。</p>
 </div>
 
 <h3 id="s91-3">三、中央極限定理 (Central Limit Theorem)</h3>
@@ -289,7 +385,9 @@
         <tr><td>非常態（偏態、雙峰⋯⋯）</td><td style="text-align:left;">$n$ 夠大時（經驗法則 <strong>$n \geq 30$</strong>）近似常態分配</td></tr>
     </tbody>
 </table>
-<p class="note">母體偏得越嚴重，需要的 $n$ 越大；文末的 CLT 模擬器可以親手驗證「右偏、均勻、雙峰母體的 $\bar{X}$ 都被拉成鐘形」。</p>
+<p><strong>標準化</strong>：當 $\bar{X}$ 為常態（母體常態），或由 CLT 可視為近似常態（$n$ 夠大）時，才能像第 8 章一樣標準化、查 Z 表——只是分母要換成標準誤：</p>
+<div class="math-block">$$Z = \frac{\bar{X} - \mu_{\bar{X}}}{\sigma_{\bar{X}}} = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$$</div>
+<p class="note">骰子的母體是「平的」，在互動圖 9.1 中 $n=3$ 就已經有鐘形的樣子，$n=10$ 幾乎與常態曲線重合。母體偏得越嚴重，需要的 $n$ 越大；文末的 CLT 模擬器可以親手驗證「右偏、均勻、雙峰母體的 $\bar{X}$ 都被拉成鐘形」。</p>
 </div>
 
 <div class="example-block">
@@ -492,6 +590,7 @@
             <p><strong>母體分配</strong>：個別觀測值 $X$ 的分配（描述母體成員長什麼樣）。</p>
             <p><strong>抽樣分配</strong>：重複抽取大小 $n$ 的樣本、每次計算統計量，這些統計量形成的分配（描述統計量的隨機行為）。</p>
             <p>兩者中心相同（$\mu_{\bar{X}} = \mu$），但抽樣分配窄得多（$\sigma/\sqrt{n}$），且形狀在 $n$ 大時趨近常態——不管母體是什麼形狀。</p>
+            <p>以擲骰子為例：母體分配是「擲一次的點數」，1～6 各 $1/6$、是平的；$n=2$ 時 $\bar{X}$ 的抽樣分配有 11 個可能值、呈三角形，平均仍是 3.5，變異數只剩母體的一半。</p>
         </div>
         </details>
     </li>
@@ -610,7 +709,7 @@
 <div class="summary" id="summary">
 <h2>📌 Chapter Summary</h2>
 <ul>
-    <li><strong>抽樣分配</strong>：統計量本身是隨機變數，有自己的分配。$\bar{X}$ 的抽樣分配：$\mu_{\bar{X}} = \mu$、標準誤 $\sigma_{\bar{X}} = \sigma/\sqrt{n}$——平均數的擺盪比個別值小，且隨 $n$ 以 $\sqrt{n}$ 的速度收窄。</li>
+    <li><strong>抽樣分配</strong>：統計量本身是隨機變數，有自己的分配（擲骰子：母體是平的，$\bar{X}$ 在 $n=2$ 是三角形、$n=3$ 已近鐘形）。$\bar{X}$ 的抽樣分配：$\mu_{\bar{X}} = \mu$、標準誤 $\sigma_{\bar{X}} = \sigma/\sqrt{n}$——平均數的擺盪比個別值小，且隨 $n$ 以 $\sqrt{n}$ 的速度收窄。</li>
     <li><strong>CLT</strong>：母體常態 → $\bar{X}$ 任何 $n$ 都常態；母體非常態 → $n \geq 30$ 時近似常態。CLT 不會把母體變常態——個別 $X$ 的機率仍取決於母體形狀。</li>
     <li><strong>標準化</strong>：$Z = (\bar{X} - \mu)/(\sigma/\sqrt{n})$——分母記得用標準誤。</li>
     <li><strong>樣本比例</strong>：$np \geq 5$ 且 $n(1-p) \geq 5$ 時，$\hat{p}$ 近似 $N\!\left(p,\ p(1-p)/n\right)$；$Z = (\hat{p}-p)/\sqrt{p(1-p)/n}$。</li>
@@ -661,7 +760,7 @@ function drawXvsXbar() {
     ctx.clearRect(0, 0, W, H);
     ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H);
     ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 13px "Noto Sans TC", sans-serif'; ctx.textAlign = 'center';
-    ctx.fillText('圖 9.1　個別值 X（藍，σ=20）vs 16 杯平均 X̄（綠，標準誤=5）：超過 710 的面積', W / 2, 18);
+    ctx.fillText('圖 9.2　個別值 X（藍，σ=20）vs 16 杯平均 X̄（綠，標準誤=5）：超過 710 的面積', W / 2, 18);
     // X 曲線 + 著色
     ctx.fillStyle = 'rgba(46,108,184,0.20)';
     ctx.beginPath(); ctx.moveTo(px(710), axisY);
@@ -828,6 +927,162 @@ function drawXvsXbar() {
     document.addEventListener('DOMContentLoaded', function () {
         drawPopSketch('skew');
         cltRun();
+    });
+})();
+
+
+// ── 互動圖 9.1：骰子平均點數的精確抽樣分配 ──
+(function () {
+    const POP_VAR = 35 / 12;
+    let animTimer = null;
+    let bars = [];   // 供滑鼠提示使用：{x0, x1, y, sum, cnt}
+    function gcd(a, b) { return b ? gcd(b, a % b) : a; }
+    function frac(sum, n) {
+        const g = gcd(sum, n);
+        const a = sum / g, b = n / g;
+        return b === 1 ? String(a) : a + '/' + b;
+    }
+    function sumCounts(n) {          // 擲 n 顆骰子，點數總和的組合數
+        let c = [1];
+        for (let k = 0; k < n; k++) {
+            const nc = new Array(c.length + 6).fill(0);
+            for (let s = 0; s < c.length; s++) if (c[s]) for (let f = 1; f <= 6; f++) nc[s + f] += c[s];
+            c = nc;
+        }
+        return c;                     // c[s] = 總和為 s 的組合數
+    }
+    const xMin = 0.5, xMax = 6.5, yMax = 0.8;
+    const pL = 52, pR = 16, pT = 30, pB = 42;
+    function geom(cv) {
+        const W = cv.width, H = cv.height;
+        const pW = W - pL - pR, pH = H - pT - pB;
+        return { W, H, pW, pH,
+                 px: x => pL + (x - xMin) / (xMax - xMin) * pW,
+                 py: v => pT + pH - v / yMax * pH, axisY: pT + pH };
+    }
+    window.diceDraw = function () {
+        const n = parseInt(document.getElementById('diceN').value);
+        document.getElementById('diceNVal').textContent = 'n = ' + n;
+        const showPop = document.getElementById('dicePop').checked;
+        const showNorm = document.getElementById('diceNorm').checked;
+        const cv = document.getElementById('diceChart');
+        if (!cv) return;
+        const ctx = cv.getContext('2d');
+        const g = geom(cv);
+        const counts = sumCounts(n);
+        const total = Math.pow(6, n);
+        const w = 1 / n;              // 相鄰 x̄ 的間距＝長條寬度
+        ctx.clearRect(0, 0, g.W, g.H);
+        ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, g.W, g.H);
+        ctx.fillStyle = '#1a3a6b'; ctx.font = 'bold 13px "Noto Sans TC", sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText(n === 1 ? '母體分配：擲 1 次的點數 X（每個點數機率 1/6）'
+                             : '擲 ' + n + ' 次的平均點數 X̄ 的抽樣分配（共 ' + total.toLocaleString() + ' 種組合）', g.W / 2, 18);
+        // 格線與縱軸
+        ctx.strokeStyle = '#eef2f7'; ctx.lineWidth = 1; ctx.fillStyle = '#777'; ctx.font = '11px sans-serif'; ctx.textAlign = 'right';
+        for (let v = 0; v <= yMax + 1e-9; v += 0.2) {
+            ctx.beginPath(); ctx.moveTo(pL, g.py(v)); ctx.lineTo(g.W - pR, g.py(v)); ctx.stroke();
+            ctx.fillText(v.toFixed(1), pL - 6, g.py(v) + 4);
+        }
+        ctx.save(); ctx.translate(14, pT + g.pH / 2); ctx.rotate(-Math.PI / 2); ctx.textAlign = 'center';
+        ctx.fillText('機率 ÷ 長條寬（面積＝機率）', 0, 0); ctx.restore();
+        // 母體（灰底，畫在長條後面）
+        if (showPop) {
+            ctx.fillStyle = 'rgba(122,138,160,0.16)';
+            for (let x = 1; x <= 6; x++) ctx.fillRect(g.px(x - 0.44), g.py(1 / 6), g.px(x + 0.44) - g.px(x - 0.44), g.axisY - g.py(1 / 6));
+        }
+        // 長條
+        bars = [];
+        for (let s = n; s <= 6 * n; s++) {
+            const p = counts[s] / total;
+            const xb = s / n;
+            const h = p / w;          // 密度高度
+            const x0 = g.px(xb - w / 2 * 0.88), x1 = g.px(xb + w / 2 * 0.88);
+            ctx.fillStyle = 'rgba(46,108,184,0.75)';
+            ctx.fillRect(x0, g.py(h), Math.max(1, x1 - x0), g.axisY - g.py(h));
+            bars.push({ x0: g.px(xb - w / 2), x1: g.px(xb + w / 2), y: g.py(h), sum: s, cnt: counts[s] });
+        }
+        // 母體（灰框）
+        if (showPop) {
+            ctx.strokeStyle = '#7a8aa0'; ctx.lineWidth = 1.6; ctx.setLineDash([5, 3]);
+            for (let x = 1; x <= 6; x++) ctx.strokeRect(g.px(x - 0.44), g.py(1 / 6), g.px(x + 0.44) - g.px(x - 0.44), g.axisY - g.py(1 / 6));
+            ctx.setLineDash([]);
+            ctx.fillStyle = '#5a6a7a'; ctx.font = '11px "Noto Sans TC", sans-serif'; ctx.textAlign = 'left';
+            ctx.fillText('灰框＝母體（高度 1/6）', g.px(4.95), g.py(1 / 6) - 8);
+        }
+        // 常態曲線
+        const se = Math.sqrt(POP_VAR / n);
+        if (showNorm) {
+            ctx.beginPath(); ctx.strokeStyle = '#c0392b'; ctx.lineWidth = 2; ctx.setLineDash([6, 4]);
+            for (let i = 0; i <= 300; i++) {
+                const x = xMin + (xMax - xMin) * i / 300;
+                const v = Math.exp(-0.5 * ((x - 3.5) / se) ** 2) / (se * Math.sqrt(2 * Math.PI));
+                const y = g.py(Math.min(v, yMax * 1.02));
+                i === 0 ? ctx.moveTo(g.px(x), y) : ctx.lineTo(g.px(x), y);
+            }
+            ctx.stroke(); ctx.setLineDash([]);
+        }
+        // μ 標記
+        ctx.strokeStyle = '#d4a017'; ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(g.px(3.5), g.axisY); ctx.lineTo(g.px(3.5), pT + 4); ctx.stroke();
+        ctx.fillStyle = '#b8860b'; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'center';
+        ctx.fillText('μ = 3.5', g.px(3.5), pT + 2);
+        // 橫軸
+        ctx.strokeStyle = '#999'; ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(pL, g.axisY); ctx.lineTo(g.W - pR, g.axisY); ctx.stroke();
+        ctx.fillStyle = '#555'; ctx.font = '11px sans-serif';
+        for (let x = 1; x <= 6; x++) {
+            ctx.beginPath(); ctx.moveTo(g.px(x), g.axisY); ctx.lineTo(g.px(x), g.axisY + 4); ctx.stroke();
+            ctx.fillText(x, g.px(x), g.axisY + 16);
+        }
+        ctx.fillText(n === 1 ? '點數 x' : '平均點數 x̄', pL + g.pW / 2, g.H - 6);
+        // 統計摘要
+        let pMid = 0;
+        for (let s = n; s <= 6 * n; s++) if (s >= 3 * n && s <= 4 * n) pMid += counts[s];
+        const v = POP_VAR / n;
+        document.getElementById('diceResult').textContent =
+(n === 1 ? '母體 X：' : 'X̄（n = ' + n + '）：') +
+'可能值 ' + (5 * n + 1) + ' 個　｜　平均 = 3.5　｜　變異數 = 2.917 / ' + n + ' = ' + v.toFixed(3) + '　｜　標準差 = ' + Math.sqrt(v).toFixed(3) + '\n' +
+'兩端 P(X̄ = 1 或 6) = 2/' + total.toLocaleString() + (2 / total < 0.0001 ? '，不到萬分之一' : ' ≈ ' + (2 / total).toFixed(4)) +
+'　｜　中間 P(3 ≤ X̄ ≤ 4) = ' + pMid.toLocaleString() + '/' + total.toLocaleString() + ' ≈ ' + (pMid / total).toFixed(3) + '\n' +
+(n === 1 ? '這就是母體本身：平的。按 n = 2、n = 3 看看平均點數的分配怎麼變。' :
+ n <= 3 ? '和上面引例的表對照看看：中心仍是 3.5，但分配往中間集中。' :
+ '母體是平的，X̄ 卻已經很像鐘形——試著勾選常態曲線比對。');
+        diceHint(null);
+    };
+    function diceHint(text) {
+        const el = document.getElementById('diceHint');
+        if (el) el.textContent = text || '（滑鼠移到長條上，這裡會顯示該 x̄ 的機率）';
+    }
+    window.diceSet = function (n) {
+        if (animTimer) { clearInterval(animTimer); animTimer = null; document.getElementById('diceAnimBtn').textContent = '▶ 動畫 n = 1 → 10'; }
+        document.getElementById('diceN').value = n; diceDraw();
+    };
+    window.diceAnimate = function () {
+        const btn = document.getElementById('diceAnimBtn');
+        if (animTimer) { clearInterval(animTimer); animTimer = null; btn.textContent = '▶ 動畫 n = 1 → 10'; return; }
+        let n = 1; document.getElementById('diceN').value = n; diceDraw();
+        btn.textContent = '⏸ 停止';
+        animTimer = setInterval(function () {
+            n++;
+            if (n > 10) { clearInterval(animTimer); animTimer = null; btn.textContent = '▶ 動畫 n = 1 → 10'; return; }
+            document.getElementById('diceN').value = n; diceDraw();
+        }, 800);
+    };
+    document.addEventListener('DOMContentLoaded', function () {
+        const cv = document.getElementById('diceChart');
+        if (!cv) return;
+        cv.addEventListener('mousemove', function (e) {
+            const r = cv.getBoundingClientRect();
+            const mx = (e.clientX - r.left) * cv.width / r.width;
+            const n = parseInt(document.getElementById('diceN').value);
+            const total = Math.pow(6, n);
+            const b = bars.find(b => mx >= b.x0 && mx < b.x1);
+            if (!b) { return; }
+            const xb = b.sum / n;
+            diceHint('x̄ = ' + frac(b.sum, n) + (Number.isInteger(xb) ? '' : '（≈ ' + xb.toFixed(2) + '）') +
+                     '：機率 = ' + b.cnt.toLocaleString() + ' / ' + total.toLocaleString() + (b.cnt / total < 0.0001 ? '，不到萬分之一' : ' ≈ ' + (b.cnt / total).toFixed(4)));
+        });
+        diceDraw();
     });
 })();
 

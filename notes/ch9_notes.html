@@ -70,6 +70,9 @@ li{margin:2px 0}
 table.zt{border-collapse:collapse;margin:4px auto;font-size:15px}
 table.zt td,table.zt th{border:1.5px solid var(--ink);padding:2px 10px;text-align:center}
 table.zt th{background:var(--hl-b)}
+table.zt.dice{font-size:13.5px;margin:3px auto}
+table.zt.dice td,table.zt.dice th{padding:1px 6px}
+table.zt.dice .katex{font-size:1em}
 table.dir{border-collapse:collapse;width:100%;font-size:14.5px;margin:4px 0}
 table.dir td,table.dir th{border:1.5px solid #888;padding:3px 7px;text-align:center}
 table.dir th{background:#f3efe2}
@@ -111,6 +114,7 @@ table.dir td:first-child{white-space:nowrap}
 
   <div class="map">
     <span class="side">本章地圖 ▸</span>
+    <span class="n">擲骰子：$X$ vs $\bar X$</span><span class="arrow">→</span>
     <span class="n">統計量也是隨機變數</span><span class="arrow">→</span>
     <span class="n">$\bar X$：中心 $\mu$、寬 $\sigma/\sqrt n$</span><span class="arrow">→</span>
     <span class="n main">中央極限定理 ★★★</span><span class="arrow">→</span>
@@ -123,8 +127,46 @@ table.dir td:first-child{white-space:nowrap}
     把「標準差」換成<span class="wavy">「標準誤」</span>，你就會了一半。
   </div>
 
-  <h2>§9.1 抽樣分配是什麼？</h2>
+
+  <h2>§9.1 抽樣分配是什麼？——從擲骰子開始</h2>
+  <div class="ex">
+    <div class="q">擲一顆公正的骰子，點數 $X$ 就是「母體」。擲 $n$ 次（互相獨立）算平均點數 $\bar X$。$\bar X$ 的分配長什麼樣？和 $X$ 有什麼不同？</div>
+    <p><b>Step 0　母體（$n=1$）</b>：1～6 每個點數機率都是 $\frac16$（平的）　→　$\mu=3.5$，$\sigma^2=\frac{35}{12}\approx 2.917$</p>
+    <p><b>Step 1　擲 2 次（$n=2$）</b>：共 $6\times6=36$ 種組合，每種機率 $\frac{1}{36}$。每種組合算一個 $\bar x$：<br>
+      <span class="side">$(1,1)\to 1$；$(1,2),(2,1)\to 1.5$；$(1,6),(6,1),(2,5),(5,2),(3,4),(4,3)\to 3.5$；…；$(6,6)\to 6$</span></p>
+    <table class="zt dice">
+      <tr><th>$\bar x$</th><th>1</th><th>1.5</th><th>2</th><th>2.5</th><th>3</th><th>3.5</th><th>4</th><th>4.5</th><th>5</th><th>5.5</th><th>6</th></tr>
+      <tr><td>$P(\bar x)$</td><td>$\frac{1}{36}$</td><td>$\frac{2}{36}$</td><td>$\frac{3}{36}$</td><td>$\frac{4}{36}$</td><td>$\frac{5}{36}$</td><td>$\frac{6}{36}$</td><td>$\frac{5}{36}$</td><td>$\frac{4}{36}$</td><td>$\frac{3}{36}$</td><td>$\frac{2}{36}$</td><td>$\frac{1}{36}$</td></tr>
+    </table>
+    <p style="text-align:center">$E(\bar X)=\sum \bar x\,P(\bar x)=3.5$　　$V(\bar X)=\sum(\bar x-3.5)^2P(\bar x)=\frac{52.5}{36}\approx$ <span class="circ">1.458</span></p>
+    <p><b>Step 2　擲 3 次（$n=3$）</b>：共 $6^3=216$ 種組合，$\bar x$ 有 16 個可能值：</p>
+    <table class="zt dice">
+      <tr><th>$\bar x$</th><th>1</th><th>$\frac{4}{3}$</th><th>$\frac{5}{3}$</th><th>2</th><th>$\frac{7}{3}$</th><th>$\frac{8}{3}$</th><th>3</th><th>$\frac{10}{3}$</th></tr>
+      <tr><td>$P(\bar x)$</td><td>$\frac{1}{216}$</td><td>$\frac{3}{216}$</td><td>$\frac{6}{216}$</td><td>$\frac{10}{216}$</td><td>$\frac{15}{216}$</td><td>$\frac{21}{216}$</td><td>$\frac{25}{216}$</td><td>$\frac{27}{216}$</td></tr>
+      <tr><th>$\bar x$</th><th>$\frac{11}{3}$</th><th>4</th><th>$\frac{13}{3}$</th><th>$\frac{14}{3}$</th><th>5</th><th>$\frac{16}{3}$</th><th>$\frac{17}{3}$</th><th>6</th></tr>
+      <tr><td>$P(\bar x)$</td><td>$\frac{27}{216}$</td><td>$\frac{25}{216}$</td><td>$\frac{21}{216}$</td><td>$\frac{15}{216}$</td><td>$\frac{10}{216}$</td><td>$\frac{6}{216}$</td><td>$\frac{3}{216}$</td><td>$\frac{1}{216}$</td></tr>
+    </table>
+    <p style="text-align:center">$E(\bar X)=3.5$　　$V(\bar X)=\frac{210}{216}\approx$ <span class="circ">0.972</span></p>
+  </div>
+
+  <h3>三個分配放在一起比（灰虛框＝母體）</h3>
+  <div class="c3">
+    <div><svg viewBox="0 0 200 92" width="200" height="92" class="sk"><rect x="10.1" y="45.8" width="26.4" height="26.2" fill="#bfe3ff" stroke="#22408a" stroke-width="1"/><rect x="40.8" y="45.8" width="26.4" height="26.2" fill="#bfe3ff" stroke="#22408a" stroke-width="1"/><rect x="71.5" y="45.8" width="26.4" height="26.2" fill="#bfe3ff" stroke="#22408a" stroke-width="1"/><rect x="102.1" y="45.8" width="26.4" height="26.2" fill="#bfe3ff" stroke="#22408a" stroke-width="1"/><rect x="132.8" y="45.8" width="26.4" height="26.2" fill="#bfe3ff" stroke="#22408a" stroke-width="1"/><rect x="163.5" y="45.8" width="26.4" height="26.2" fill="#bfe3ff" stroke="#22408a" stroke-width="1"/><line x1="4" y1="72.0" x2="196" y2="72.0" stroke="#444" stroke-width="1.3"/><text x="23.3" y="86" text-anchor="middle" fill="#444" font-size="11">1</text><text x="54.0" y="86" text-anchor="middle" fill="#444" font-size="11">2</text><text x="84.7" y="86" text-anchor="middle" fill="#444" font-size="11">3</text><text x="115.3" y="86" text-anchor="middle" fill="#444" font-size="11">4</text><text x="146.0" y="86" text-anchor="middle" fill="#444" font-size="11">5</text><text x="176.7" y="86" text-anchor="middle" fill="#444" font-size="11">6</text><line x1="100.0" y1="69.0" x2="100.0" y2="6.0" stroke="#d6312b" stroke-width="1.2" stroke-dasharray="4 3"/></svg><div class="cap">母體 $X$：<b>平的</b><br>平均 3.5｜變異數 2.917</div></div>
+    <div><svg viewBox="0 0 200 92" width="200" height="92" class="sk"><rect x="9.8" y="45.8" width="27.0" height="26.2" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="3 2"/><rect x="40.5" y="45.8" width="27.0" height="26.2" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="3 2"/><rect x="71.2" y="45.8" width="27.0" height="26.2" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="3 2"/><rect x="101.8" y="45.8" width="27.0" height="26.2" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="3 2"/><rect x="132.5" y="45.8" width="27.0" height="26.2" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="3 2"/><rect x="163.2" y="45.8" width="27.0" height="26.2" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="3 2"/><rect x="16.7" y="63.3" width="13.2" height="8.7" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="32.1" y="54.5" width="13.2" height="17.5" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="47.4" y="45.8" width="13.2" height="26.2" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="62.7" y="37.1" width="13.2" height="34.9" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="78.1" y="28.3" width="13.2" height="43.7" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="93.4" y="19.6" width="13.2" height="52.4" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="108.7" y="28.3" width="13.2" height="43.7" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="124.1" y="37.1" width="13.2" height="34.9" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="139.4" y="45.8" width="13.2" height="26.2" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="154.7" y="54.5" width="13.2" height="17.5" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="170.1" y="63.3" width="13.2" height="8.7" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><line x1="4" y1="72.0" x2="196" y2="72.0" stroke="#444" stroke-width="1.3"/><text x="23.3" y="86" text-anchor="middle" fill="#444" font-size="11">1</text><text x="54.0" y="86" text-anchor="middle" fill="#444" font-size="11">2</text><text x="84.7" y="86" text-anchor="middle" fill="#444" font-size="11">3</text><text x="115.3" y="86" text-anchor="middle" fill="#444" font-size="11">4</text><text x="146.0" y="86" text-anchor="middle" fill="#444" font-size="11">5</text><text x="176.7" y="86" text-anchor="middle" fill="#444" font-size="11">6</text><line x1="100.0" y1="69.0" x2="100.0" y2="6.0" stroke="#d6312b" stroke-width="1.2" stroke-dasharray="4 3"/></svg><div class="cap">$\bar X$（$n=2$）：<b>三角形</b><br>平均 3.5｜變異數 <span class="hy">2.917/2</span></div></div>
+    <div><svg viewBox="0 0 200 92" width="200" height="92" class="sk"><rect x="9.8" y="45.8" width="27.0" height="26.2" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="3 2"/><rect x="40.5" y="45.8" width="27.0" height="26.2" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="3 2"/><rect x="71.2" y="45.8" width="27.0" height="26.2" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="3 2"/><rect x="101.8" y="45.8" width="27.0" height="26.2" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="3 2"/><rect x="132.5" y="45.8" width="27.0" height="26.2" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="3 2"/><rect x="163.2" y="45.8" width="27.0" height="26.2" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="3 2"/><rect x="18.9" y="69.8" width="8.8" height="2.2" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="29.2" y="65.5" width="8.8" height="6.5" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="39.4" y="58.9" width="8.8" height="13.1" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="49.6" y="50.2" width="8.8" height="21.8" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="59.8" y="39.3" width="8.8" height="32.7" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="70.0" y="26.2" width="8.8" height="45.8" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="80.3" y="17.4" width="8.8" height="54.6" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="90.5" y="13.1" width="8.8" height="58.9" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="100.7" y="13.1" width="8.8" height="58.9" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="110.9" y="17.4" width="8.8" height="54.6" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="121.2" y="26.2" width="8.8" height="45.8" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="131.4" y="39.3" width="8.8" height="32.7" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="141.6" y="50.2" width="8.8" height="21.8" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="151.8" y="58.9" width="8.8" height="13.1" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="162.0" y="65.5" width="8.8" height="6.5" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><rect x="172.3" y="69.8" width="8.8" height="2.2" fill="#8fc3ef" stroke="#22408a" stroke-width="1"/><line x1="4" y1="72.0" x2="196" y2="72.0" stroke="#444" stroke-width="1.3"/><text x="23.3" y="86" text-anchor="middle" fill="#444" font-size="11">1</text><text x="54.0" y="86" text-anchor="middle" fill="#444" font-size="11">2</text><text x="84.7" y="86" text-anchor="middle" fill="#444" font-size="11">3</text><text x="115.3" y="86" text-anchor="middle" fill="#444" font-size="11">4</text><text x="146.0" y="86" text-anchor="middle" fill="#444" font-size="11">5</text><text x="176.7" y="86" text-anchor="middle" fill="#444" font-size="11">6</text><line x1="100.0" y1="69.0" x2="100.0" y2="6.0" stroke="#d6312b" stroke-width="1.2" stroke-dasharray="4 3"/></svg><div class="cap">$\bar X$（$n=3$）：<b class="r">像鐘形了</b><br>平均 3.5｜變異數 <span class="hy">2.917/3</span></div></div>
+  </div>
+  <div class="sticky green">
+    <b>看出來了嗎？</b>① <span class="hy">中心不變</span>（都是 3.5）　② <span class="hp">越來越集中</span>（變異數 $=\sigma^2/n$；全擲 1 或全擲 6 的機率 $\frac26\to\frac2{36}\to\frac2{216}$）　③ <span class="hb">形狀變鐘形</span>（中央極限定理的雛形）
+  </div>
+  <div class="trap"><b class="t">⚠ 別搞混</b>　<b>母體分配</b>＝擲<b>一次</b>的點數 $X$，永遠是平的；<b>抽樣分配</b>＝擲 $n$ 次的<b>平均</b> $\bar X$，它才會隨 $n$ 改變。</div>
+  <div class="pno">— 1 —</div>
+</div>
+
+<!-- ================= PAGE 2 ================= -->
+<div class="page">
+  <h2>抽樣分配的定義</h2>
   <div class="box">
+    <p class="side">剛才 $n=2$、$n=3$ 那兩張表就是抽樣分配。一般化：</p>
     <p>從母體<b>重複</b>抽大小 $n$ 的樣本無限多次，每次都算一個 $\bar x$：</p>
     <p style="text-align:center;font-size:16px">樣本①→ $\bar x_1$　樣本②→ $\bar x_2$　樣本③→ $\bar x_3$　…… <span class="arrow">⇒</span> 這一大堆 $\bar x$ 形成的分配 ＝ <span class="hy"><b>$\bar X$ 的抽樣分配</b></span></p>
     <p class="side">關鍵：抽樣「之前」不知道會抽到誰 → $\bar X$ 是隨機變數 → 有自己的平均數、標準差、形狀。</p>
@@ -133,14 +175,13 @@ table.dir td:first-child{white-space:nowrap}
   <h2>$\bar X$ 的三個性質 <span style="font-size:14px">（必背）</span></h2>
   <div class="cols">
     <div>
-      <div class="formula" style="font-size:1.1em">$\mu_{\bar X}=\mu \qquad \sigma_{\bar X}=\dfrac{\sigma}{\sqrt n}$</div>
+      <div class="formula" style="font-size:1.1em">$\mu_{\bar X}=\mu \qquad \sigma^2_{\bar X}=\dfrac{\sigma^2}{n} \qquad \sigma_{\bar X}=\dfrac{\sigma}{\sqrt n}$</div>
       <ol>
         <li><span class="hy">中心不變</span>：$\bar X$ 瞄準的就是 $\mu$（不偏）</li>
         <li><span class="hp">寬度變窄</span>：$\sigma_{\bar X}=\sigma/\sqrt n$ 叫做<b class="r">標準誤</b></li>
         <li><span class="hb">形狀</span>：由中央極限定理決定（下一頁）</li>
       </ol>
-      <p>標準化公式因此<b>換分母</b>：</p>
-      <div class="formula">$Z=\dfrac{\bar X-\mu}{\sigma/\sqrt n}$</div>
+      <p class="side">（還沒講到常態，所以這裡<b>只談中心與寬度</b>，標準化留到 CLT。）</p>
     </div>
     <div style="flex:0 0 262px">
       <svg viewBox="0 0 262 112" width="262" height="112" class="sk"><line x1="4" y1="90" x2="258" y2="90" stroke="#444" stroke-width="1.3"/><path d="M8.0,82.0 L9.5,81.7 L11.1,81.5 L12.6,81.2 L14.2,80.9 L15.7,80.7 L17.2,80.4 L18.8,80.1 L20.3,79.8 L21.8,79.5 L23.4,79.2 L24.9,78.9 L26.5,78.6 L28.0,78.3 L29.5,77.9 L31.1,77.6 L32.6,77.3 L34.1,77.0 L35.7,76.6 L37.2,76.3 L38.8,76.0 L40.3,75.6 L41.8,75.3 L43.4,75.0 L44.9,74.6 L46.4,74.3 L48.0,73.9 L49.5,73.6 L51.0,73.2 L52.6,72.9 L54.1,72.5 L55.7,72.2 L57.2,71.8 L58.7,71.5 L60.3,71.1 L61.8,70.8 L63.3,70.4 L64.9,70.1 L66.4,69.8 L68.0,69.4 L69.5,69.1 L71.0,68.8 L72.6,68.4 L74.1,68.1 L75.7,67.8 L77.2,67.5 L78.7,67.1 L80.3,66.8 L81.8,66.5 L83.3,66.2 L84.9,65.9 L86.4,65.7 L88.0,65.4 L89.5,65.1 L91.0,64.8 L92.6,64.6 L94.1,64.3 L95.6,64.1 L97.2,63.9 L98.7,63.6 L100.2,63.4 L101.8,63.2 L103.3,63.0 L104.9,62.8 L106.4,62.6 L107.9,62.5 L109.5,62.3 L111.0,62.2 L112.5,62.0 L114.1,61.9 L115.6,61.8 L117.2,61.7 L118.7,61.6 L120.2,61.5 L121.8,61.4 L123.3,61.3 L124.8,61.3 L126.4,61.3 L127.9,61.2 L129.5,61.2 L131.0,61.2 L132.5,61.2 L134.1,61.2 L135.6,61.3 L137.2,61.3 L138.7,61.3 L140.2,61.4 L141.8,61.5 L143.3,61.6 L144.8,61.7 L146.4,61.8 L147.9,61.9 L149.4,62.0 L151.0,62.2 L152.5,62.3 L154.1,62.5 L155.6,62.6 L157.1,62.8 L158.7,63.0 L160.2,63.2 L161.8,63.4 L163.3,63.6 L164.8,63.9 L166.4,64.1 L167.9,64.3 L169.4,64.6 L171.0,64.8 L172.5,65.1 L174.1,65.4 L175.6,65.7 L177.1,65.9 L178.7,66.2 L180.2,66.5 L181.7,66.8 L183.3,67.1 L184.8,67.5 L186.3,67.8 L187.9,68.1 L189.4,68.4 L191.0,68.8 L192.5,69.1 L194.0,69.4 L195.6,69.8 L197.1,70.1 L198.7,70.4 L200.2,70.8 L201.7,71.1 L203.3,71.5 L204.8,71.8 L206.3,72.2 L207.9,72.5 L209.4,72.9 L210.9,73.2 L212.5,73.6 L214.0,73.9 L215.6,74.3 L217.1,74.6 L218.6,75.0 L220.2,75.3 L221.7,75.6 L223.2,76.0 L224.8,76.3 L226.3,76.6 L227.9,77.0 L229.4,77.3 L230.9,77.6 L232.5,77.9 L234.0,78.3 L235.6,78.6 L237.1,78.9 L238.6,79.2 L240.2,79.5 L241.7,79.8 L243.2,80.1 L244.8,80.4 L246.3,80.7 L247.8,80.9 L249.4,81.2 L250.9,81.5 L252.5,81.7 L254.0,82.0" fill="none" stroke="#22408a" stroke-width="2" stroke-dasharray="5 4" stroke-linecap="round"/><path d="M8.0,90.0 L9.5,90.0 L11.1,90.0 L12.6,90.0 L14.2,90.0 L15.7,90.0 L17.2,90.0 L18.8,90.0 L20.3,90.0 L21.8,90.0 L23.4,90.0 L24.9,89.9 L26.5,89.9 L28.0,89.9 L29.5,89.9 L31.1,89.9 L32.6,89.9 L34.1,89.8 L35.7,89.8 L37.2,89.7 L38.8,89.7 L40.3,89.6 L41.8,89.6 L43.4,89.5 L44.9,89.4 L46.4,89.2 L48.0,89.1 L49.5,89.0 L51.0,88.8 L52.6,88.6 L54.1,88.3 L55.7,88.0 L57.2,87.7 L58.7,87.4 L60.3,86.9 L61.8,86.5 L63.3,86.0 L64.9,85.4 L66.4,84.7 L68.0,84.0 L69.5,83.2 L71.0,82.3 L72.6,81.4 L74.1,80.3 L75.7,79.2 L77.2,77.9 L78.7,76.6 L80.3,75.1 L81.8,73.5 L83.3,71.8 L84.9,70.1 L86.4,68.2 L88.0,66.1 L89.5,64.0 L91.0,61.8 L92.6,59.5 L94.1,57.1 L95.6,54.6 L97.2,52.1 L98.7,49.5 L100.2,46.8 L101.8,44.2 L103.3,41.5 L104.9,38.8 L106.4,36.1 L107.9,33.5 L109.5,30.9 L111.0,28.4 L112.5,25.9 L114.1,23.6 L115.6,21.4 L117.2,19.4 L118.7,17.5 L120.2,15.8 L121.8,14.3 L123.3,13.0 L124.8,12.0 L126.4,11.1 L127.9,10.5 L129.5,10.1 L131.0,10.0 L132.5,10.1 L134.1,10.5 L135.6,11.1 L137.2,12.0 L138.7,13.0 L140.2,14.3 L141.8,15.8 L143.3,17.5 L144.8,19.4 L146.4,21.4 L147.9,23.6 L149.4,25.9 L151.0,28.4 L152.5,30.9 L154.1,33.5 L155.6,36.1 L157.1,38.8 L158.7,41.5 L160.2,44.2 L161.8,46.8 L163.3,49.5 L164.8,52.1 L166.4,54.6 L167.9,57.1 L169.4,59.5 L171.0,61.8 L172.5,64.0 L174.1,66.1 L175.6,68.2 L177.1,70.1 L178.7,71.8 L180.2,73.5 L181.7,75.1 L183.3,76.6 L184.8,77.9 L186.3,79.2 L187.9,80.3 L189.4,81.4 L191.0,82.3 L192.5,83.2 L194.0,84.0 L195.6,84.7 L197.1,85.4 L198.7,86.0 L200.2,86.5 L201.7,86.9 L203.3,87.4 L204.8,87.7 L206.3,88.0 L207.9,88.3 L209.4,88.6 L210.9,88.8 L212.5,89.0 L214.0,89.1 L215.6,89.2 L217.1,89.4 L218.6,89.5 L220.2,89.6 L221.7,89.6 L223.2,89.7 L224.8,89.7 L226.3,89.8 L227.9,89.8 L229.4,89.9 L230.9,89.9 L232.5,89.9 L234.0,89.9 L235.6,89.9 L237.1,89.9 L238.6,90.0 L240.2,90.0 L241.7,90.0 L243.2,90.0 L244.8,90.0 L246.3,90.0 L247.8,90.0 L249.4,90.0 L250.9,90.0 L252.5,90.0 L254.0,90.0" fill="none" stroke="#d6312b" stroke-width="2" stroke-linecap="round"/><line x1="131.0" y1="86" x2="131.0" y2="94" stroke="#22408a" stroke-width="1.5"/><text x="131.0" y="106" text-anchor="middle" fill="#22408a" font-size="12">μ</text><text x="210.9" y="62" text-anchor="middle" fill="#22408a" font-size="12">母體 X：σ</text><text x="175.6" y="22" text-anchor="middle" fill="#d6312b" font-size="12">x̄：σ/√n</text></svg>
@@ -148,6 +189,12 @@ table.dir td:first-child{white-space:nowrap}
     </div>
   </div>
 
+  <div class="box dash">
+    <b>✔ 回頭驗證骰子</b>　$\sigma^2=\frac{35}{12}\approx2.917$，$\sigma\approx1.708$<br>
+    $n=2$：$\sigma^2_{\bar X}=\frac{2.917}{2}\approx1.458$，$\sigma_{\bar X}=\frac{1.708}{\sqrt2}\approx1.208$<br>
+    $n=3$：$\sigma^2_{\bar X}=\frac{2.917}{3}\approx0.972$，$\sigma_{\bar X}=\frac{1.708}{\sqrt3}\approx0.986$<br>
+    <span class="side">和一張一張列表算出來的<b>完全一樣</b>——公式只是幫你省掉「列 36 種、216 種組合」的工作。</span>
+  </div>
   <table class="dir">
     <tr><th></th><th>標準差 $\sigma$</th><th>標準誤 $\sigma/\sqrt n$</th></tr>
     <tr><td>描述誰的分散？</td><td>「<b>個別</b>觀測值」$X$</td><td class="r">「<b>樣本平均數</b>」$\bar X$</td></tr>
@@ -158,10 +205,11 @@ table.dir td:first-child{white-space:nowrap}
     <b class="t">⚠ 陷阱 #1｜$\sqrt n$ 法則</b>　分母是 $\sqrt n$ 不是 $n$！<span class="hp">樣本放大 4 倍，標準誤才減半</span>；要縮成 1/3 得放大 9 倍。<br>
     <span class="side">口訣：「要減半，抽四倍」</span>
   </div>
-  <div class="pno">— 1 —</div>
+  <div class="box dash" style="height:58mm"><span class="side">✍️ 上課筆記區（試試看：擲 2 次時 $P(\bar X\le 2)$ 是多少？）</span></div>
+  <div class="pno">— 2 —</div>
 </div>
 
-<!-- ================= PAGE 2 ================= -->
+<!-- ================= PAGE 3 ================= -->
 <div class="page">
   <h2>中央極限定理（CLT）</h2>
   <span class="stamp" style="right:16mm;top:12mm">必考 ★★★</span>
@@ -183,7 +231,11 @@ table.dir td:first-child{white-space:nowrap}
     <tr><td>非常態（偏態、雙峰…）</td><td>$n\ge 30$ 時<b>近似</b>常態</td><td class="g"><b>✔ 可以</b></td></tr>
     <tr><td>非常態</td><td>$n\lt 30$</td><td class="r"><b>✘ 不行</b></td></tr>
   </table>
-  <p class="side">母體偏得越嚴重，需要的 $n$ 越大；$n\ge30$ 是經驗法則。</p>
+  <p class="side">母體偏得越嚴重，需要的 $n$ 越大；$n\ge30$ 是經驗法則。（骰子母體是平的，$n=3$ 就已經像鐘形。）</p>
+  <div class="cols" style="align-items:center">
+    <div style="flex:0 0 58%"><b>標準化</b>：$\bar X$ 是常態（或由 CLT 近似常態）<b class="r">之後</b>，才能像 Ch8 一樣查 Z 表——只是分母<b>換成標準誤</b>：</div>
+    <div class="formula" style="margin:2px 0">$Z=\dfrac{\bar X-\mu_{\bar X}}{\sigma_{\bar X}}=\dfrac{\bar X-\mu}{\sigma/\sqrt n}$</div>
+  </div>
 
   <div class="trap">
     <b class="t">⚠ 陷阱 #2｜CLT 不會把「母體」變常態</b>　CLT 只管<b>平均數 $\bar X$</b>。母體右偏時，「<span class="hp">單一個</span> $X$ 低於 20」的機率<b class="r">不能</b>用 Z 表算——這是本章最常見的誤用！
@@ -212,10 +264,10 @@ table.dir td:first-child{white-space:nowrap}
       </div>
     </div>
   </div>
-  <div class="pno">— 2 —</div>
+  <div class="pno">— 3 —</div>
 </div>
 
-<!-- ================= PAGE 3 ================= -->
+<!-- ================= PAGE 4 ================= -->
 <div class="page">
   <h2>個別值 vs 平均值｜範例 9.2</h2>
   <div class="ex">
@@ -271,10 +323,10 @@ table.dir td:first-child{white-space:nowrap}
     <tr><td>Ch10 起 統計推論</td><td class="r"><b>統計量</b></td><td class="r"><b>母體參數</b></td><td>$\bar x=22.6$，$\mu$ 可能在哪？</td></tr>
   </table>
   <p>💡 <span class="hy">方向即將反轉</span>：Ch10 開始「由樣本推母體」，而<b class="r">標準誤</b>就是信賴區間的核心零件。</p>
-  <div class="pno">— 3 —</div>
+  <div class="pno">— 4 —</div>
 </div>
 
-<!-- ================= PAGE 4 ================= -->
+<!-- ================= PAGE 5 ================= -->
 <div class="page">
   <h2>易錯總整理（考前看這格就好）</h2>
   <div class="box red">
@@ -286,6 +338,7 @@ table.dir td:first-child{white-space:nowrap}
       <li>母體本來就常態 → 任何 $n$ 都可用（不用等 30）。</li>
       <li>$\hat p$ 用常態前先檢查 $np\ge5$、$n(1-p)\ge5$。</li>
       <li>先分清楚題目問的是<b>「一個」</b>還是<b>「平均」</b>。</li>
+      <li>母體分配（一次的 $X$）≠ 抽樣分配（平均 $\bar X$）。</li>
     </ol>
   </div>
 
@@ -296,12 +349,13 @@ table.dir td:first-child{white-space:nowrap}
     <p><b>3.</b>（沐茶）會員 App 使用率 $p=0.6$，抽 $n=150$ 位會員。(a) 可以用常態近似嗎？ (b) $P(\hat p\lt 0.54)$</p>
     <p><b>4.</b>（是非）母體嚴重右偏，$n=4$ 時仍可用 Z 表算 $P(\bar X\gt a)$。</p>
     <p><b>5.</b> 樣本由 $n=25$ 增加到 $n=100$，$\bar X$ 的標準誤變成原來的幾倍？</p>
+    <p><b>6.</b>（四面骰）點數 1～4 各 $\frac14$。擲 2 次，(a) 列出 $\bar X$ 的抽樣分配　(b) 求 $E(\bar X)$、$V(\bar X)$，並和 $\sigma^2/n$ 比對。</p>
   </div>
 
-  <div class="box dash" style="height:52mm;position:relative"><span class="side">✍️ 計算區（先判斷「一個 or 平均」，再決定分母）</span></div>
+  <div class="box dash" style="height:26mm;position:relative"><span class="side">✍️ 計算區（先判斷「一個 or 平均」，再決定分母）</span></div>
 
   <h3>考前一分鐘 Checklist</h3>
-  <div class="chips"><span>說得出「抽樣分配」是什麼</span><span>$\mu_{\bar X}=\mu$、$\sigma_{\bar X}=\sigma/\sqrt n$</span><span>標準差 vs 標準誤</span><span>CLT 判斷表</span><span>$\hat p$ 的標準誤與條件</span><span>「一個」vs「平均」</span></div>
+  <div class="chips"><span>會列骰子 $n=2$ 的 $\bar X$ 分配</span><span>說得出「抽樣分配」是什麼</span><span>$\mu_{\bar X}=\mu$、$\sigma_{\bar X}=\sigma/\sqrt n$</span><span>標準差 vs 標準誤</span><span>CLT 判斷表</span><span>$\hat p$ 的標準誤與條件</span><span>「一個」vs「平均」</span></div>
 
   <div class="sticky" style="transform:rotate(.6deg)">
     <b>✔ 答案（先自己寫再看！）</b>
@@ -317,11 +371,13 @@ table.dir td:first-child{white-space:nowrap}
         3(a) $np=90$、$n(1-p)=60$ 皆 $\ge5$ ✔<br>
         3(b) $\sigma_{\hat p}=\sqrt{0.24/150}=0.04$，$z=-1.5$ → $0.0668$<br>
         4. <b class="r">✗</b>，$n\lt 30$ 且母體非常態，CLT 不適用<br>
-        5. $n$ 放大 4 倍 → 標準誤變 <b>1/2</b>
+        5. $n$ 放大 4 倍 → 標準誤變 <b>1/2</b><br>
+        6(a) $\bar x=1,1.5,\dots,4$，機率依序 $1,2,3,4,3,2,1$（皆 $\div 16$）<br>
+        6(b) $E=2.5$；$V=\frac{10}{16}=0.625=\frac{1.25}{2}$ ✔
       </div>
     </div>
   </div>
-  <div class="pno">— 4 —</div>
+  <div class="pno">— 5 —</div>
 </div>
 
 <script>
