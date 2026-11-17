@@ -6,6 +6,7 @@
     <title>Chapter 9　抽樣分配</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Source+Serif+4:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
@@ -211,6 +212,45 @@
             .two-col { grid-template-columns: 1fr; }
             body { padding: 20px 14px 60px; }
         }
+        /* ── 抽樣模擬動畫（ai-hub 風格特色區塊）── */
+.ssim{--bg:#05070b;--line:#1a2230;--dim:#6b7a90;--txt:#c9d4e3;--cyan:#3fd4ff;--orange:#ff9a2e;--green:#2ee68a;--yellow:#ffd23f;
+  margin:22px 0;background:radial-gradient(ellipse at 75% 0%,#0d1a2b 0%,transparent 55%),radial-gradient(ellipse at 0% 100%,#1a0f05 0%,transparent 50%),linear-gradient(180deg,#0c111a,#080b11);
+  border:1px solid #1f2a3a;border-radius:8px;overflow:hidden;color:var(--txt);font-family:'JetBrains Mono',Consolas,'Noto Sans TC',monospace;font-size:12px;line-height:1.5;
+  box-shadow:0 6px 24px rgba(5,10,20,.25)}
+.ssim *{box-sizing:border-box}
+.ssim .ov{text-decoration:overline}
+.ssim .hd{font-size:11px;letter-spacing:.14em;color:#9fb0c6;padding:10px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-weight:600}
+.ssim .hd .l{display:flex;align-items:center}
+.ssim .hd .l::before{content:"";width:7px;height:7px;background:var(--cyan);border-radius:50%;margin-right:9px;box-shadow:0 0 8px var(--cyan)}
+.ssim .hd .t{color:var(--dim);font-weight:400;letter-spacing:.06em}
+.ssim .ctl{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;padding:9px 14px;border-bottom:1px solid var(--line)}
+.ssim .grp{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.ssim .grp>span{color:var(--dim);font-size:10.5px;letter-spacing:.1em;margin-right:4px;font-family:'Noto Sans TC',sans-serif}
+.ssim button{background:transparent;border:1px solid #263243;color:var(--txt);font:600 11.5px 'JetBrains Mono',Consolas,'Noto Sans TC',monospace;padding:5px 10px;border-radius:3px;cursor:pointer;margin:0}
+.ssim button:hover{border-color:var(--cyan)}
+.ssim button.on{border-color:var(--cyan);color:var(--cyan);background:rgba(63,212,255,.08)}
+.ssim button.go{border-color:var(--orange);color:var(--orange)}
+.ssim label{display:inline-flex;gap:5px;align-items:center;color:#9aa8bb;font-size:11.5px;cursor:pointer;font-family:'Noto Sans TC',sans-serif}
+.ssim label .sw{display:inline-block;width:16px;border-top:2px dashed var(--yellow)}
+.ssim label .sw.g{border-top:2px solid var(--green)}
+.ssim canvas{display:block;width:100%;height:460px}
+.ssim .stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line)}
+.ssim .st{padding:9px 14px;border-right:1px solid var(--line)}
+.ssim .st:last-child{border-right:0}
+.ssim .st .k{color:var(--dim);font-size:10.5px;letter-spacing:.06em;font-family:'Noto Sans TC',sans-serif}
+.ssim .st .v{font-size:19px;font-weight:800;color:#fff}
+.ssim .st .s{font-size:10.5px;color:var(--dim)}
+.ssim .st .s b{color:var(--yellow);font-weight:600}
+.ssim .src{font-size:11px;color:var(--dim);padding:8px 14px;border-top:1px solid var(--line);font-family:'Noto Sans TC',sans-serif;line-height:1.7}
+.ssim .src b{color:#c9d4e3}
+@media(max-width:600px){
+  .ssim canvas{height:600px}
+  .ssim .stats{grid-template-columns:repeat(2,1fr)}
+  .ssim .st:nth-child(2){border-right:0}
+  .ssim .st:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .ssim .ctl{padding:8px 10px}
+  .ssim button{padding:5px 8px}
+}
     </style>
 </head>
 <body>
@@ -238,6 +278,7 @@
     <li><a href="#s91">§9.1　樣本平均數的抽樣分配</a>
         <ol style="margin-top:4px;">
             <li><a href="#s91-1">抽樣分配是什麼（從擲骰子開始）</a></li>
+            <li><a href="#s91-sim">🎬 抽樣模擬動畫</a></li>
             <li><a href="#s91-2">$\bar{X}$ 的平均數與標準誤</a></li>
             <li><a href="#s91-3">中央極限定理</a></li>
         </ol>
@@ -350,6 +391,28 @@
 <canvas id="diceChart" class="chart" width="660" height="290"></canvas>
 <div id="diceHint" style="text-align:center; font-size:0.9em; color:var(--navy); min-height:1.6em; font-family:monospace;">（滑鼠移到長條上，這裡會顯示該 x̄ 的機率）</div>
 <div class="calc-result" id="diceResult" style="display:block;"></div>
+</div>
+
+<h3 id="s91-sim">🎬 抽樣模擬動畫：$\bar{X}$ 的抽樣分配是怎麼「一次一次」累積出來的</h3>
+<p>互動圖 9.1 是把所有組合都算進去的<strong>精確</strong>分配；實際上我們不會知道全部組合，而是「抽一次樣本、算一個 $\bar{x}$」重複很多次。下面的動畫就在做這件事：每次從母體抽 $n$ 個點數（青色光點），在中央算出 $\bar{x}$，再把結果（橘色光點）丟進右邊的直方圖。抽得越多次，直條就越貼近黃色虛線的理論機率。</p>
+<!-- ══ 抽樣模擬動畫（擲骰子）══ -->
+<div class="ssim" id="ssim">
+  <div class="hd"><span class="l">SAMPLING ENGINE · 擲骰子抽樣分配模擬</span><span class="t" id="ssHdr">—</span></div>
+  <div class="ctl">
+    <div class="grp" id="ssN"><span>樣本數 n</span></div>
+    <div class="grp" id="ssSp"><span>速度</span></div>
+    <div class="grp"><button class="go" id="ssPlay">❚❚ 暫停</button><button id="ssStep">抽一次</button><button id="ssReset">重設</button></div>
+    <div class="grp"><label><input type="checkbox" id="ssChkT" checked><span class="sw"></span>理論機率</label>
+    <label><input type="checkbox" id="ssChkN"><span class="sw g"></span>常態曲線 N(3.5, σ²/n)</label></div>
+  </div>
+  <canvas id="ssCv"></canvas>
+  <div class="stats">
+    <div class="st"><div class="k">模擬次數</div><div class="v" id="ssSN">0</div><div class="s">每次擲 n 顆骰子取平均</div></div>
+    <div class="st"><div class="k"><span class="ov">x</span> 的平均</div><div class="v" id="ssSM">—</div><div class="s">理論 μ = <b>3.5</b></div></div>
+    <div class="st"><div class="k"><span class="ov">x</span> 的變異數</div><div class="v" id="ssSV">—</div><div class="s" id="ssSV2">—</div></div>
+    <div class="st"><div class="k"><span class="ov">x</span> 的標準誤</div><div class="v" id="ssSS">—</div><div class="s" id="ssSS2">—</div></div>
+  </div>
+  <div class="src">母體：公正骰子 <b>X</b> ∈ {1,…,6}，各 1/6，μ = 3.5、σ² = 35/12 ≈ 2.917。每次抽樣都是「抽出放回」（獨立擲 n 次）。<b>橘色直條</b>＝模擬的相對次數；<b style="color:#ffd23f">黃色虛線</b>＝理論機率 P(<span class="ov">x</span>)（與上方引例的表相同）。建議順序：n = 1（就是母體）→ 2（三角形）→ 3 → 10，並看變異數是否接近 σ²/n。</div>
 </div>
 
 <div class="formula-card">
@@ -1084,6 +1147,289 @@ function drawXvsXbar() {
         });
         diceDraw();
     });
+})();
+
+// ── 抽樣模擬動畫（擲骰子）──
+(function () {
+    const $ = id => document.getElementById(id);
+    const C = { cyan: '#3fd4ff', orange: '#ff9a2e', green: '#2ee68a', yellow: '#ffd23f', dim: '#6b7a90', line: '#1a2230' };
+    const MONO = "'JetBrains Mono', Consolas, monospace";
+    const MU = 3.5, VAR = 35 / 12;
+    const NS = [1, 2, 3, 5, 10];
+    const SPEEDS = [{ k: '慢速示範', rate: .7, dur: 2.6 }, { k: '快', rate: 6, dur: 1.1 }, { k: '超快', rate: 60, dur: .7 }, { k: '極速', rate: 1500, dur: .6, vis: 25 }];
+    const FIX_UNTIL = 50;     // 前 50 次以理論最大值固定縱軸
+    let n = 2, sp = 0, running = true, showT = true, showN = false, onScreen = true;
+    let counts, total, sum, sumSq, theory, tmax, trials = [], glow = [0, 0, 0, 0, 0, 0], pick = [0, 0, 0, 0, 0, 0], flash, lastTxt = '', hubPulse = 0, acc = 0;
+
+    const cv = $('ssCv'); let g, W, H;
+    function fit() {
+        const r = cv.getBoundingClientRect(), d = window.devicePixelRatio || 1;
+        cv.width = Math.round(r.width * d); cv.height = Math.round(r.height * d);
+        g = cv.getContext('2d'); g.setTransform(d, 0, 0, d, 0, 0); W = r.width; H = r.height;
+    }
+    window.addEventListener('resize', fit);
+
+    // 理論機率：n 顆骰子點數和的分配（卷積），index = sum - n
+    function theoryFor(n) {
+        let p = [1];
+        for (let k = 0; k < n; k++) {
+            const q = new Array(p.length + 5).fill(0);
+            p.forEach((v, i) => { for (let f = 0; f < 6; f++) q[i + f] += v / 6; });
+            p = q;
+        }
+        return p;
+    }
+    const fx = v => Number.isInteger(v) ? v.toFixed(0) : (+v.toFixed(3)).toString();
+    function reset() {
+        const B = 5 * n + 1;
+        counts = new Array(B).fill(0); flash = new Array(B).fill(0);
+        total = sum = sumSq = 0; theory = theoryFor(n); tmax = Math.max(...theory);
+        trials = []; pick = [0, 0, 0, 0, 0, 0]; lastTxt = ''; acc = 0;
+        $('ssHdr').innerHTML = 'n = ' + n + ' · <span class="ov">x</span> 可能值 ' + B + ' 個';
+        $('ssSV2').innerHTML = '理論 σ²/n = <b>' + (VAR / n).toFixed(3) + '</b>';
+        $('ssSS2').innerHTML = '理論 σ/√n = <b>' + Math.sqrt(VAR / n).toFixed(3) + '</b>';
+        updStats();
+    }
+
+    // 控制列
+    NS.forEach(v => { const b = document.createElement('button'); b.textContent = v; b.onclick = () => { n = v; mark(); reset(); }; $('ssN').appendChild(b); });
+    SPEEDS.forEach((s, i) => { const b = document.createElement('button'); b.textContent = s.k; b.onclick = () => { sp = i; mark(); }; $('ssSp').appendChild(b); });
+    function mark() {
+        [...$('ssN').querySelectorAll('button')].forEach((b, i) => b.classList.toggle('on', NS[i] === n));
+        [...$('ssSp').querySelectorAll('button')].forEach((b, i) => b.classList.toggle('on', i === sp));
+    }
+    $('ssPlay').onclick = () => { running = !running; $('ssPlay').textContent = running ? '❚❚ 暫停' : '▶ 繼續'; };
+    $('ssStep').onclick = () => spawn(true, SPEEDS[0].dur);
+    $('ssReset').onclick = reset;
+    $('ssChkT').onchange = e => showT = e.target.checked;
+    $('ssChkN').onchange = e => showN = e.target.checked;
+
+    // ── 版面：寬螢幕＝左→右；窄螢幕＝上→下 ──
+    function L() {
+        const narrow = W < 560;
+        if (!narrow) {
+            const nx = 18, nw = 86, top = 48, bot = H - 58;
+            const nodes = [...Array(6)].map((_, i) => ({ x: nx, y: top + 12 + i * (bot - top - 24) / 5 - 17, w: nw, h: 34 }));
+            const hub = { x: W * .39, y: (top + bot) / 2, r: 32 };
+            return { narrow, nodes, hub, hx0: W * .52, hx1: W - 18, top, bot, txtY: H - 18, txtX: W * .39 };
+        }
+        const pad = 10, nTop = 26, nh = 46, gap = 5, nw = (W - 2 * pad - 5 * gap) / 6;
+        const nodes = [...Array(6)].map((_, i) => ({ x: pad + i * (nw + gap), y: nTop, w: nw, h: nh }));
+        const hub = { x: W / 2, y: nTop + nh + 72, r: 26 };
+        const top = hub.y + hub.r + 74;
+        return { narrow, nodes, hub, hx0: 12, hx1: W - 12, top, bot: H - 32, txtY: hub.y + hub.r + 24, txtX: W / 2 };
+    }
+    function bez(p, t) { const u = 1 - t; return [0, 1].map(k => u * u * u * p[0][k] + 3 * u * u * t * p[1][k] + 3 * u * t * t * p[2][k] + t * t * t * p[3][k]); }
+    function inPath(G, v) {
+        const nd = G.nodes[v - 1], h = G.hub;
+        if (!G.narrow) { const x0 = nd.x + nd.w, y = nd.y + nd.h / 2, m = (h.x - x0) * .5; return [[x0, y], [x0 + m, y], [h.x - m, h.y], [h.x - h.r, h.y]]; }
+        const x = nd.x + nd.w / 2, y0 = nd.y + nd.h, m = (h.y - h.r - y0) * .55;
+        return [[x, y0], [x, y0 + m], [h.x, h.y - h.r - m], [h.x, h.y - h.r]];
+    }
+    function ymax() {
+        const base = tmax * 1.35;
+        if (total < FIX_UNTIL) return base;
+        return Math.max(base, Math.max(...counts) / total * 1.08);
+    }
+    function binW(G) { return (G.hx1 - G.hx0) / counts.length; }
+    function binX(G, i) { return G.hx0 + binW(G) * (i + .5); }
+    function hh(G) { return G.bot - G.top - 8; }
+    function barH(G, i) { const r = total ? counts[i] / total : 0; return Math.min(r / ymax(), 1) * hh(G); }
+    function outPath(G, i) {
+        const h = G.hub, x = binX(G, i), y = G.bot - barH(G, i) - 3;
+        if (!G.narrow) return [[h.x + h.r, h.y], [h.x + h.r + 60, h.y], [x, Math.min(y, G.bot) - 110], [x, y]];
+        return [[h.x, h.y + h.r], [h.x, h.y + h.r + 50], [x, y - 70], [x, y]];
+    }
+
+    // ── 畫含 x̄ 的文字：在 x 上方自己畫橫線 ──
+    function textX(str, x, y, align) {
+        const size = +(/(\d+(?:\.\d+)?)px/.exec(g.font) || [0, 12])[1];
+        const parts = str.split('x̄');
+        const wx = g.measureText('x').width;
+        let tw = 0; parts.forEach((p, i) => { tw += g.measureText(p).width; if (i < parts.length - 1) tw += wx; });
+        let cx = align === 'center' ? x - tw / 2 : align === 'right' ? x - tw : x;
+        const saveAlign = g.textAlign; g.textAlign = 'left';
+        parts.forEach((p, i) => {
+            g.fillText(p, cx, y); cx += g.measureText(p).width;
+            if (i < parts.length - 1) {
+                g.fillText('x', cx, y);
+                const ly = y - size * .62;
+                g.save(); g.strokeStyle = g.fillStyle; g.lineWidth = Math.max(1, size / 11); g.setLineDash([]);
+                g.beginPath(); g.moveTo(cx + wx * .08, ly); g.lineTo(cx + wx * .92, ly); g.stroke(); g.restore();
+                cx += wx;
+            }
+        });
+        g.textAlign = saveAlign;
+        return tw;
+    }
+
+    // ── 抽樣 ──
+    function spawn(vis, dur) {
+        const vals = [...Array(n)].map(() => 1 + Math.floor(Math.random() * 6)), s = vals.reduce((a, b) => a + b, 0);
+        const tr = { vals, s, bin: s - n, xbar: s / n, t: 0, dur, vis };
+        vals.forEach(v => pick[v - 1]++);
+        if (vis) { vals.forEach(v => glow[v - 1] = 1); trials.push(tr); } else record(tr);
+    }
+    function record(tr) { counts[tr.bin]++; total++; sum += tr.xbar; sumSq += tr.xbar * tr.xbar; flash[tr.bin] = 1; }
+    function txt(tr) {
+        const many = tr.vals.length > 5;
+        const v = many ? tr.vals.slice(0, 5).join(', ') + ', …' : tr.vals.join(', ');
+        if (n === 1) return '抽到 ' + v + ' → x̄ = ' + tr.xbar;
+        return '抽到 ' + v + ' → x̄ = ' + (many ? tr.s : '(' + tr.vals.join('+') + ')') + '/' + n + ' = ' + fx(tr.xbar);
+    }
+    function updStats() {
+        $('ssSN').textContent = total.toLocaleString();
+        if (!total) { ['ssSM', 'ssSV', 'ssSS'].forEach(k => $(k).textContent = '—'); return; }
+        const m = sum / total, v = total > 1 ? (sumSq - total * m * m) / (total - 1) : 0;
+        $('ssSM').textContent = m.toFixed(3);
+        $('ssSV').textContent = total > 1 ? v.toFixed(3) : '—';
+        $('ssSS').textContent = total > 1 ? Math.sqrt(Math.max(v, 0)).toFixed(3) : '—';
+    }
+
+    // ── 繪圖 ──
+    let last = performance.now(), statT = 0, txtT = 0;
+    function frame(now) {
+        requestAnimationFrame(frame);
+        const dt = Math.min(.05, (now - last) / 1000); last = now;
+        if (!onScreen || !W) return;
+        const S = SPEEDS[sp];
+        if (running) {
+            acc += S.rate * dt; let k = Math.floor(acc); acc -= k;
+            const visP = S.vis ? Math.min(1, S.vis / S.rate) : 1;
+            while (k-- > 0) spawn(Math.random() < visP, S.dur);
+        }
+        const G = L(); g.clearRect(0, 0, W, H);
+        g.textBaseline = 'alphabetic';
+
+        // 母體節點 → hub 的曲線
+        for (let v = 1; v <= 6; v++) {
+            const p = inPath(G, v);
+            g.strokeStyle = 'rgba(63,212,255,' + (.08 + .5 * glow[v - 1]) + ')'; g.lineWidth = 1 + 2.5 * glow[v - 1];
+            g.beginPath(); g.moveTo(...p[0]); g.bezierCurveTo(...p[1], ...p[2], ...p[3]); g.stroke();
+        }
+        g.lineWidth = 1;
+        // 母體節點
+        const maxPick = Math.max(1, ...pick);
+        for (let v = 1; v <= 6; v++) {
+            const nd = G.nodes[v - 1], gl = glow[v - 1]; glow[v - 1] *= Math.pow(.02, dt);
+            g.fillStyle = '#0b0f16'; g.fillRect(nd.x, nd.y, nd.w, nd.h);
+            g.strokeStyle = gl > .05 ? C.cyan : '#2a3a50'; g.shadowColor = C.cyan; g.shadowBlur = 18 * gl;
+            g.strokeRect(nd.x, nd.y, nd.w, nd.h); g.shadowBlur = 0;
+            g.fillStyle = 'rgba(63,212,255,' + (.08 + .35 * gl) + ')'; g.fillRect(nd.x + 1, nd.y + 1, nd.w - 2, nd.h - 2);
+            if (!G.narrow) {
+                g.fillStyle = '#fff'; g.font = '800 18px ' + MONO; g.textAlign = 'left'; g.fillText(v, nd.x + 9, nd.y + 23);
+                g.fillStyle = C.dim; g.font = '9.5px ' + MONO; g.fillText('P=1/6', nd.x + 31, nd.y + 15);
+                const bx = nd.x + 31, bw = nd.w - 39;
+                g.fillStyle = '#24405a'; g.fillRect(bx, nd.y + 22, bw, 3);
+                g.fillStyle = C.cyan; g.fillRect(bx, nd.y + 22, bw * pick[v - 1] / maxPick, 3);
+            } else {
+                g.textAlign = 'center';
+                g.fillStyle = '#fff'; g.font = '800 16px ' + MONO; g.fillText(v, nd.x + nd.w / 2, nd.y + 19);
+                g.fillStyle = C.dim; g.font = '8.5px ' + MONO; g.fillText('P=1/6', nd.x + nd.w / 2, nd.y + 31);
+                const bx = nd.x + 5, bw = nd.w - 10;
+                g.fillStyle = '#24405a'; g.fillRect(bx, nd.y + 37, bw, 3);
+                g.fillStyle = C.cyan; g.fillRect(bx, nd.y + 37, bw * pick[v - 1] / maxPick, 3);
+            }
+        }
+        g.textAlign = 'left'; g.fillStyle = C.dim; g.font = '10px ' + MONO;
+        g.fillText('POPULATION X（被抽中次數）', G.nodes[0].x, G.nodes[0].y - 10);
+
+        // 直方圖
+        const B = counts.length, bw = binW(G), ym = ymax(), HH = hh(G);
+        g.strokeStyle = '#2a3546'; g.beginPath(); g.moveTo(G.hx0, G.bot + .5); g.lineTo(G.hx1, G.bot + .5); g.stroke();
+        for (let i = 0; i < B; i++) {
+            const r = total ? counts[i] / total : 0, raw = r / ym * HH, h = Math.min(raw, HH), x = G.hx0 + i * bw, f = flash[i];
+            flash[i] *= Math.pow(.01, dt);
+            if (h > 0) {
+                const gr = g.createLinearGradient(0, G.bot - h, 0, G.bot);
+                gr.addColorStop(0, 'rgba(255,154,46,' + (.75 + .25 * f) + ')'); gr.addColorStop(1, 'rgba(255,154,46,.15)');
+                g.fillStyle = gr; g.fillRect(x + bw * .12, G.bot - h, bw * .76, h);
+                if (f > .05) { g.fillStyle = 'rgba(255,230,180,' + f + ')'; g.fillRect(x + bw * .12, G.bot - h - 1.5, bw * .76, 2); }
+                if (raw > HH + .5) {   // 超出縱軸：頂端畫小箭頭
+                    g.fillStyle = C.orange; g.beginPath();
+                    g.moveTo(x + bw / 2, G.bot - HH - 7); g.lineTo(x + bw / 2 - 4, G.bot - HH - 1); g.lineTo(x + bw / 2 + 4, G.bot - HH - 1); g.fill();
+                }
+            }
+            if (showT) {
+                const th = theory[i] / ym * HH; g.strokeStyle = C.yellow; g.lineWidth = 1.4; g.setLineDash([3, 3]);
+                g.beginPath(); g.moveTo(x + bw * .06, G.bot - th); g.lineTo(x + bw * .94, G.bot - th); g.stroke(); g.setLineDash([]); g.lineWidth = 1;
+            }
+        }
+        if (showN && n > 1) {
+            const sd = Math.sqrt(VAR / n); g.strokeStyle = C.green; g.lineWidth = 1.8; g.beginPath();
+            for (let px = 0; px <= 240; px++) {
+                const xv = 1 + 5 * px / 240;
+                const d = Math.exp(-((xv - MU) ** 2) / (2 * sd * sd)) / (sd * Math.sqrt(2 * Math.PI)) / n;   // 每個 x̄ 值的機率≈密度×間距 1/n
+                const X = G.hx0 + bw * ((xv - 1) * n + .5), Y = G.bot - Math.min(d / ym, 1.02) * HH;
+                px ? g.lineTo(X, Y) : g.moveTo(X, Y);
+            }
+            g.stroke(); g.lineWidth = 1;
+        }
+        // μ 線
+        const mux = G.hx0 + bw * ((MU - 1) * n + .5);
+        g.strokeStyle = 'rgba(255,255,255,.35)'; g.setLineDash([2, 4]);
+        g.beginPath(); g.moveTo(mux, G.top - 2); g.lineTo(mux, G.bot); g.stroke(); g.setLineDash([]);
+        g.fillStyle = '#9aa8bb'; g.font = '10px ' + MONO; g.textAlign = 'center'; g.fillText('μ = 3.5', mux, G.top - 6);
+        // 標題（放在 μ 標籤上方，避免重疊）
+        g.textAlign = 'left'; g.fillStyle = C.dim; g.font = '10px ' + MONO;
+        textX(G.narrow ? 'x̄ 的抽樣分配（相對次數）' : 'SAMPLING DISTRIBUTION OF x̄（相對次數）', G.hx0, G.top - 22);
+        // 橫軸標籤：間距夠才標半格，否則只標整數
+        g.fillStyle = '#8796ab'; g.font = '10px ' + MONO; g.textAlign = 'center';
+        const halfOK = n <= 2 && bw >= 26;
+        for (let i = 0; i < B; i++) {
+            const v = (i + n) / n;
+            if (Number.isInteger(v) || (n === 2 && halfOK)) g.fillText(fx(v), G.hx0 + bw * (i + .5), G.bot + 14);
+        }
+        g.textAlign = 'right'; g.fillStyle = C.dim; textX('x̄', G.hx1, G.bot + 27, 'right');
+
+        // 光點
+        for (let k = trials.length - 1; k >= 0; k--) {
+            const tr = trials[k]; tr.t += dt / tr.dur;
+            if (tr.t >= .5 && !tr.merged) { tr.merged = 1; hubPulse = 1; if (SPEEDS[sp].rate < 10 || now - txtT > 450) { lastTxt = txt(tr); txtT = now; } }
+            if (tr.t >= 1) { record(tr); trials.splice(k, 1); continue; }
+            if (tr.t < .5) {
+                tr.vals.forEach((v, j) => {
+                    const u = Math.min(1, Math.max(0, (tr.t / .5) * 1.15 - j * .15 / Math.max(1, n - 1)));
+                    if (u <= 0) return;
+                    dot(bez(inPath(G, v), easeIO(u)), C.cyan, 2.6);
+                    for (let q = 1; q <= 3; q++) { const uu = u - q * .035; if (uu > 0) dot(bez(inPath(G, v), easeIO(uu)), C.cyan, 2.6 - q * .6, .5 - q * .12); }
+                });
+            } else {
+                const u = easeIO((tr.t - .5) / .5), p = outPath(G, tr.bin);
+                dot(bez(p, u), C.orange, 3.2);
+                for (let q = 1; q <= 4; q++) { const uu = u - q * .03; if (uu > 0) dot(bez(p, uu), C.orange, 3.2 - q * .6, .5 - q * .1); }
+            }
+        }
+        // hub
+        const h = G.hub; hubPulse *= Math.pow(.03, dt);
+        g.lineWidth = 5; g.strokeStyle = '#1d2a3a'; g.beginPath(); g.arc(h.x, h.y, h.r, 0, 7); g.stroke();
+        g.strokeStyle = C.orange; g.shadowColor = C.orange; g.shadowBlur = 20 * hubPulse; g.globalAlpha = .35 + .65 * hubPulse;
+        g.beginPath(); g.arc(h.x, h.y, h.r + 3 * hubPulse, 0, 7); g.stroke(); g.globalAlpha = 1; g.shadowBlur = 0; g.lineWidth = 1;
+        g.fillStyle = '#fff'; g.font = 'bold ' + (G.narrow ? 13 : 15) + 'px ' + MONO; textX('x̄', h.x, h.y + 1, 'center');
+        g.fillStyle = C.dim; g.font = '9.5px ' + MONO; g.textAlign = 'center'; g.fillText('ΣX / n', h.x, h.y + 13);
+        // 算式
+        g.textAlign = 'left';
+        if (lastTxt) {
+            g.font = (G.narrow ? 11 : 12.5) + "px 'JetBrains Mono', Consolas, 'Noto Sans TC', monospace"; g.fillStyle = '#e6eef8';
+            textX(lastTxt, G.txtX, G.txtY, 'center');
+        } else {
+            g.font = "11px 'Noto Sans TC', sans-serif"; g.fillStyle = C.dim; g.textAlign = 'center';
+            g.fillText('按「抽一次」或等待自動抽樣', G.txtX, G.txtY); g.textAlign = 'left';
+        }
+        statT += dt; if (statT > .1) { statT = 0; updStats(); }
+    }
+    function easeIO(t) { return t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; }
+    function dot(p, c, r, a) {
+        if (r <= 0) return; g.globalAlpha = a === undefined ? 1 : a; g.fillStyle = c; g.shadowColor = c; g.shadowBlur = 10;
+        g.beginPath(); g.arc(p[0], p[1], r, 0, 7); g.fill(); g.shadowBlur = 0; g.globalAlpha = 1;
+    }
+
+    // 只有捲到畫面內才動，省電
+    if ('IntersectionObserver' in window) {
+        new IntersectionObserver(es => es.forEach(e => { onScreen = e.isIntersecting; if (onScreen) fit(); }), { threshold: .05 }).observe($('ssim'));
+    }
+    function start() { fit(); mark(); reset(); requestAnimationFrame(frame); }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
 
 document.addEventListener('DOMContentLoaded', function () {
